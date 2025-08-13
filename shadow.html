@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SMASH.bad — Entraînement Shadow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <a href="/" class="brand">
+      <img src="assets/logo.png" alt="SMASH.bad" class="brand__logo" />
+      <span class="brand__name">SMASH.bad</span>
+    </a>
+    <button class="nav__toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+    <nav class="nav__links" data-nav>
+      <a href="shadow.html" aria-current="page">Entraînement</a>
+      <a href="guide.html">Guide raquettes</a>
+      <a href="partner.html">Trouver partenaire</a>
+      <a href="about.html">À propos</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <h1>Entraînement Shadow</h1>
+    <p class="lead">On implémentera ici ton fonctionnement précis (timings, enchaînements, sons, presets). Pour l’instant : un prototype minimal pour valider l’ergonomie.</p>
+
+    <div class="shadow-grid" data-shadow-grid>
+      <button class="shadow-cell">1</button>
+      <button class="shadow-cell">2</button>
+      <button class="shadow-cell">3</button>
+      <button class="shadow-cell">4</button>
+      <button class="shadow-cell">5</button>
+      <button class="shadow-cell">6</button>
+    </div>
+
+    <div class="shadow-controls">
+      <button class="btn btn--primary" data-shadow-start>Démarrer</button>
+      <button class="btn btn--ghost" data-shadow-stop>Arrêter</button>
+      <label class="shadow-speed">Vitesse
+        <input type="range" min="400" max="1600" step="100" value="800" data-shadow-speed />
+      </label>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> SMASH.bad</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
