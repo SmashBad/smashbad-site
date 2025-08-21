@@ -128,11 +128,16 @@ a{color:inherit;text-decoration:none}
 /* =========================
    5) Responsive
    ========================= */
-@media (max-width:980px){
-  .hero-split{grid-template-columns:1fr;grid-template-rows:auto auto;min-height:auto}
-  .hero-split__art{justify-self:start;max-width:420px}
-  .nav__links{display:none} /* (menu mobile à ajouter plus tard) */
+@media (max-width: 980px){
+  /* au lieu de display:none */
+  .nav__links{
+    display:flex;            /* garder visible */
+    gap:12px;
+    flex-wrap:wrap;          /* passera à la ligne */
+    row-gap:8px;
+  }
 }
+
 
 
 
