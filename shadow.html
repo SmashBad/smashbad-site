@@ -100,7 +100,7 @@
   <!-- ===== Header du site (mêmes classes que la home) ===== -->
   <header class="nav">
     <a href="index.html" class="brand">
-      <img class="brand__logo" src="SMASH (6).png" alt="SMASH logo"/>
+      <img class="brand__logo" src="logo.png" alt="SMASH"/>
       <span class="brand__wordmark">SMASH</span>
     </a>
     <nav class="nav__links">
@@ -282,13 +282,23 @@
       // Countdown net (3,2,1,GO sans texte parasite)
       let c=3; arena.innerHTML=`<div class="count">${c}</div>`;
       const cd = setInterval(()=>{
-        c--; if(c>0){ arena.innerHTML=`<div class="count">${c}</div>`; }
+        c--;
+        if(c>0){
+          arena.innerHTML=`<div class="count">${c}</div>`;
+        }
         else{
           clearInterval(cd);
-          currentDir=pick(); showArrow(currentDir); ding(); updateTime();
-          tickId=setInterval(tick,100);
-        }
-      },1000);
+          // Affiche "GO !" avant la première flèche
+          arena.innerHTML = `<div class="count" style="letter-spacing:.05em">GO !</div>`;
+          setTimeout(()=>{
+            currentDir=pick();
+            showArrow(currentDir);
+            ding();
+            updateTime();
+            tickId=setInterval(tick,100);
+      }, 600); // durée d'affichage de "GO !"
+    }
+  },1000);
     }
 
     function end(){
@@ -327,3 +337,4 @@
   </script>
 </body>
 </html>
+
