@@ -3,52 +3,349 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SMASH.bad — Entraînement Shadow</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <title>SMASH — Shadow</title>
+
+  <!-- Polices (mêmes que l’accueil) -->
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles globaux du site -->
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Styles spécifiques à Shadow (scopés par .shadow-page) -->
+  <style>
+    .shadow-page{padding:40px 5%;max-width:1100px;margin:0 auto}
+    .shadow-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px; padding:22px 22px 28px;
+    }
+    .shadow-title{font-family:'Audiowide',Outfit,sans-serif;font-size:28px;margin:0 0 6px}
+    .shadow-muted{color:var(--muted)}
+    .row{display:grid;gap:18px;margin-top:18px}
+
+    /* Sliders */
+    .slider-wrap{margin-top:8px}
+    .slider{width:100%}
+    input[type="range"].slider{
+      -webkit-appearance:none; appearance:none; height:6px; border-radius:6px;
+      background:rgba(255,255,255,.15); outline:none;
+    }
+    input[type="range"].slider::-webkit-slider-thumb{
+      -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%;
+      background:var(--turquoise); border:2px solid rgba(0,0,0,.25); cursor:pointer;
+    }
+    .ticks{display:flex;justify-content:space-between;font-size:12px;color:#8fa1b8;margin-top:6px}
+
+    /* Grille des directions */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .dir-btn{
+      height:86px; border-radius:12px; border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.02); color:#cfe7ff;
+      display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer;
+      transition:background .15s ease, border-color .15s ease, transform .05s ease;
+    }
+    .dir-btn .arrow{font-size:28px;line-height:1}
+    .dir-btn .lbl{font-size:12px;opacity:.85}
+    .dir-btn:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.22)}
+    .dir-btn.active{background:var(--turquoise); color:#061225; border-color:transparent; font-weight:700}
+    .note{font-size:13px;color:#f8a39b;margin-top:6px}
+
+    /* Options + actions */
+    .opt{display:flex;align-items:center;gap:8px}
+    .go-btn{
+      width:100%; height:52px; border-radius:14px; font-weight:800;
+      background:#ff5959; color:#fff; border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; gap:10px; margin-top:12px;
+      transition:filter .15s ease;
+    }
+    .go-btn[disabled]{opacity:.45;cursor:not-allowed}
+    .go-btn:hover:not([disabled]){filter:brightness(1.05)}
+
+    /* Écran exercice */
+    .bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .pill{border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06);
+      color:var(--turquoise); border-radius:999px; padding:8px 14px; font-weight:700}
+    .stop-btn{
+      border:1px solid #ff4646; color:#ff4646; background:transparent;
+      border-radius:10px; padding:8px 12px; font-weight:700; cursor:pointer;
+    }
+    .arena{
+      min-height:58vh; display:flex; align-items:center; justify-content:center;
+      text-align:center;
+    }
+    .mega-arrow{
+      font-family:'Outfit',system-ui; font-weight:900;
+      font-size:min(28vw, 16rem); line-height:1; color:var(--turquoise);
+      text-shadow:0 6px 26px rgba(0,0,0,.45);
+    }
+    .countdown{font-size:min(28vw, 10rem);font-weight:800;color:var(--turquoise)}
+    .timebox{ text-align:right }
+    .timebox .big{font-size:32px;font-weight:800}
+    .timebox .small{font-size:13px;color:#8fa1b8}
+
+    /* Fin */
+    .end-card{ text-align:center; padding:36px 24px }
+    .thumb{font-size:min(24vw, 9rem)}
+    .actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:16px}
+    .btn{
+      border-radius:12px; padding:10px 14px; font-weight:700; cursor:pointer; border:1px solid transparent;
+    }
+    .btn-secondary{border-color:#ff5959;color:#ff5959;background:transparent}
+    .btn-primary{background:var(--turquoise);color:#071229}
+
+    /* Responsive */
+    @media (max-width:700px){
+      .grid-2{grid-template-columns:1fr}
+      .shadow-page{padding:24px 4%}
+    }
+  </style>
 </head>
-<body>
-  <header class="nav">
-    <a href="/" class="brand">
-      <img src="assets/logo.png" alt="SMASH.bad" class="brand__logo" />
-      <span class="brand__name">SMASH.bad</span>
-    </a>
-    <button class="nav__toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
-    <nav class="nav__links" data-nav>
-      <a href="shadow.html" aria-current="page">Entraînement</a>
-      <a href="guide.html">Guide raquettes</a>
-      <a href="partner.html">Trouver partenaire</a>
-      <a href="about.html">À propos</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
 
-  <main class="page">
-    <h1>Entraînement Shadow</h1>
-    <p class="lead">On implémentera ici ton fonctionnement précis (timings, enchaînements, sons, presets). Pour l’instant : un prototype minimal pour valider l’ergonomie.</p>
+<body class="home">
+  <main class="shadow-page">
+    <!-- SETUP -->
+    <section id="setup" class="shadow-card">
+      <h1 class="shadow-title">Shadow — Configuration</h1>
+      <p class="shadow-muted">Paramètre ton exercice et lance‑toi.</p>
 
-    <div class="shadow-grid" data-shadow-grid>
-      <button class="shadow-cell">1</button>
-      <button class="shadow-cell">2</button>
-      <button class="shadow-cell">3</button>
-      <button class="shadow-cell">4</button>
-      <button class="shadow-cell">5</button>
-      <button class="shadow-cell">6</button>
-    </div>
+      <!-- Durée totale -->
+      <div class="row">
+        <label><strong>Durée totale :</strong>
+          <span id="totalLabel" class="shadow-muted">1m 00s</span>
+        </label>
+        <div class="slider-wrap">
+          <input id="total" class="slider" type="range" min="30" max="180" step="5" value="60" />
+          <div class="ticks"><span>30s</span><span>1m 45s</span><span>3m</span></div>
+        </div>
+      </div>
 
-    <div class="shadow-controls">
-      <button class="btn btn--primary" data-shadow-start>Démarrer</button>
-      <button class="btn btn--ghost" data-shadow-stop>Arrêter</button>
-      <label class="shadow-speed">Vitesse
-        <input type="range" min="400" max="1600" step="100" value="800" data-shadow-speed />
-      </label>
-    </div>
+      <!-- Intervalle -->
+      <div class="row">
+        <label><strong>Durée d'intervalle :</strong>
+          <span id="intervalLabel" class="shadow-muted">5s</span>
+        </label>
+        <div class="slider-wrap">
+          <input id="interval" class="slider" type="range" min="2" max="8" step="0.5" value="5" />
+          <div class="ticks"><span>2s</span><span>5s</span><span>8s</span></div>
+        </div>
+      </div>
+
+      <!-- Directions -->
+      <div class="row">
+        <label><strong>Positions à entraîner</strong></label>
+        <div class="grid-2">
+          <button class="dir-btn" data-dir="↖"><span class="arrow">↖</span><span class="lbl">Amorti Gauche</span></button>
+          <button class="dir-btn" data-dir="↗"><span class="arrow">↗</span><span class="lbl">Amorti Droit</span></button>
+          <button class="dir-btn" data-dir="←"><span class="arrow">←</span><span class="lbl">À Gauche</span></button>
+          <button class="dir-btn" data-dir="→"><span class="arrow">→</span><span class="lbl">À Droite</span></button>
+          <button class="dir-btn" data-dir="↙"><span class="arrow">↙</span><span class="lbl">Dégagement Gauche</span></button>
+          <button class="dir-btn" data-dir="↘"><span class="arrow">↘</span><span class="lbl">Dégagement Droit</span></button>
+        </div>
+        <p id="dirWarn" class="note" style="display:none">Sélectionne au moins une position pour commencer.</p>
+      </div>
+
+      <!-- Options -->
+      <div class="row">
+        <label class="opt">
+          <input id="hideProgress" type="checkbox" />
+          <span>Masquer la progression en cours</span>
+        </label>
+      </div>
+
+      <!-- GO -->
+      <button id="go" class="go-btn" disabled>
+        <span>▶</span><span>GO !</span>
+      </button>
+    </section>
+
+    <!-- COUNTDOWN / RUN / END -->
+    <section id="run" style="display:none">
+      <div id="bar" class="bar" style="display:none">
+        <div class="pill">Exercice en cours</div>
+        <div class="timebox">
+          <button id="stopBtn" class="stop-btn">Arrêter</button>
+          <div class="big" id="timeLeft">0:00</div>
+          <div class="small">Temps restant</div>
+        </div>
+      </div>
+
+      <div id="arena" class="arena">
+        <!-- rempli dynamiquement -->
+      </div>
+    </section>
   </main>
 
-  <footer class="footer">
-    <p>© <span id="year"></span> SMASH.bad</p>
-  </footer>
+  <script>
+    // ====== State ======
+    const el = (id)=>document.getElementById(id);
+    const setup = el('setup');
+    const run = el('run');
+    const arena = el('arena');
+    const bar = el('bar');
 
-  <script src="main.js"></script>
+    const total = el('total');
+    const interval = el('interval');
+    const totalLabel = el('totalLabel');
+    const intervalLabel = el('intervalLabel');
+    const hideProgress = el('hideProgress');
+    const goBtn = el('go');
+    const dirWarn = el('dirWarn');
+
+    const stopBtn = el('stopBtn');
+    const timeLeft = el('timeLeft');
+
+    const dirButtons = Array.from(document.querySelectorAll('.dir-btn'));
+    let selected = new Set();
+
+    // labels
+    const fmt = (s)=>`${Math.floor(s/60)}m ${(s%60).toString().padStart(2,'0')}s`;
+    totalLabel.textContent = fmt(+total.value);
+    intervalLabel.textContent = `${(+interval.value).toFixed(1).replace('.0','')}s`;
+
+    total.addEventListener('input', ()=> totalLabel.textContent = fmt(+total.value));
+    interval.addEventListener('input', ()=> intervalLabel.textContent =
+      `${(+interval.value).toFixed(1).replace('.0','')}s`);
+
+    // Select directions
+    dirButtons.forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const d = b.dataset.dir;
+        if (selected.has(d)) { selected.delete(d); b.classList.remove('active'); }
+        else { selected.add(d); b.classList.add('active'); }
+        goBtn.disabled = selected.size===0;
+        dirWarn.style.display = selected.size===0 ? 'block' : 'none';
+      })
+    });
+
+    // Audio ding
+    function ding(){
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.35, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+      osc.start(); osc.stop(ctx.currentTime + 0.12);
+    }
+
+    // ====== Run logic ======
+    let totalMs=0, intervalMs=0, remainingMs=0, intervalRemainingMs=0, tickId=null;
+    let hideUI=false, currentDir=null;
+
+    function pick(){
+      const arr = Array.from(selected);
+      return arr[Math.floor(Math.random()*arr.length)];
+    }
+
+    function showArrow(dir){
+      arena.innerHTML = `<div class="mega-arrow" aria-live="assertive">${dir}</div>`;
+    }
+    function hideArrow(){
+      arena.innerHTML = `<div style="color:#8fa1b8;font-size:26px">Prépare-toi…</div>`;
+    }
+    function showCountdown(n){
+      arena.innerHTML = `<div class="countdown">${n}</div>`;
+    }
+    function showEnd(){
+      const box = document.createElement('div');
+      box.className='end-card shadow-card';
+      box.innerHTML = `
+        <div class="thumb">👍</div>
+        <h2 style="font-family:'Audiowide',Outfit;font-size:34px;margin:12px 0 8px">Bien joué !</h2>
+        <p style="color:var(--muted);font-size:18px">Exercice terminé</p>
+        <div class="actions">
+          <button class="btn btn-primary" id="restart">Recommencer</button>
+          <button class="btn btn-secondary" id="back">Modifier les paramètres</button>
+        </div>`;
+      arena.innerHTML=''; arena.appendChild(box);
+      document.getElementById('restart').onclick = start;
+      document.getElementById('back').onclick = resetToSetup;
+    }
+
+    function updateBar(){
+      if (!hideUI){
+        bar.style.display = '';
+        const s = Math.max(0, Math.ceil(remainingMs/1000));
+        timeLeft.textContent = `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+      } else {
+        bar.style.display = 'flex';
+        // on masque juste l’info temps si épuré
+        timeLeft.parentElement.style.visibility = 'hidden';
+      }
+    }
+
+    function tick(){
+      const step = 100; // 100ms => permet 0.5s propre et Hide à 2/3
+      remainingMs -= step;
+      intervalRemainingMs -= step;
+
+      // cacher la flèche dès que 2/3 écoulés
+      const hideAt = intervalMs * (2/3);
+      if (currentDir && (intervalMs - intervalRemainingMs) >= hideAt){
+        currentDir = null; hideArrow();
+      }
+
+      if (intervalRemainingMs <= 0 && remainingMs > 0){
+        // nouvelle direction
+        currentDir = pick();
+        showArrow(currentDir);
+        intervalRemainingMs = intervalMs;
+        ding();
+      }
+      if (remainingMs <= 0){
+        clearInterval(tickId); tickId=null; currentDir=null;
+        showEnd();
+        return;
+      }
+      updateBar();
+    }
+
+    function start(){
+      // init
+      totalMs = +total.value * 1000;
+      intervalMs = Math.round(+interval.value * 1000);
+      remainingMs = totalMs;
+      intervalRemainingMs = intervalMs;
+      hideUI = hideProgress.checked;
+
+      // écran run
+      setup.style.display='none';
+      run.style.display='';
+      bar.style.display='none';
+      arena.innerHTML='';
+
+      // countdown 3-2-1-GO
+      let c=3; showCountdown(c);
+      const cd = setInterval(()=>{
+        c--; if (c>0){ showCountdown(c); }
+        else{
+          clearInterval(cd);
+          // premier affichage
+          currentDir = pick();
+          showArrow(currentDir);
+          ding();
+          updateBar();
+          tickId = setInterval(tick, 100);
+        }
+      }, 1000);
+    }
+
+    function stop(){
+      if (tickId) { clearInterval(tickId); tickId=null; }
+      resetToSetup();
+    }
+
+    function resetToSetup(){
+      run.style.display='none';
+      setup.style.display='';
+      arena.innerHTML='';
+      bar.style.display='none';
+    }
+
+    goBtn.addEventListener('click', start);
+    stopBtn.addEventListener('click', stop);
+
+  </script>
 </body>
 </html>
