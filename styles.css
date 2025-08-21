@@ -69,7 +69,13 @@ a{color:inherit;text-decoration:none}
 }
 
 /* Icônes dans les pills (ne changent pas la hauteur du header) */
-.nav-ic{width:18px;height:18px;display:block;flex:0 0 18px;opacity:.95}
+.nav-ic{
+   width:18px;
+   height:18px;
+   display:block;
+   flex:0 0 18px;
+   opacity:.95
+}
 
 /* État "bientôt" (désactivé) + tooltips */
 .is-soon{position:relative;cursor:not-allowed;color:#9BA8BF;background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.18)}
@@ -82,6 +88,9 @@ a{color:inherit;text-decoration:none}
   opacity:0; pointer-events:none; transition:opacity .15s ease;
 }
 .is-soon:hover .tooltip, .btn--disabled:hover .tooltip{opacity:1}
+
+.nav-pill:hover .nav-ic,
+.btn--ghost:hover .nav-ic{ opacity:1 }
 
 /* Boutons génériques */
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;font-weight:600}
@@ -124,4 +133,5 @@ a{color:inherit;text-decoration:none}
   .hero-split__art{justify-self:start;max-width:420px}
   .nav__links{display:none} /* (menu mobile à ajouter plus tard) */
 }
+
 
