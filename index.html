@@ -8,23 +8,46 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="home">
+  
   <!-- HEADER -->
-  <header class="nav">
-    <a href="/" class="brand">
-      <img src="hero.png" alt="SMASH.bad" class="brand__logo" />
-      <span class="brand__name">SMASH</span>
+<header class="nav">
+  <a href="/" class="brand">
+    <img src="assets/logo.png" alt="SMASH.bad" class="brand__logo" />
+    <span class="brand__wordmark">SMASH</span>
+  </a>
+
+  <nav class="nav__links" data-nav>
+    <a href="shadow.html" class="nav-pill">
+      <!-- foudre / entraînement -->
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="nav-ic"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" fill="currentColor"/></svg>
+      Entraînement
     </a>
 
-    <nav class="nav__links" data-nav>
-      <a href="shadow.html">Entraînement</a>
-      <a href="guide.html">Matériel</a>
-      <a href="partner.html">Partenaires</a>
-      <a class="is-disabled" href="#" aria-disabled="true" title="À venir…">Boutique</a>
-    </nav>
+    <a href="guide.html" class="nav-pill">
+      <!-- raquette stylisée simple -->
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="nav-ic"><path d="M14.5 2a5.5 5.5 0 0 0-5.5 5.5c0 1.2.37 2.31 1 3.22L3 17.72 6.28 21l7.07-7a5.5 5.5 0 1 0 1.15-12z" fill="currentColor"/></svg>
+      Matériel
+    </a>
 
-    <button class="btn btn--ghost btn--disabled"
-            aria-disabled="true" title="À venir…">Se connecter</button>
-  </header>
+    <a href="partner.html" class="nav-pill">
+      <!-- users -->
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="nav-ic"><path d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-8 2a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.31 0-6 1.34-6 3v2h10v-2c0-1.66-2.69-3-6-3Zm8 0c-.68 0-1.33.07-1.95.2A5.42 5.42 0 0 1 18 19v2h6v-2c0-1.66-2.69-3-6-3Z" fill="currentColor"/></svg>
+      Partenaires
+    </a>
+
+    <span class="nav-pill is-soon" aria-disabled="true">
+      <!-- sac / boutique -->
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="nav-ic"><path d="M6 7V6a6 6 0 1 1 12 0v1h2v14H4V7h2Zm2 0h8V6a4 4 0 0 0-8 0v1Z" fill="currentColor"/></svg>
+      Boutique
+      <span class="tooltip">Bientôt disponible</span>
+    </span>
+  </nav>
+
+  <button class="btn btn--ghost btn--disabled" aria-disabled="true">
+    Se connecter
+    <span class="tooltip">Bientôt disponible</span>
+  </button>
+</header>
 
   <!-- HERO SPLIT -->
   <main>
@@ -33,8 +56,7 @@
         <p class="kicker">Bienvenue sur SMASH</p>
         <h1>Votre partenaire<br><span class="accent">Badminton</span></h1>
         <p class="lead">
-          Un portail pratique et sobre pour les badistes : entraînement, matériel
-          et bientôt mise en relation pour les tournois.
+          Progresser, s’équiper, jouer : tout ce qu’il te faut pour vivre le badminton à fond.
         </p>
       </div>
 
@@ -56,4 +78,5 @@
   </script>
 </body>
 </html>
+
 
