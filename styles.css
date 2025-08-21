@@ -4,8 +4,18 @@
   --turquoise:#12D8DF; --red:#FF3D2E; --orange:#FF7A1A;
   --white:#F4F8FF; --muted:#C7D2E0;
 }
-body{margin:0;background:var(--dark);color:var(--white);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
-a{color:inherit;text-decoration:none}
+
+body {
+  margin:0;
+  background:#0a1428; /* bleu nuit profond */
+  color:var(--white);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+}
+
+a {
+  color:inherit;
+  text-decoration:none
+}
 
 /* ====== Header ====== */
 .nav{
@@ -30,13 +40,15 @@ a{color:inherit;text-decoration:none}
 
 /* ====== HERO “Visuel fort” ====== */
 .hero-split{
-  display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:32px;
-  min-height:calc(100vh - 64px);padding:40px 5%;
-  background:
-    radial-gradient(80% 80% at 100% 0%, rgba(255,122,26,.12) 0%, rgba(0,0,0,0) 60%),
-    radial-gradient(70% 70% at 80% 20%, rgba(18,216,223,.10) 0%, rgba(0,0,0,0) 60%),
-    var(--dark);
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  align-items:center;
+  gap:32px;
+  min-height:calc(100vh - 64px);
+  padding:40px 5%;
+  background:#0a1428; /* même fond bleu nuit, uniforme */
 }
+
 .kicker{display:inline-block;margin:0 0 14px;padding:6px 10px;border-radius:999px;
   background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:14px}
 .hero-split__text h1{font-size:clamp(34px,6vw,64px);line-height:1.05;margin:0 0 10px}
@@ -54,3 +66,4 @@ a{color:inherit;text-decoration:none}
   .hero-split__art{justify-self:start;max-width:420px}
   .nav__links{display:none} /* (on pourra ajouter un menu mobile plus tard) */
 }
+
