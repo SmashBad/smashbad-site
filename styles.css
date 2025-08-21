@@ -7,7 +7,7 @@
 
 body {
   margin:0;
-  background:#0a1428; /* bleu nuit profond */
+  background:#010B2E; /* bleu nuit profond */
   color:var(--white);
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
 }
@@ -66,4 +66,5 @@ a {
   .hero-split__art{justify-self:start;max-width:420px}
   .nav__links{display:none} /* (on pourra ajouter un menu mobile plus tard) */
 }
+
 
