@@ -3,98 +3,56 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SMASH.bad — Accueil</title>
+  <title>SMASH.bad — Votre partenaire de badminton</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="home">
+  <!-- HEADER -->
   <header class="nav">
     <a href="/" class="brand">
       <img src="assets/logo.png" alt="SMASH.bad" class="brand__logo" />
-      <span class="brand__name">SMASH.bad</span>
+      <span class="brand__name">SMASH</span>
     </a>
-    <button class="nav__toggle" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+
     <nav class="nav__links" data-nav>
       <a href="shadow.html">Entraînement</a>
-      <a href="guide.html">Guide raquettes</a>
-      <a href="partner.html">Trouver partenaire</a>
-      <a href="about.html">À propos</a>
-      <a href="contact.html">Contact</a>
+      <a href="guide.html">Matériel</a>
+      <a href="partner.html">Partenaires</a>
+      <a class="is-disabled" href="#" aria-disabled="true" title="À venir…">Boutique</a>
     </nav>
+
+    <button class="btn btn--ghost btn--disabled"
+            aria-disabled="true" title="À venir…">Se connecter</button>
   </header>
 
-  <!-- HERO / Carrousel -->
-  <section class="hero">
-    <div class="hero__slides" data-slides>
-      <!-- Slide 1 -->
-      <article class="hero-slide is-active">
-        <div class="hero-slide__text">
-          <h1>Améliore tes réflexes et ta vitesse.</h1>
-          <p>L’entraînement Shadow pour travailler tes déplacements, proprement et efficacement.</p>
-          <div class="actions">
-            <a class="btn btn--primary" href="shadow.html">S’entraîner maintenant</a>
-          </div>
-        </div>
-        <div class="hero-slide__art">
-          <img src="assets/hero.png" alt="Joueur de badminton stylisé" />
-        </div>
-      </article>
+  <!-- HERO SPLIT -->
+  <main>
+    <section class="hero-split">
+      <div class="hero-split__text">
+        <p class="kicker">Bienvenue sur SMASH</p>
+        <h1>Votre partenaire<br><span class="accent">Badminton</span></h1>
+        <p class="lead">
+          Un portail pratique et sobre pour les badistes : entraînement, matériel
+          et bientôt mise en relation pour les tournois.
+        </p>
+      </div>
 
-      <!-- Slide 2 -->
-      <article class="hero-slide">
-        <div class="hero-slide__text">
-          <h1>Bientôt : trouve un partenaire de tournoi près de chez toi.</h1>
-          <p>Filtre par niveau, géographie et type de match. Dis-nous ce dont tu as besoin.</p>
-          <div class="actions">
-            <a class="btn btn--secondary" href="partner.html">Donner mon avis</a>
-          </div>
-        </div>
-        <div class="hero-slide__art">
-          <img src="assets/hero.png" alt="Joueur de badminton stylisé" />
-        </div>
-      </article>
+      <div class="hero-split__art">
+        <!-- Remplacez cette image par votre illustration -->
+        <img src="assets/hero.png" alt="Joueur de badminton stylisé" />
+      </div>
+    </section>
+  </main>
 
-      <!-- Slide 3 -->
-      <article class="hero-slide">
-        <div class="hero-slide__text">
-          <h1>La raquette qui correspond à ton jeu.</h1>
-          <p>Un guide clair, sans jargon : choisis selon ton style, ton niveau et tes objectifs.</p>
-          <div class="actions">
-            <a class="btn btn--primary" href="guide.html">Commencer le test</a>
-          </div>
-        </div>
-        <div class="hero-slide__art">
-          <img src="assets/hero.png" alt="Joueur de badminton stylisé" />
-        </div>
-      </article>
-    </div>
-
-    <div class="hero__dots" data-dots></div>
-  </section>
-
-  <!-- 3 cartes outils -->
-  <section class="features">
-    <div class="feature">
-      <h3>Entraînement Shadow</h3>
-      <p>Un exercice simple pour travailler tes appuis et tes réflexes.</p>
-      <a class="link" href="shadow.html">Lancer l’outil →</a>
-    </div>
-    <div class="feature">
-      <h3>Guide raquettes</h3>
-      <p>Un questionnaire court pour trouver la bonne raquette, sans prise de tête.</p>
-      <a class="link" href="guide.html">Commencer →</a>
-    </div>
-    <div class="feature">
-      <h3>Trouver partenaire</h3>
-      <p>La fonctionnalité arrive bientôt. Donne-nous tes idées pour la prioriser.</p>
-      <a class="link" href="partner.html">Donner mon avis →</a>
-    </div>
-  </section>
-
+  <!-- FOOTER MINIMAL -->
   <footer class="footer">
     <p>© <span id="year"></span> SMASH.bad — Tous droits réservés.</p>
   </footer>
 
-  <script src="main.js"></script>
+  <script>
+    // Année dans le footer
+    document.getElementById('year')?.append(new Date().getFullYear());
+  </script>
 </body>
 </html>
