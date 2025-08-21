@@ -69,7 +69,7 @@ a {
 
 /* === Brand (logo + wordmark) === */
 .brand{display:flex;align-items:center;gap:12px}
-.brand__logo{height:36px;width:auto}        /* + grand */
+.brand__logo{height:48px;width:auto}        /* + grand */
 .brand__wordmark{
   font-weight:800;
   letter-spacing:.6px;
@@ -130,6 +130,7 @@ a {
   border:1px solid rgba(255,255,255,.12);
   color:#C7D2E0;
 }
+
 
 
 
