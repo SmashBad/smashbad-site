@@ -67,4 +67,70 @@ a {
   .nav__links{display:none} /* (on pourra ajouter un menu mobile plus tard) */
 }
 
+/* === Brand (logo + wordmark) === */
+.brand{display:flex;align-items:center;gap:12px}
+.brand__logo{height:36px;width:auto}        /* + grand */
+.brand__wordmark{
+  font-weight:800;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  /* léger dégradé sportif sur le texte */
+  background:linear-gradient(90deg, #F4F8FF 0%, #12D8DF 60%, #F4F8FF 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+/* === Navigation pills + icônes === */
+.nav__links{display:flex;gap:10px}
+.nav-ic{width:16px;height:16px;opacity:.9}
+.nav-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 12px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);
+  color:#EAF2FF;background:rgba(255,255,255,.04);
+  font-weight:600;opacity:.95;
+  transition:transform .08s ease, background .2s ease, border-color .2s ease, color .2s ease;
+}
+.nav-pill:hover{
+  background:rgba(255,255,255,.10);
+  border-color:rgba(255,255,255,.28);
+  color:#fff; transform:translateY(-1px);
+}
+
+/* État "bientôt" (désactivé avec tooltip) */
+.is-soon{
+  position:relative; cursor:not-allowed;
+  color:#9BA8BF; background:rgba(255,255,255,.02);
+  border:1px dashed rgba(255,255,255,.18);
+}
+.is-soon:hover{background:rgba(255,255,255,.06); color:#C8D3E6}
+.is-soon .tooltip,
+.btn--disabled .tooltip{
+  position:absolute; top:110%; left:50%; transform:translateX(-50%);
+  white-space:nowrap; padding:6px 8px; border-radius:8px;
+  background:#121A2A; color:#EAF2FF; font-size:12px;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+  opacity:0; pointer-events:none; transition:opacity .15s ease;
+}
+.is-soon:hover .tooltip,
+.btn--disabled:hover .tooltip{ opacity:1; }
+
+/* Bouton "Se connecter" désactivé */
+.btn--disabled{opacity:.55; cursor:not-allowed; position:relative}
+.btn--ghost{border:1px solid rgba(255,255,255,.25); color:#fff; background:transparent; padding:8px 14px; border-radius:999px; font-weight:600}
+.btn--ghost:hover{border-color:rgba(255,255,255,.35)}
+
+/* Hero – retouche légère pour donner plus de peps */
+.hero-split__text h1{font-weight:800}
+.hero-split__text .accent{color:#12D8DF}
+.kicker{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  color:#C7D2E0;
+}
+
+
+
 
