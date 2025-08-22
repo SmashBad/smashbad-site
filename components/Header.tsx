@@ -33,10 +33,10 @@ export default function Header() {
         </span>
       </nav>
 
-      <button className="nav-pill is-soon" aria-disabled="true">
-        <img src="/Login.svg" alt="" className="nav-ic" />
-        Se connecter
-        <span className="tooltip">Bientôt disponible</span>
+      <button className="nav-pill is-soon nav__login" aria-disabled="true" type="button">
+        <img src="/Login.svg" alt="" className="nav-ic" aria-hidden="true" />
+         <span className="label">Se connecter</span>
+         <span className="tooltip">Bientôt disponible</span>
       </button>
     </header>
   );
