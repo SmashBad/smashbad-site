@@ -9,7 +9,7 @@ export default function Header() {
       </a>
 
       <nav className="nav__links">
-        <a href="/shadow" className="nav-pill">
+        <a href="/entrainements" className="nav-pill">
           <img src="/Bolt.svg" alt="" className="nav-ic" />
           Entraînement
         </a>
