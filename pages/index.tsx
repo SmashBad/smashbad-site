@@ -1,3 +1,5 @@
+// pages/index.tsx
+import React from "react";
 import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -6,56 +8,53 @@ export default function Home() {
   return (
     <>
       <Head>
-        <h1 className="hero__title">
-          Votre partenaire
-        <br />
-          <span className="accent">Badminton</span>
-        </h1>
-        {/* Polices (on pourra déplacer dans _document plus tard) */}
+        <title>SMASH.bad — Votre partenaire de badminton</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Fonts */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+          rel="stylesheet"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Audiowide&family=Outfit:wght@400;600;700;800&display=swap"
           rel="stylesheet"
         />
       </Head>
 
-      <Header />
+      <body className="home">
+        {/* HEADER */}
+        <Header />
 
-      <main className="hero">
-        <section className="hero__grid">
-          <div className="hero__text">
-            <span className="kicker">Bienvenue sur SMASH</span>
-            <h1 className="hero__title">
-              Votre partenaire <span className="accent">badminton</span>
-            </h1>
-            <p className="lead hero__lead">
-              Entraînement, matériel, partenaires&nbsp;: tout ce qu’il te faut
-              pour vivre le badminton à fond — simplement et sans blabla.
-            </p>
-
-            {/* CTA unique et discret (la nav contient déjà les entrées) */}
-            <div className="hero__cta">
-              <a href="/shadow" className="cta-primary">
-                <img src="/assets/Bolt.svg" alt="" className="nav-ic" />
-                Commencer l’entraînement
-              </a>
+        {/* HERO SPLIT */}
+        <main>
+          <section className="hero-split">
+            <div className="hero-split__text">
+              <p className="kicker">Bienvenue sur SMASH</p>
+              <h1>
+                Votre partenaire
+                <br />
+                <span className="accent">Badminton</span>
+              </h1>
+              <p className="lead">
+                Progresser, s’équiper, jouer : tout ce qu’il te faut pour vivre
+                le badminton à fond.
+              </p>
             </div>
-          </div>
 
-          {/* Logo (ou illustration) en grand côté droit */}
-          <div className="hero__art">
-            {/* Utilise ton logo (ou illustration) déposée dans /public */}
-            <img
-              src="/logo.png"
-              alt="Logo SMASH"
-              className="hero__mark"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-        </section>
-      </main>
+            <div className="hero-split__art">
+              <img
+                src="/assets/hero.png"
+                alt="Joueur de badminton stylisé"
+              />
+            </div>
+          </section>
+        </main>
 
-      <Footer />
+        {/* FOOTER */}
+        <Footer />
+      </body>
     </>
   );
 }
