@@ -6,8 +6,11 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>SMASH.bad — Votre partenaire</title><br /><span className="accent">Badminton</span>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <h1 className="hero__title">
+          Votre partenaire
+        <br />
+          <span className="accent">Badminton</span>
+        </h1>
         {/* Polices (on pourra déplacer dans _document plus tard) */}
         <link
           href="https://fonts.googleapis.com/css2?family=Audiowide&family=Outfit:wght@400;600;700;800&display=swap"
