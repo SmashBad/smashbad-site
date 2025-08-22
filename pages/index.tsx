@@ -45,7 +45,7 @@ export default function Home() {
 
             <div className="hero-split__art">
               <img
-                src="/public/hero.png"
+                src="/assets/hero.png"
                 alt="Joueur de badminton stylisé"
               />
             </div>
