@@ -146,3 +146,79 @@ a{color:inherit;text-decoration:none}
   }
   .nav__links::-webkit-scrollbar{ display:none; }
 }
+
+/* ========== Entraînements ========== */
+.trainings { padding: 40px 5% 72px; }
+.trainings__wrap { max-width: 1200px; margin: 0 auto; }
+.trainings__title {
+  font-family:"Audiowide","Outfit",system-ui;
+  font-size: clamp(28px, 4.2vw, 40px);
+  margin: 0 0 18px;
+}
+.trainings__filters {
+  display: flex; gap: 10px; flex-wrap: wrap; row-gap: 10px;
+  margin: 10px 0 24px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.trainings__filters::-webkit-scrollbar { display: none; }
+
+/* Chips (filtres) */
+.chip{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.04); color:#EAF2FF; font-weight:700;
+  white-space:nowrap; transition: background .2s ease, border-color .2s ease, transform .08s ease;
+}
+.chip:hover{ background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.28); transform:translateY(-1px); }
+.chip--active{ background:rgba(18,216,223,.15); border-color:#12D8DF; color:#fff; }
+
+/* Grille des cartes */
+.ex-grid{
+  display:grid; grid-template-columns: 1fr 1fr; gap: 22px;
+}
+@media (max-width: 900px){
+  .ex-grid{ grid-template-columns: 1fr; }
+}
+
+/* Carte d’exercice */
+.ex-card{
+  display:grid; grid-template-columns: 1fr auto; align-items:stretch;
+  border:1px solid rgba(255,255,255,.10);
+  background:#0a1428;
+  border-radius:16px; padding:18px;
+  box-shadow:0 6px 26px rgba(0,0,0,.22);
+}
+.ex-card--soon{ opacity:.65; }
+
+.ex-card__body{ padding-right: 16px; }
+.ex-card__title{
+  font-size: clamp(20px, 3.2vw, 26px); margin: 0 0 6px; font-weight: 800;
+}
+.ex-card__pitch{ color: var(--muted); margin: 0 0 12px; }
+.ex-card__tags{ display:flex; gap:8px; padding:0; margin:0; list-style:none; }
+.ex-card__tag{
+  font-size:12px; color:#C7D2E0;
+  padding:4px 8px; border-radius:999px;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10);
+}
+
+/* CTA */
+.ex-card__cta{
+  display:flex; align-items:center; justify-content:flex-end;
+}
+.cta-primary{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 14px; border-radius:12px; font-weight:800;
+  background:linear-gradient(90deg, #12D8DF 0%, #24b9f0 100%);
+  color:#041225; border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 10px 28px rgba(18,216,223,.20);
+}
+.cta-primary:hover{ transform: translateY(-1px); }
+
+.cta-disabled{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 14px; border-radius:12px; font-weight:700;
+  border:1px dashed rgba(255,255,255,.25);
+  color:#9BA8BF; background:rgba(255,255,255,.02);
+}
