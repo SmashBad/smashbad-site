@@ -15,22 +15,11 @@ export default function Home() {
 
       <Header />
 
-      <main>
-        {/* Mini placeholder pour valider le rendu. 
-            On remplacera ensuite par ton vrai hero. */}
-        <section className="hero-split">
-          <div className="hero-split__text">
-            <p className="kicker">Bienvenue sur SMASH</p>
-            <h1>Votre partenaire <span className="accent">Badminton</span></h1>
-            <p className="lead">
-              Des outils clairs pour t’entraîner mieux, t’équiper intelligemment
-              et (bientôt) trouver des partenaires de tournoi.
-            </p>
-          </div>
-          <div className="hero-split__art">
-            <img src="/public/hero.png" alt="" />
-          </div>
-        </section>
+      <main style={{ padding: "40px 5%" }}>
+        <h1 style={{ fontFamily: "Audiowide, Outfit, sans-serif", marginBottom: 8 }}>
+          Accueil
+        </h1>
+        <p className="lead">Page Next.js opérationnelle ✅</p>
       </main>
     </>
   );
