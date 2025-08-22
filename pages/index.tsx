@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>SMASH.bad — Votre partenaire</title><br><span class="accent">Badminton</span>
+        <title>SMASH.bad — Votre partenaire</title><br /><span className="accent">Badminton</span>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Polices (on pourra déplacer dans _document plus tard) */}
         <link
