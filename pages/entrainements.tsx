@@ -11,6 +11,7 @@ type Exercise = {
   pitch: string;
   tags: Tag[];
   status: "active" | "soon";
+  mode?: "play" | "read"; // play = interactif, read = consignes
   href?: string; // pour les actifs
 };
 
@@ -139,15 +140,21 @@ export default function Entrainements() {
 
                   <div className="ex-card__cta">
                     {ex.status === "active" && ex.href ? (
-                      <a href={ex.href} className="cta-primary">
-                        Démarrer
-                      </a>
+                        ex.mode === "read" ? (
+                        <a href={ex.href} className="cta-secondary">
+                            Voir
+                        </a>
+                        ) : (
+                        <a href={ex.href} className="cta-primary">
+                            Démarrer
+                        </a>
+                        )
                     ) : (
-                      <span className="cta-disabled" aria-disabled="true">
+                        <span className="cta-disabled" aria-disabled="true">
                         Bientôt disponible
-                      </span>
+                        </span>
                     )}
-                  </div>
+                    </div>
                 </article>
               ))}
             </section>
