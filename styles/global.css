@@ -197,14 +197,15 @@ a{color:inherit;text-decoration:none}
   border-color: transparent;
   color: #041225;                 /* texte foncé pour le contraste */
   box-shadow:
-    0 10px 26px rgba(18,216,223,.30),
+    0 5px 12px rgba(18,216,223,.30),
     0 0 0 1px rgba(0,0,0,.08) inset;
   transform: translateY(-2px);
 }
 .chip--active:hover{
+  background: linear-gradient(180deg, #14adb3, #0aafb4);
   transform: translateY(-2px);
   box-shadow:
-    0 12px 28px rgba(18,216,223,.36),
+    0 7px 15px rgba(18,216,223,.36),
     0 0 0 1px rgba(0,0,0,.10) inset;
 }
 .chip:focus-visible{
