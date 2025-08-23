@@ -125,26 +125,27 @@ a{color:inherit;text-decoration:none}
   color:var(--muted); text-align:center;
 }
 
-/* ====== Breakpoints (adjust these values easily) ====== */
-/* < 700px : logo + burger ; no pills ; no login visible in header */
-@media (max-width: 699px){
-  .brand__wordmark{ display:none; }
-  .nav__links{ display:none; }
-  .login--full{ display:none; }
-  .login--icon-only{ display:none; } /* login only inside burger on mobile */
-  .burger{ display:inline-flex; }
+/* ====== Breakpoints clean ====== */
+
+/* < 750px : logo + wordmark, burger visible, pas de pills */
+@media (max-width: 749px){
+  .brand__wordmark{ display:inline; }   /* texte SMASH réapparaît */
+  .nav__links{ display:none; }          /* cacher les liens */
+  .login--full{ display:none; }         /* pas de bouton login */
+  .login--icon-only{ display:none; }    /* pas d’icône login non plus */
+  .burger{ display:inline-flex; }       /* burger visible */
 }
 
-/* 700–999px : logo + pills + login icon-only ; (optional) hide wordmark */
-@media (min-width: 700px) and (max-width: 999px){
-  .brand__wordmark{ display:none; } /* keep only logo mark; remove if you prefer */
-  .nav__links{ display:flex; }
+/* 750–999px : logo sans wordmark, pills visibles, login en icône */
+@media (min-width: 750px) and (max-width: 999px){
+  .brand__wordmark{ display:none; }     /* garder seulement le logo */
+  .nav__links{ display:flex; }          /* afficher les pills */
   .login--full{ display:none; }
-  .login--icon-only{ display:inline-flex; }
+  .login--icon-only{ display:inline-flex; } /* icône login visible */
   .burger{ display:none; }
 }
 
-/* ≥ 1000px : full header */
+/* ≥ 1000px : tout complet */
 @media (min-width: 1000px){
   .brand__wordmark{ display:inline; }
   .nav__links{ display:flex; }
