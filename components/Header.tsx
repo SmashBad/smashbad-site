@@ -4,12 +4,10 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const [open, setOpen] = useState(false);
 
-  // Prevent body scroll when burger is open
+  // Empêche le scroll quand le menu mobile est ouvert
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   return (
@@ -20,7 +18,7 @@ export default function Header() {
         <span className="brand__wordmark">SMASH</span>
       </a>
 
-      {/* Main nav pills (hidden < 900px) */}
+      {/* Pills (cachées < 750px via CSS) */}
       <nav className="nav__links" aria-label="Navigation principale">
         <a href="/entrainements" className="nav-pill">
           <img src="Bolt.svg" className="nav-ic" alt="" aria-hidden />
@@ -46,43 +44,45 @@ export default function Header() {
         </span>
       </nav>
 
-      {/* Right area: login button (text version ≥1200), icon‑only 900–1199 */}
+      {/* Zone droite : login + burger */}
       <div className="nav__actions">
-        {/* Icon-only login (shown between 900–1199) */}
+        {/* Icône login (visible 750–999px via CSS .login--icon-only) */}
         <button
           className="btn btn--ghost btn--icon login--icon-only"
           aria-disabled="true"
           title="Se connecter (bientôt)"
+          type="button"
         >
           <img src="Login.svg" alt="" className="nav-ic" aria-hidden />
         </button>
 
-        {/* Full login button (shown ≥1200) */}
+        {/* Bouton login complet (visible ≥1000px via CSS .login--full) */}
         <button
           className="btn btn--ghost btn--disabled login--full"
           aria-disabled="true"
+          type="button"
         >
           <img src="Login.svg" alt="" className="nav-ic" aria-hidden />
           Se connecter
           <span className="tooltip">Bientôt disponible</span>
         </button>
 
-        {/* Burger (shown < 900) */}
+        {/* Burger (visible < 750px via CSS .burger) */}
         <button
           className="burger"
           aria-label="Ouvrir le menu"
           aria-expanded={open}
           aria-controls="mobileMenu"
           onClick={() => setOpen(true)}
+          type="button"
         >
-          {/* Simple inline burger icon */}
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path d="M3 6h18M3 12h18M3 18h18" stroke="#EAF2FF" strokeWidth="2" strokeLinecap="round"/>
           </svg>
         </button>
       </div>
 
-      {/* Mobile overlay menu */}
+      {/* Menu mobile */}
       <div
         id="mobileMenu"
         className={`mmenu ${open ? "is-open" : ""}`}
@@ -97,6 +97,7 @@ export default function Header() {
               className="mmenu__close"
               aria-label="Fermer le menu"
               onClick={() => setOpen(false)}
+              type="button"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden>
                 <path d="M6 6l12 12M18 6L6 18" stroke="#EAF2FF" strokeWidth="2" strokeLinecap="round"/>
@@ -127,7 +128,7 @@ export default function Header() {
           </nav>
 
           <div className="mmenu__footer">
-            <button className="btn btn--ghost btn--disabled" aria-disabled="true">
+            <button className="btn btn--ghost btn--disabled" aria-disabled="true" type="button">
               <img src="Login.svg" alt="" className="nav-ic" aria-hidden />
               Se connecter
             </button>
