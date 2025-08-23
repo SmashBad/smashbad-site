@@ -71,10 +71,12 @@ export default function Header() {
         <button
           className="burger"
           aria-label="Ouvrir le menu"
-          aria-expanded={open}
-          aria-controls="mobileMenu"
-          onClick={() => setOpen(true)}
           type="button"
+          onClick={() => {
+            const el = document.getElementById("mobileMenu");
+            el?.classList.add("is-open");
+            document.body.style.overflow = "hidden";
+            }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path d="M3 6h18M3 12h18M3 18h18" stroke="#EAF2FF" strokeWidth="2" strokeLinecap="round"/>
@@ -85,7 +87,7 @@ export default function Header() {
       {/* Menu mobile */}
       <div
         id="mobileMenu"
-        className={`mmenu ${open ? "is-open" : ""}`}
+        className="mmenu"
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
@@ -93,12 +95,14 @@ export default function Header() {
         <div className="mmenu__panel">
           <div className="mmenu__header">
             <span>Menu</span>
-            <button
-              className="mmenu__close"
-              aria-label="Fermer le menu"
-              onClick={() => setOpen(false)}
-              type="button"
-            >
+              <button
+                className="mmenu__close"
+                aria-label="Fermer le menu"
+                onClick={() => {
+                  document.getElementById("mobileMenu")?.classList.remove("is-open");
+                  document.body.style.overflow = "";
+                }}
+              >
               <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden>
                 <path d="M6 6l12 12M18 6L6 18" stroke="#EAF2FF" strokeWidth="2" strokeLinecap="round"/>
               </svg>
@@ -106,7 +110,7 @@ export default function Header() {
           </div>
 
           <nav className="mmenu__list">
-            <a href="/entrainements" className="mmenu__item" onClick={() => setOpen(false)}>
+            <a href="/entrainements" className="mmenu__item">
               <img src="Bolt.svg" className="nav-ic" alt="" aria-hidden />
               <span>Entraînement</span>
             </a>
@@ -128,7 +132,7 @@ export default function Header() {
           </nav>
 
           <div className="mmenu__footer">
-            <button className="btn btn--ghost btn--disabled" aria-disabled="true" type="button">
+            <button className="btn btn--ghost btn--disabled" aria-disabled="true">
               <img src="Login.svg" alt="" className="nav-ic" aria-hidden />
               Se connecter
             </button>
