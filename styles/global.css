@@ -125,27 +125,107 @@ a{color:inherit;text-decoration:none}
   color:var(--muted); text-align:center;
 }
 
-/* =========================
-   5) Responsive
-   ========================= */
-@media (max-width: 980px){
-  /* au lieu de display:none */
-  .nav__links{
-    display:flex;            /* garder visible */
-    gap:12px;
-    flex-wrap:wrap;          /* passera à la ligne */
-    row-gap:8px;
-  }
+/* ====== Breakpoints (adjust these values easily) ====== */
+/* < 900px : logo + burger ; no pills ; no login visible in header */
+@media (max-width: 899px){
+  .brand__wordmark{ display:none; }
+  .nav__links{ display:none; }
+  .login--full{ display:none; }
+  .login--icon-only{ display:none; } /* login only inside burger on mobile */
+  .burger{ display:inline-flex; }
 }
 
-@media (max-width: 700px){
-  .nav__links{
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .nav__links::-webkit-scrollbar{ display:none; }
+/* 900–1199px : logo + pills + login icon-only ; (optional) hide wordmark */
+@media (min-width: 900px) and (max-width: 1199px){
+  .brand__wordmark{ display:none; } /* keep only logo mark; remove if you prefer */
+  .nav__links{ display:flex; }
+  .login--full{ display:none; }
+  .login--icon-only{ display:inline-flex; }
+  .burger{ display:none; }
 }
+
+/* ≥ 1200px : full header */
+@media (min-width: 1200px){
+  .brand__wordmark{ display:inline; }
+  .nav__links{ display:flex; }
+  .login--full{ display:inline-flex; }
+  .login--icon-only{ display:none; }
+  .burger{ display:none; }
+}
+
+/* ====== Small tweaks ====== */
+.nav__actions{
+  display:flex; align-items:center; gap:10px;
+}
+
+.btn--icon{
+  padding:8px; border-radius:12px; gap:0;
+  width:36px; height:36px; justify-content:center;
+}
+
+/* ====== Burger button base (hidden by default) ====== */
+.burger{
+  display:none; align-items:center; justify-content:center;
+  width:40px; height:40px; border-radius:10px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.15);
+}
+.burger:hover{ background:rgba(255,255,255,.1) }
+
+/* ====== Mobile menu (overlay) ====== */
+.mmenu{
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,.45);
+  opacity:0; pointer-events:none;
+  transition:opacity .2s ease;
+}
+.mmenu.is-open{ opacity:1; pointer-events:auto; }
+
+.mmenu__panel{
+  position:absolute; top:0; right:0;
+  width:min(88vw, 360px); height:100%;
+  background:#0b1530; border-left:1px solid rgba(255,255,255,.08);
+  box-shadow:-16px 0 40px rgba(0,0,0,.35);
+  transform:translateX(100%);
+  transition:transform .2s ease;
+}
+.mmenu.is-open .mmenu__panel{ transform:translateX(0) }
+
+.mmenu__header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08);
+  color:#EAF2FF; font-weight:700;
+}
+.mmenu__close{
+  width:36px; height:36px; border-radius:10px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.15);
+}
+
+.mmenu__list{
+  display:flex; flex-direction:column; gap:8px;
+  padding:14px 12px;
+}
+.mmenu__item{
+  display:flex; align-items:center; gap:10px;
+  padding:12px 10px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+  color:#EAF2FF;
+}
+.mmenu__item:hover{ background:rgba(255,255,255,.09) }
+.mmenu__item.is-soon{ opacity:.7; cursor:not-allowed; }
+.mmenu__soon{
+  margin-left:auto; font-size:12px; color:#C7D2E0; opacity:.8;
+}
+
+.mmenu__footer{
+  margin-top:auto; padding:14px 12px; border-top:1px solid rgba(255,255,255,.08);
+}
+
+
+
 
 /* ========== Entraînements ========== */
 .trainings { padding: 40px 5% 72px; overflow: visible;}
