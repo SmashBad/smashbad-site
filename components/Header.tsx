@@ -34,13 +34,13 @@ export default function Header() {
         </span>
 
         <span className="nav-pill is-soon" aria-disabled="true">
-          <img src="/public/Partner.svg" className="nav-ic" alt="" />
+          <img src="Partner.svg" className="nav-ic" alt="" />
           Partenaires
           <span className="tooltip">Bientôt disponible</span>
         </span>
 
         <span className="nav-pill is-soon" aria-disabled="true">
-          <img src="/public/Shop.svg" className="nav-ic" alt="" aria-hidden />
+          <img src="Shop.svg" className="nav-ic" alt="" aria-hidden />
           Boutique
           <span className="tooltip">Bientôt disponible</span>
         </span>
