@@ -16,31 +16,31 @@ export default function Header() {
     <header className="nav">
       {/* Brand */}
       <a href="/" className="brand" aria-label="Page d’accueil">
-        <img src="/assets/logo.png" alt="SMASH.bad" className="brand__logo" />
+        <img src="/public/logo.png" alt="SMASH.bad" className="brand__logo" />
         <span className="brand__wordmark">SMASH</span>
       </a>
 
       {/* Main nav pills (hidden < 900px) */}
       <nav className="nav__links" aria-label="Navigation principale">
         <a href="/entrainements" className="nav-pill">
-          <img src="/assets/Bolt.svg" className="nav-ic" alt="" aria-hidden />
+          <img src="/public/Bolt.svg" className="nav-ic" alt="" aria-hidden />
           Entraînement
         </a>
 
         <span className="nav-pill is-soon" aria-disabled="true">
-          <img src="/assets/Racket.svg" className="nav-ic" alt="" />
+          <img src="/public/Racket.svg" className="nav-ic" alt="" />
           Matériel
           <span className="tooltip">Bientôt disponible</span>
         </span>
 
         <span className="nav-pill is-soon" aria-disabled="true">
-          <img src="/assets/Partner.svg" className="nav-ic" alt="" />
+          <img src="/public/Partner.svg" className="nav-ic" alt="" />
           Partenaires
           <span className="tooltip">Bientôt disponible</span>
         </span>
 
         <span className="nav-pill is-soon" aria-disabled="true">
-          <img src="/assets/Shop.svg" className="nav-ic" alt="" aria-hidden />
+          <img src="/public/Shop.svg" className="nav-ic" alt="" aria-hidden />
           Boutique
           <span className="tooltip">Bientôt disponible</span>
         </span>
