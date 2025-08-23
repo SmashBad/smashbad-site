@@ -126,7 +126,7 @@ a{color:inherit;text-decoration:none}
 }
 
 /* ====== Breakpoints (adjust these values easily) ====== */
-/* < 900px : logo + burger ; no pills ; no login visible in header */
+/* < 700px : logo + burger ; no pills ; no login visible in header */
 @media (max-width: 899px){
   .brand__wordmark{ display:none; }
   .nav__links{ display:none; }
@@ -135,7 +135,7 @@ a{color:inherit;text-decoration:none}
   .burger{ display:inline-flex; }
 }
 
-/* 900–1199px : logo + pills + login icon-only ; (optional) hide wordmark */
+/* 700–999px : logo + pills + login icon-only ; (optional) hide wordmark */
 @media (min-width: 900px) and (max-width: 1199px){
   .brand__wordmark{ display:none; } /* keep only logo mark; remove if you prefer */
   .nav__links{ display:flex; }
@@ -144,7 +144,7 @@ a{color:inherit;text-decoration:none}
   .burger{ display:none; }
 }
 
-/* ≥ 1200px : full header */
+/* ≥ 1000px : full header */
 @media (min-width: 1200px){
   .brand__wordmark{ display:inline; }
   .nav__links{ display:flex; }
