@@ -127,7 +127,7 @@ a{color:inherit;text-decoration:none}
 
 /* ====== Breakpoints (adjust these values easily) ====== */
 /* < 700px : logo + burger ; no pills ; no login visible in header */
-@media (max-width: 899px){
+@media (max-width: 699px){
   .brand__wordmark{ display:none; }
   .nav__links{ display:none; }
   .login--full{ display:none; }
@@ -136,7 +136,7 @@ a{color:inherit;text-decoration:none}
 }
 
 /* 700–999px : logo + pills + login icon-only ; (optional) hide wordmark */
-@media (min-width: 900px) and (max-width: 1199px){
+@media (min-width: 700px) and (max-width: 999px){
   .brand__wordmark{ display:none; } /* keep only logo mark; remove if you prefer */
   .nav__links{ display:flex; }
   .login--full{ display:none; }
@@ -145,7 +145,7 @@ a{color:inherit;text-decoration:none}
 }
 
 /* ≥ 1000px : full header */
-@media (min-width: 1200px){
+@media (min-width: 1000px){
   .brand__wordmark{ display:inline; }
   .nav__links{ display:flex; }
   .login--full{ display:inline-flex; }
