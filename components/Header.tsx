@@ -16,19 +16,19 @@ export default function Header() {
     <header className="nav">
       {/* Brand */}
       <a href="/" className="brand" aria-label="Page d’accueil">
-        <img src="/public/logo.png" alt="SMASH.bad" className="brand__logo" />
+        <img src="logo.png" alt="SMASH.bad" className="brand__logo" />
         <span className="brand__wordmark">SMASH</span>
       </a>
 
       {/* Main nav pills (hidden < 900px) */}
       <nav className="nav__links" aria-label="Navigation principale">
         <a href="/entrainements" className="nav-pill">
-          <img src="/public/Bolt.svg" className="nav-ic" alt="" aria-hidden />
+          <img src="Bolt.svg" className="nav-ic" alt="" aria-hidden />
           Entraînement
         </a>
 
         <span className="nav-pill is-soon" aria-disabled="true">
-          <img src="/public/Racket.svg" className="nav-ic" alt="" />
+          <img src="Racket.svg" className="nav-ic" alt="" />
           Matériel
           <span className="tooltip">Bientôt disponible</span>
         </span>
@@ -54,7 +54,7 @@ export default function Header() {
           aria-disabled="true"
           title="Se connecter (bientôt)"
         >
-          <img src="/assets/Login.svg" alt="" className="nav-ic" aria-hidden />
+          <img src="Login.svg" alt="" className="nav-ic" aria-hidden />
         </button>
 
         {/* Full login button (shown ≥1200) */}
@@ -62,7 +62,7 @@ export default function Header() {
           className="btn btn--ghost btn--disabled login--full"
           aria-disabled="true"
         >
-          <img src="/assets/Login.svg" alt="" className="nav-ic" aria-hidden />
+          <img src="Login.svg" alt="" className="nav-ic" aria-hidden />
           Se connecter
           <span className="tooltip">Bientôt disponible</span>
         </button>
@@ -106,21 +106,21 @@ export default function Header() {
 
           <nav className="mmenu__list">
             <a href="/entrainements" className="mmenu__item" onClick={() => setOpen(false)}>
-              <img src="/assets/Bolt.svg" className="nav-ic" alt="" aria-hidden />
+              <img src="Bolt.svg" className="nav-ic" alt="" aria-hidden />
               <span>Entraînement</span>
             </a>
             <span className="mmenu__item is-soon" aria-disabled="true">
-              <img src="/assets/Racket.svg" className="nav-ic" alt="" />
+              <img src="Racket.svg" className="nav-ic" alt="" />
               <span>Matériel</span>
               <small className="mmenu__soon">Bientôt</small>
             </span>
             <span className="mmenu__item is-soon" aria-disabled="true">
-              <img src="/assets/Partner.svg" className="nav-ic" alt="" />
+              <img src="Partner.svg" className="nav-ic" alt="" />
               <span>Partenaires</span>
               <small className="mmenu__soon">Bientôt</small>
             </span>
             <span className="mmenu__item is-soon" aria-disabled="true">
-              <img src="/assets/Shop.svg" className="nav-ic" alt="" />
+              <img src="Shop.svg" className="nav-ic" alt="" />
               <span>Boutique</span>
               <small className="mmenu__soon">Bientôt</small>
             </span>
@@ -128,7 +128,7 @@ export default function Header() {
 
           <div className="mmenu__footer">
             <button className="btn btn--ghost btn--disabled" aria-disabled="true">
-              <img src="/assets/Login.svg" alt="" className="nav-ic" aria-hidden />
+              <img src="Login.svg" alt="" className="nav-ic" aria-hidden />
               Se connecter
             </button>
           </div>
