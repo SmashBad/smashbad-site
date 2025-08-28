@@ -4,6 +4,7 @@ import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
+import DeviceTest from "../components/DeviceTest";
 
 export default function Home() {
   return (
@@ -51,7 +52,11 @@ export default function Home() {
               />
             </div>
           </section>
+
+          <DeviceTest />
+          
         </main>
+
 
         <BottomNav />
 
