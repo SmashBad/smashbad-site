@@ -3,6 +3,7 @@ import React from "react";
 import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import BottomNav from "../components/BottomNav";
 
 export default function Home() {
   return (
@@ -52,9 +53,8 @@ export default function Home() {
           </section>
         </main>
 
-        import BottomNav from "@/components/BottomNav"
 
-        export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
           return (
             <>
               <Component {...pageProps} />
