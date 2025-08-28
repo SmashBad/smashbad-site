@@ -345,3 +345,44 @@ a{color:inherit;text-decoration:none}
   border:1px dashed rgba(255,255,255,.25);
   color:#9BA8BF; background:rgba(255,255,255,.02);
 }
+
+
+/* ===== Bottom navigation (mobile only) ===== */
+.bottomnav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 64px;
+  background: rgba(8,15,30,.95);
+  border-top: 1px solid rgba(255,255,255,.1);
+  display: none;              /* masqué par défaut */
+  justify-content: space-around;
+  align-items: center;
+  z-index: 9999;
+  padding-bottom: env(safe-area-inset-bottom); /* support iOS notch */
+}
+
+.bottomnav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #C7D2E0;
+  text-decoration: none;
+  font-weight: 600;
+  gap: 2px;
+  flex: 1;
+  padding: 6px 0;
+}
+
+.bottomnav__item:hover { color: #fff; }
+.bottomnav__item.is-active { color: var(--turquoise); }
+.bottomnav__item.is-soon { opacity: .5; cursor: not-allowed; }
+
+.bottomnav__ic {
+  width: 22px; height: 22px;
+}
+
+/* Active only on narrow screens */
+@media (max-width: 750px) {
+  .bottomnav { display: flex; }
+}
