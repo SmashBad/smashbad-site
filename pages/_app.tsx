@@ -11,7 +11,7 @@ import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
 
 /** Seuil (en pixels) pour considérer un "PC étroit" */
-const NARROW_MAX = 600; // ajuste cette valeur si besoin (ex: 700/900)
+const NARROW_MAX = 800; // ajuste cette valeur si besoin (ex: 700/900)
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();

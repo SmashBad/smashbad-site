@@ -80,8 +80,6 @@ export default function Entrainements() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <Header />
-
       <main className="trainings">
         <div className="trainings__wrap">
           <h1 className="trainings__title">Des exercices pour mieux performer</h1>

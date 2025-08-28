@@ -10,8 +10,6 @@ export default function Shadow() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <Header />
-
       <main className="container">
         <h1 style={{ fontFamily: "Audiowide, Outfit, sans-serif", marginBottom: 8 }}>
           Shadow

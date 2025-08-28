@@ -26,8 +26,7 @@ export default function Home() {
       </Head>
 
       <body className="home">
-        {/* HEADER */}
-        <Header />
+
 
         {/* HERO SPLIT */}
         <main>
@@ -54,7 +53,7 @@ export default function Home() {
           </section>
 
           <DeviceTest />
-          
+
         </main>
 
 
