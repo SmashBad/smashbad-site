@@ -53,6 +53,12 @@ export default function Home() {
           </section>
         </main>
 
+        {/* FOOTER */}
+        <Footer />
+      </body>
+    </>
+  );
+}
 
 export default function App({ Component, pageProps }) {
           return (
@@ -62,10 +68,3 @@ export default function App({ Component, pageProps }) {
             </>
           )
         }
-
-        {/* FOOTER */}
-        <Footer />
-      </body>
-    </>
-  );
-}
