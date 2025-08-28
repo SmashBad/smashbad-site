@@ -52,8 +52,10 @@ export default function Home() {
           </section>
         </main>
 
-        {/* FOOTER */}
+        <BottomNav />
+        
         <Footer />
+        
       </body>
     </>
   );
