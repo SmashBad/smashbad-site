@@ -15,7 +15,6 @@ export default function BottomNav() {
   const router = useRouter();
 
   const navItems: NavItem[] = [
-    { href: "/",               label: "Accueil",      icon: "/Home.svg",    title: "Aller à l’accueil" },
     { href: "/entrainements",  label: "Entraînement", icon: "/Bolt.svg",  title: "Voir les entraînements" },
     { href: "/materiel",    label: "Matériel",  icon: "/Racket.svg", title: "Bientôt disponible", soon: true },
     { href: "/partenaires",    label: "Partenaires",  icon: "/Partner.svg", title: "Bientôt disponible", soon: true },
