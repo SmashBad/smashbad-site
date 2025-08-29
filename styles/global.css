@@ -240,7 +240,7 @@ body.is-mobile .login--full{ display:none; }
 
 body.is-mobile .brand__wordmark{ display:none; } /* garder "SMASH" */
 body.is-mobile.is-home .brand__wordmark{ display:inline; }
-body.is-mobile.is-home .nav__title{ opacity:0; pointer-events:none; user-select:none; }
+body.is-mobile.is-home .nav__title{ opacity:0; pointer-events:none; user-select:none; text-transform: uppercase; }
 
 body.is-mobile .nav__title{
   position:absolute; left:50%; transform:translateX(-50%);
