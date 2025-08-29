@@ -159,8 +159,6 @@ export default function Entrainements() {
           )}
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }

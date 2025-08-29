@@ -58,8 +58,6 @@ export default function Home() {
 
 
         <BottomNav />
-
-        <Footer />
         
       </body>
     </>
