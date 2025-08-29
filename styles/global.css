@@ -472,3 +472,21 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 /* Range un peu plus visibles */
 input[type="range"]{ width:100%; }
 
+/* Flèche géante en caractères */
+.big-arrow{
+  line-height: 1;
+  font-weight: 900;
+  text-shadow: 0 10px 30px rgba(0,0,0,.35);
+  -webkit-text-stroke: 3px rgba(4,18,37,.35); /* bord pour lisibilité */
+}
+
+/* Mini caractères dans les cartes */
+.dir-char{
+  font-size: 40px;
+  line-height: 1;
+  color: #EAF2FF;
+}
+.dir-card.is-active .dir-char{
+  color: #041225; /* flèche sombre sur fond turquoise actif */
+}
+

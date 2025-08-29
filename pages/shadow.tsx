@@ -9,12 +9,12 @@ type Phase = "param" | "precount" | "run" | "paused" | "finished";
 const LS_KEY = "shadow.v1";
 
 const DIRS: Record<DirKey, { key: DirKey; label: string; angle: number }> = {
-  AG: { key: "AG", label: "Amorti Gauche", angle: -135 }, // ↖
-  AD: { key: "AD", label: "Amorti Droit", angle: -45 },   // ↗
-  G:  { key: "G",  label: "À Gauche",       angle: 180 },  // ←
-  D:  { key: "D",  label: "À Droite",       angle: 0 },    // →
-  DG: { key: "DG", label: "Dégagement Gauche", angle: 135 }, // ↙
-  DD: { key: "DD", label: "Dégagement Droit",  angle: 45 },  // ↘
+  AG: { key: "AG", label: "Amorti Gauche",     char:"↖"},
+  AD: { key: "AD", label: "Amorti Droit",      char:"↗"},
+  G:  { key: "G",  label: "À Gauche",          char:"←"},
+  D:  { key: "D",  label: "À Droite",          char:"→"},
+  DG: { key: "DG", label: "Dégagement Gauche", char:"↙"},
+  DD: { key: "DD", label: "Dégagement Droit",  char:"↘"},
 };
 
 const MIN_TOTAL = 30;   // secondes
@@ -104,25 +104,21 @@ function useWakeLock() {
 }
 
 // ---------- Flèche SVG géante ----------
-function BigArrow({ angle, size = 600, color = "#12D8DF" }: { angle: number; size?: number; color?: string; }) {
+function BigArrow({ char, size = 600, color = "#12D8DF" }: { char: string; size?: number; color?: string; }) {
   // Une simple flèche épaisse et lisible
   const s = size;
   return (
-    <svg
+    <div
+      className="big-arrow"
       role="img"
       aria-label="Direction"
-      width={s}
-      height={s}
-      viewBox="0 0 100 100"
-      style={{ transform: `rotate(${angle}deg)`, filter: "drop-shadow(0 10px 30px rgba(0,0,0,.35))" }}
+      style={{
+        fontSize: `${Math.floor(size * 0.8)}px`,
+        color,
+      }}
     >
-      <g fill="none" stroke={color} strokeWidth="10" strokeLinecap="round" strokeLinejoin="round">
-        {/* tige */}
-        <path d="M20 80 L80 20" />
-        {/* pointe */}
-        <path d="M60 20 L80 20 L80 40" />
-      </g>
-    </svg>
+      {char}
+    </div>
   );
 }
 
@@ -450,10 +446,7 @@ export default function Shadow() {
                     aria-pressed={active}
                     aria-label={d.label}
                   >
-                    <div className="dir-arrow">
-                      {/* mini flèche orientée */}
-                      <BigArrow angle={d.angle} size={64} color={active ? "#041225" : "#EAF2FF"} />
-                    </div>
+                    <div className="dir-char">{d.char}</div>
                     <div className="dir-label">{d.label}</div>
                   </button>
                 );
@@ -504,7 +497,7 @@ export default function Shadow() {
           )}
           <div className="arrow-wrap">
             {currentDir && showArrow && (
-              <BigArrow angle={DIRS[currentDir].angle} size={arrowSize} />
+              <BigArrowChar char={DIRS[currentDir].char} size={arrowSize} />
             )}
           </div>
           {phase === "paused" && <div className="paused-badge">En pause</div>}
