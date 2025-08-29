@@ -310,8 +310,8 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   color: var(--turquoise);
 }
 .bottomnav__item.is-active .bottomnav__ic{
-  filter: var(--turq-filter);*/
-}
+  filter: var(--turq-filter);
+}*/
 
 /* Bonus : hover visuel sur nav-pill */
 .nav-pill:hover .nav-ic{
