@@ -38,53 +38,53 @@ export default function BottomNav() {
   }, [soonToast]);
 
   return (
-    <nav className="bottomnav" aria-label="Navigation principale mobile">
-      {navItems.map((item) => {
-        const active = isActive(item.href);
-        const classes = [
-          "bottomnav__item",
-          active ? "is-active" : "",
-          item.soon ? "is-soon" : "",
-        ].join(" ").trim();
+    <>
+      <nav className="bottomnav" aria-label="Navigation principale mobile">
+        {navItems.map((item) => {
+          const active = isActive(item.href);
+          const classes = [
+            "bottomnav__item",
+            active ? "is-active" : "",
+            item.soon ? "is-soon" : "",
+          ].join(" ").trim();
 
-        const icon = <img src={item.icon} alt="" className="bottomnav__ic" aria-hidden />;
+          const icon = <img src={item.icon} alt="" className="bottomnav__ic" aria-hidden />;
 
-        if (item.soon) {
-          // Élément désactivé (annoncé “bientôt”)
+          if (item.soon) {
+            return (
+              <button
+                key={item.href}
+                className={classes}
+                type="button"
+                title={item.title || item.label}
+                onClick={() => setSoonToast(`${item.label} — bientôt disponible`)}
+                aria-disabled="true"
+              >
+                {icon}
+                <span>{item.label}</span>
+              </button>
+            );
+          }
+
           return (
-            <button
+            <Link
               key={item.href}
+              href={item.href}
               className={classes}
-              type="button"
+              aria-current={active ? "page" : undefined}
               title={item.title || item.label}
-              onClick={() => setSoonToast(`${item.label} — bientôt disponible`)}
-              aria-disabled="true"
             >
               {icon}
               <span>{item.label}</span>
+            </Link>
           );
-        }
+        })}
+      </nav>
 
-        // Lien actif/inactif
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={classes}
-            aria-current={active ? "page" : undefined}
-            title={item.title || item.label}
-          >
-            {icon}
-            <span>{item.label}</span>
-          </Link>
-        );
-      })}
-    </nav>
-
-    {/* Toast discret */}
-    {soonToast && (
-      <div className="toast" role="status" aria-live="polite">{soonToast}</div>
-    )}
+      {/* Toast discret */}
+      {soonToast && (
+        <div className="toast" role="status" aria-live="polite">{soonToast}</div>
+      )}
     </>
   );
 }
