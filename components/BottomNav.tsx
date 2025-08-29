@@ -62,7 +62,6 @@ export default function BottomNav() {
             >
               {icon}
               <span>{item.label}</span>
-            </span>
           );
         }
 
