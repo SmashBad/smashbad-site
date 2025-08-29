@@ -333,7 +333,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 }
 
 /* HOME : meilleure occupation en mobile */
-@media (max-width: 640px){
+@media (max-width: 900px){
   .hero-split{
     grid-template-columns: 1fr;
     min-height: unset;      /* plus de “grande page vide” */
