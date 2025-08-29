@@ -95,7 +95,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       {/* Header : en mobile, il n’affiche que logo + SMASH + pageTitle + login icône (via CSS) */}
-      <Header pageTitle={pageTitle} />
+      <Header title={pageTitle} />
 
       <main>
         <Component {...pageProps} />

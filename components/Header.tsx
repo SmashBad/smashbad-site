@@ -3,27 +3,21 @@ import React from "react";
 
 type HeaderProps = {
   /** Titre affiché au centre en version mobile (header minimal) */
-  pageTitle?: string;
+  title?: string;
 };
 
-export default function Header({ title }: { title?: string })
+export default function Header({ title }: HeaderProps))
 {
   return (
     <header className="nav">
       {/* Partie gauche : marque */}
       <a href="/" className="brand" aria-label="Page d’accueil">
-        {/* Utilise les chemins racine pour les assets (public/) */}
         <img src="/logo.png" alt="SMASH.bad" className="brand__logo" />
         <span className="brand__wordmark">SMASH</span>
 
-        {/* titre de page, visible seulement en mobile et hors-home via CSS */}
-        <span className="nav__title">{(title ?? "").toUpperCase()}</span>
+        {/* Titre mobile : même style que le wordmark, visible hors-home */}
+        {title && <span className="nav__title">{title.toUpperCase()}</span>}
       </a>
-
-      {/* Titre central (affiché en MOBILE uniquement via CSS) */}
-      <div className="nav__title" aria-hidden={pageTitle ? "false" : "true"}>
-        {pageTitle ?? ""}
-      </div>
 
       {/* Liens principaux (affichés en PC standard/étroit via CSS) */}
       <nav className="nav__links" aria-label="Navigation principale">
