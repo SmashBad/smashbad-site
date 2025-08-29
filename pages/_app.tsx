@@ -63,6 +63,14 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+          {/* Fonts globales – charge pour toutes les pages */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Audiowide&family=Outfit:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap"
+            rel="stylesheet"
+          />
+
         {/* Favicons (assure-toi que les fichiers sont bien dans /public) */}
         <link rel="icon" href="/favicon.ico" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
