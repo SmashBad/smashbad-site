@@ -297,26 +297,38 @@ body.is-desktop-standard .brand__wordmark{ display:inline; }
 body.is-desktop-standard .nav-pill .label{ display:inline; }
 
 .nav-pill.is-active{
-  color: var(--turquoise);
-  border-color: rgba(18,216,223,.45);
-  background: rgba(18,216,223,.08);
+  background: linear-gradient(180deg, #12D8DF, #0EC2C9);
+  border-color: transparent;
+  color:#041225;
+  box-shadow: 0 6px 16px rgba(18,216,223,.28), 0 0 0 1px rgba(0,0,0,.06) inset;
+  transform: translateY(-1px);
 }
+
+.nav-pill.is-active:hover{
+  background: linear-gradient(180deg, #14adb3, #0aafb4);
+}
+
+.nav-pill.is-active .label{ color:#041225; } /* par sécurité */
+
 .nav-pill.is-active .nav-ic{
   filter: var(--turq-filter);
 }
 
-/* BOTTOMNAV : idem 
+/* BOTTOMNAV : idem */
 .bottomnav__item.is-active{
   color: var(--turquoise);
+  font-weight: 800;
 }
 .bottomnav__item.is-active .bottomnav__ic{
   filter: var(--turq-filter);
-}*/
+}
 
 /* Bonus : hover visuel sur nav-pill */
 .nav-pill:hover .nav-ic{
   filter: var(--turq-filter);
 }
+
+.nav-pill img, .bottomnav__ic { filter:none !important; opacity:1; }
 
 .toast{
   position: fixed;

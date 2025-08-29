@@ -17,14 +17,14 @@ export default function BottomNav() {
 
   const navItems: NavItem[] = [
     { href: "/entrainements", label: "Entraînement", icon: "/Bolt.svg",    iconOn: "/Bolt_On.svg",    title: "Voir les entraînements" },
-    { href: "/materiel",      label: "Matériel",     icon: "/Racket.svg",  iconOn: "/Racket_On.svg",  title: "Bientôt disponible",    soon: true },
-    { href: "/partenaires",   label: "Partenaires",  icon: "/Partner.svg", iconOn: "/Partner_On.svg", title: "Bientôt disponible",    soon: true },
-    { href: "/shop",          label: "Boutique",     icon: "/Shop.svg",    iconOn: "/Shop_On.svg",    title: "Bientôt disponible",    soon: true },
+    { href: "/materiel",      label: "Matériel",     icon: "/Racket.svg",  iconOn: "/Racket_On.svg",  title: "Matériel - Bientôt disponible",    soon: true },
+    { href: "/partenaires",   label: "Partenaires",  icon: "/Partner.svg", iconOn: "/Partner_On.svg", title: "Partenaires - Bientôt disponible",    soon: true },
+    { href: "/shop",          label: "Boutique",     icon: "/Shop.svg",    iconOn: "/Shop_On.svg",    title: "Boutique - Bientôt disponible",    soon: true },
   ];
 
   // Active si la route courante commence par href (utile si on a des sous-pages)
   const isActive = (href: string) => {
-    const cur = router.asPath.replace(/\/+$/, "") || "/";
+    const cur = (router.asPath || "/").replace(/\/+$/, "") || "/";
     const target = href.replace(/\/+$/, "") || "/";
     if (target === "/") return cur === "/";
     return cur === target || cur.startsWith(target + "/");
@@ -49,22 +49,22 @@ export default function BottomNav() {
             item.soon ? "is-soon" : "",
           ].join(" ").trim();
 
-          const src = active && item.iconOn ? item.iconOn : item.icon;
-          const icon = <img src={item.icon} alt="" className="bottomnav__ic" aria-hidden />;
+          const Iconsrc = active && item.iconOn ? item.iconOn : item.icon;
+          const icon = <img src={Iconsrc} alt="" className="bottomnav__ic" aria-hidden />;
 
           if (item.soon) {
             return (
-              <button
+              <span
                 key={item.href}
                 className={classes}
-                type="button"
-                title={item.title || item.label}
-                onClick={() => setSoonToast(`${item.label} — bientôt disponible`)}
                 aria-disabled="true"
+                role="link"
+                title={item.title || item.label}
+                data-soon="true"
               >
                 {icon}
                 <span>{item.label}</span>
-              </button>
+              </span>
             );
           }
 
