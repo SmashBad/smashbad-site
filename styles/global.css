@@ -368,3 +368,107 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
     filter: drop-shadow(0 10px 28px rgba(0,0,0,.35));
   }
 }
+
+/* ====== SHADOW ====== */
+
+.shadow-page { padding: 20px 5% 90px; }
+.shadow-topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; margin-bottom:14px;
+}
+.back-pill{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.04);
+  color:#EAF2FF; font-weight:700;
+}
+.back-pill:hover{ background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.28); }
+.back-ic{ width:18px; height:18px; }
+
+.shadow-title{
+  font-family:"Audiowide","Outfit",system-ui;
+  font-size:18px; font-weight:800; letter-spacing:.8px;
+  background:linear-gradient(90deg,#F4F8FF 0%,#12D8DF 60%,#F4F8FF 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  margin:0; text-transform:uppercase;
+}
+.shadow-actions{ display:flex; align-items:center; gap:8px; }
+
+/* Carte des paramètres */
+.shadow-card{
+  border:1px solid rgba(255,255,255,.10); background:#0a1428;
+  border-radius:16px; padding:18px; box-shadow:0 6px 26px rgba(0,0,0,.22);
+  max-width:1000px; margin:0 auto;
+}
+.shadow-group{ margin-bottom:18px; }
+.shadow-label{ font-weight:700; margin:0 0 6px; display:block; }
+.shadow-scale{ display:flex; justify-content:space-between; color:#9BA8BF; font-size:12px; margin-top:6px; }
+.shadow-check{ display:flex; align-items:center; gap:8px; margin-top:6px; }
+.shadow-error{ color:#FF7A1A; font-weight:700; margin:10px 0 0; }
+.shadow-cta{ display:flex; justify-content:center; margin-top:14px; }
+
+/* Grille directions : 2 colonnes mobile, 3/4 desktop */
+.dir-grid{
+  display:grid; gap:12px;
+  grid-template-columns: 1fr 1fr;
+}
+@media (min-width: 720px){
+  .dir-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1000px){
+  .dir-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+.dir-card{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; padding:10px; border-radius:12px; text-align:center;
+  border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04);
+}
+.dir-card:hover{ background:rgba(255,255,255,.08); }
+.dir-card.is-active{
+  background: linear-gradient(180deg, #12D8DF, #0EC2C9);
+  color:#041225; border-color: transparent;
+  box-shadow: 0 5px 12px rgba(18,216,223,.30), 0 0 0 1px rgba(0,0,0,.08) inset;
+}
+.dir-arrow{ height:64px; display:flex; align-items:center; justify-content:center; }
+.dir-label{ font-weight:700; }
+
+/* Scènes */
+.shadow-stage{
+  position:relative; min-height: calc(100vh - 200px);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.shadow-remaining{
+  position:absolute; top:0; left:0; right:0; text-align:center; color:#C7D2E0;
+  padding:8px 0;
+}
+
+/* Précompte */
+.precount-num{
+  font-family:"Audiowide","Outfit",system-ui;
+  font-size: clamp(56px, 14vw, 120px); font-weight:800; letter-spacing:1px;
+}
+
+/* Flèche géante */
+.arrow-wrap{
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* Pause */
+.paused-badge{
+  position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+  padding:6px 10px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06);
+  font-weight:700;
+}
+
+/* Fin */
+.shadow-finish{
+  text-align:center; padding:40px 5%;
+}
+.shadow-finish .thumb{ font-size:80px; margin-bottom:8px; }
+.finish-cta{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
+
+/* Range un peu plus visibles */
+input[type="range"]{ width:100%; }
+
