@@ -305,12 +305,12 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   filter: var(--turq-filter);
 }
 
-/* BOTTOMNAV : idem */
+/* BOTTOMNAV : idem 
 .bottomnav__item.is-active{
   color: var(--turquoise);
 }
 .bottomnav__item.is-active .bottomnav__ic{
-  filter: var(--turq-filter);
+  filter: var(--turq-filter);*/
 }
 
 /* Bonus : hover visuel sur nav-pill */
