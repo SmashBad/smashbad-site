@@ -9,12 +9,12 @@ type Phase = "param" | "precount" | "run" | "paused" | "finished";
 const LS_KEY = "shadow.v1";
 
 const DIRS: Record<DirKey, { key: DirKey; label: string; angle: number }> = {
-  AG: { key: "AG", label: "Amorti Gauche",     char:"↖"},
-  AD: { key: "AD", label: "Amorti Droit",      char:"↗"},
-  G:  { key: "G",  label: "À Gauche",          char:"←"},
-  D:  { key: "D",  label: "À Droite",          char:"→"},
-  DG: { key: "DG", label: "Dégagement Gauche", char:"↙"},
-  DD: { key: "DD", label: "Dégagement Droit",  char:"↘"},
+  AG: { key: "AG", label: "Amorti Gauche",  char:"↖"},
+  AD: { key: "AD", label: "Amorti Droit", char:"↗"},
+  G:  { key: "G",  label: "À Gauche", char:"←"},
+  D:  { key: "D",  label: "À Droite", char:"→"},
+  DG: { key: "DG", label: "Dégagement Gauche",  char:"↙"},
+  DD: { key: "DD", label: "Dégagement Droit", char:"↘"},
 };
 
 const MIN_TOTAL = 30;   // secondes
