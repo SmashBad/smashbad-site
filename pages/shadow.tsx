@@ -104,7 +104,7 @@ function useWakeLock() {
 }
 
 // ---------- Flèche SVG géante ----------
-function BigArrow({ char, size = 600, color = "#12D8DF" }: { char: string; size?: number; color?: string; }) {
+function BigArrowChar({ char, size = 600, color = "#12D8DF" }: { char: string; size?: number; color?: string; }) {
   // Une simple flèche épaisse et lisible
   const s = size;
   return (
@@ -520,4 +520,5 @@ export default function Shadow() {
       )}
     </main>
   );
+
 }
