@@ -232,6 +232,7 @@ body.is-mobile .bottomnav{ display:flex; }         /* nav du bas visible */
 body.is-mobile .nav__links{ display:none; }        /* cacher les liens du header */
 body.is-mobile .login--full,
 body.is-mobile .login--icon-only{ display:inline; align-content: end; }  /* login en haut à droite */
+body.is-mobile .login--full{ display:none; }
 body.is-mobile .brand__wordmark{ display:inline; } /* garder "SMASH" */
 body.is-mobile .nav__title{
   opacity:1; pointer-events:auto; user-select:auto; /* titre centré visible */
