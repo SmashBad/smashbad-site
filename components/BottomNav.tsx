@@ -7,6 +7,7 @@ type NavItem = {
   href: string;
   label: string;
   icon: string;     // chemin vers l’icône (public/)
+  iconOn?: string;  // version active (turquoise)
   soon?: boolean;   // état “bientôt”
   title?: string;   // attribut title optionnel
 };
@@ -15,10 +16,10 @@ export default function BottomNav() {
   const router = useRouter();
 
   const navItems: NavItem[] = [
-    { href: "/entrainements",  label: "Entraînement", icon: "/Bolt.svg",  title: "Voir les entraînements" },
-    { href: "/materiel",    label: "Matériel",  icon: "/Racket.svg", title: "Bientôt disponible", soon: true },
-    { href: "/partenaires",    label: "Partenaires",  icon: "/Partner.svg", title: "Bientôt disponible", soon: true },
-    { href: "/shop",           label: "Boutique",     icon: "/Shop.svg",    title: "Bientôt disponible", soon: true },
+    { href: "/entrainements", label: "Entraînement", icon: "/Bolt.svg",    iconOn: "/Bolt_On.svg",    title: "Voir les entraînements" },
+    { href: "/materiel",      label: "Matériel",     icon: "/Racket.svg",  iconOn: "/Racket_On.svg",  title: "Bientôt disponible",    soon: true },
+    { href: "/partenaires",   label: "Partenaires",  icon: "/Partner.svg", iconOn: "/Partner_On.svg", title: "Bientôt disponible",    soon: true },
+    { href: "/shop",          label: "Boutique",     icon: "/Shop.svg",    iconOn: "/Shop_On.svg",    title: "Bientôt disponible",    soon: true },
   ];
 
   // Active si la route courante commence par href (utile si on a des sous-pages)
@@ -48,6 +49,7 @@ export default function BottomNav() {
             item.soon ? "is-soon" : "",
           ].join(" ").trim();
 
+          const src = active && item.iconOn ? item.iconOn : item.icon;
           const icon = <img src={item.icon} alt="" className="bottomnav__ic" aria-hidden />;
 
           if (item.soon) {
