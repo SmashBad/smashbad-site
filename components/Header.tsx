@@ -6,7 +6,8 @@ type HeaderProps = {
   pageTitle?: string;
 };
 
-export default function Header({ pageTitle }: HeaderProps) {
+export default function Header({ title }: { title?: string })
+{
   return (
     <header className="nav">
       {/* Partie gauche : marque */}
@@ -14,6 +15,9 @@ export default function Header({ pageTitle }: HeaderProps) {
         {/* Utilise les chemins racine pour les assets (public/) */}
         <img src="/logo.png" alt="SMASH.bad" className="brand__logo" />
         <span className="brand__wordmark">SMASH</span>
+
+        {/* titre de page, visible seulement en mobile et hors-home via CSS */}
+        <span className="nav__title">{(title ?? "").toUpperCase()}</span>
       </a>
 
       {/* Titre central (affiché en MOBILE uniquement via CSS) */}
