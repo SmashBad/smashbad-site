@@ -240,17 +240,32 @@ body.is-mobile .login--full{ display:none; }
 
 body.is-mobile .brand__wordmark{ display:none; } /* garder "SMASH" */
 body.is-mobile.is-home .brand__wordmark{ display:inline; }
-body.is-mobile.is-home .nav__title{ opacity:0; pointer-events:none; user-select:none; }
+body.is-mobile.is-home .nav__title{ display:none; }
 
 body.is-mobile .nav__title{
-  position:absolute; left:50%; transform:translateX(-50%);
+  display: inline;
+  grid-column: 2;
+  font-family: 'Audiowide','Outfit',system-ui;
   font-weight:800; letter-spacing:.6px;
   opacity:1; pointer-events:auto; user-select:auto;
   /* même gradient que le wordmark */
   background:linear-gradient(90deg,#F4F8FF 0%,#12D8DF 60%,#F4F8FF 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent;
   text-transform: uppercase;
+  font-size:20px;
 }
+
+body.is-mobile .nav{
+  display: grid;
+  grid-template-columns: auto auto 1fr auto; /* logo | titre | flex | login */
+  align-items: center;
+  height: 56px; /* un poil plus compact si tu veux */
+  padding: 0 12px;
+  column-gap: 8px;
+}
+
+body.is-mobile .nav__actions{ grid-column: 4; justify-self: end; }
+
 
 /* éviter que la bottomnav recouvre le contenu */
 body.is-mobile main{ padding-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom)); }
