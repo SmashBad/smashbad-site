@@ -36,8 +36,6 @@ export default function Home() {
             </div>
           </section>
 
-          <DeviceTest />
-
         </main>
 
 
