@@ -225,7 +225,7 @@ a{ color:inherit; text-decoration:none }
   flex:1; padding:6px 0;
 }
 .bottomnav__item:hover{ color:#fff; }
-.bottomnav__item.is-active{ color:var(--turquoise); }
+/*.bottomnav__item.is-active{ color:var(--turquoise); }*/
 .bottomnav__item.is-soon{ opacity:.5; cursor:not-allowed; }
 .bottomnav__ic{ width:22px; height:22px; }
 
