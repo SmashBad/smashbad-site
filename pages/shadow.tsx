@@ -8,7 +8,7 @@ type Phase = "param" | "precount" | "run" | "paused" | "finished";
 
 const LS_KEY = "shadow.v1";
 
-const DIRS: Record<DirKey, { key: DirKey; label: string; angle: number }> = {
+const DIRS: Record<DirKey, { key: DirKey; label: string; char: string }> = {
   AG: { key: "AG", label: "Amorti Gauche",  char:"↖"},
   AD: { key: "AD", label: "Amorti Droit", char:"↗"},
   G:  { key: "G",  label: "À Gauche", char:"←"},
