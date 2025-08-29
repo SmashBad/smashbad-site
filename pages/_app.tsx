@@ -37,15 +37,29 @@ export default function App({ Component, pageProps }: AppProps) {
 
   const isDesktopNarrow = !isMobile && (width ?? 9999) <= NARROW_MAX;
   const isDesktopStandard = !isMobile && !isDesktopNarrow;
-
-  // Pose des classes sur <body> pour piloter le CSS (3 cas)
-  useEffect(() => {
+  
+  const updateBodyClasses = () => {
     const b = document.body;
     b.classList.toggle("is-mobile", isMobile);
     b.classList.toggle("is-desktop-narrow", isDesktopNarrow);
     b.classList.toggle("is-desktop-standard", isDesktopStandard);
-    b.classList.toggle("is-home", router.pathname === "/");
-  }, [isMobile, isDesktopNarrow, isDesktopStandard]);
+    // utilise asPath pour être 100% juste
+    b.classList.toggle("is-home", router.asPath === "/");
+  };
+
+  // Pose des classes sur <body> pour piloter le CSS (3 cas)
+  useEffect(() => {
+    updateBodyClasses();
+    // écoute les fins de navigation pour éviter l’état collant
+    const onDone = () => updateBodyClasses();
+    router.events.on("routeChangeComplete", onDone);
+    router.events.on("hashChangeComplete", onDone);
+    return () => {
+      router.events.off("routeChangeComplete", onDone);
+      router.events.off("hashChangeComplete", onDone);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, isDesktopNarrow, isDesktopStandard, router.asPath]);
 
   // Titre d'écran (affiché AU CENTRE du header en mobile)
   const pageTitle = useMemo(() => {
