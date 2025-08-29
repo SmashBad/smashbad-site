@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
 // ---------- Types & constantes ----------
-type DirKey = "AG" | "AD" | "G" | "D" | "DG" | DD";
+type DirKey = "AG" | "AD" | "G" | "D" | "DG" | "DD";
 type Phase = "param" | "precount" | "run" | "paused" | "finished";
 
 const LS_KEY = "shadow.v1";
