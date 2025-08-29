@@ -331,3 +331,24 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   box-shadow: 0 10px 30px rgba(0,0,0,.35);
   z-index: 10000;
 }
+
+/* HOME : meilleure occupation en mobile */
+@media (max-width: 640px){
+  .hero-split{
+    grid-template-columns: 1fr;
+    min-height: unset;      /* plus de “grande page vide” */
+    padding: 28px 5% 96px;  /* laisse de la place pour la bottomnav */
+    row-gap: 20px;
+  }
+  .hero-split__text h1{
+    font-size: clamp(28px, 8vw, 40px);
+    line-height: 1.08;
+  }
+  .hero-split__art{
+    justify-self: start;     /* l’illu se place sous le texte */
+    max-width: 420px;
+  }
+  .hero-split__art img{
+    filter: drop-shadow(0 10px 28px rgba(0,0,0,.35));
+  }
+}
