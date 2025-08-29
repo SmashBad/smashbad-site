@@ -23,24 +23,24 @@ export default function Header({ pageTitle }: HeaderProps) {
 
       {/* Liens principaux (affichés en PC standard/étroit via CSS) */}
       <nav className="nav__links" aria-label="Navigation principale">
-        <a href="/entrainements" className="nav-pill">
+        <a href="/entrainements" className="nav-pill"  data-href="/entrainements">
           <img src="/Bolt.svg" className="nav-ic" alt="" aria-hidden />
           <span className="label">Entraînement</span>
         </a>
 
-        <span className="nav-pill is-soon" aria-disabled="true">
+        <span className="nav-pill is-soon" aria-disabled="true" data-href="/materiel">
           <img src="/Racket.svg" className="nav-ic" alt="" />
           <span className="label">Matériel</span>
           <span className="tooltip">Bientôt disponible</span>
         </span>
 
-        <span className="nav-pill is-soon" aria-disabled="true">
+        <span className="nav-pill is-soon" aria-disabled="true" data-href="/partenaires">
           <img src="/Partner.svg" className="nav-ic" alt="" />
           <span className="label">Partenaires</span>
           <span className="tooltip">Bientôt disponible</span>
         </span>
 
-        <span className="nav-pill is-soon" aria-disabled="true">
+        <span className="nav-pill is-soon" aria-disabled="true" data-href="/shop">
           <img src="/Shop.svg" className="nav-ic" alt="" aria-hidden />
           <span className="label">Boutique</span>
           <span className="tooltip">Bientôt disponible</span>

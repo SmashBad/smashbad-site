@@ -44,6 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
     b.classList.toggle("is-mobile", isMobile);
     b.classList.toggle("is-desktop-narrow", isDesktopNarrow);
     b.classList.toggle("is-desktop-standard", isDesktopStandard);
+    b.classList.toggle("is-home", router.pathname === "/");
   }, [isMobile, isDesktopNarrow, isDesktopStandard]);
 
   // Titre d'écran (affiché AU CENTRE du header en mobile)

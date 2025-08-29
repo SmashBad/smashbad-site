@@ -1,7 +1,7 @@
 // components/BottomNav.tsx
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 type NavItem = {
   href: string;
@@ -29,6 +29,14 @@ export default function BottomNav() {
     return cur === target || cur.startsWith(target + "/");
   };
 
+  // Petit toast non intrusif "Bientôt disponible"
+  const [soonToast, setSoonToast] = useState<string | null>(null);
+  useEffect(() => {
+    if (!soonToast) return;
+    const id = setTimeout(() => setSoonToast(null), 1400);
+    return () => clearTimeout(id);
+  }, [soonToast]);
+
   return (
     <nav className="bottomnav" aria-label="Navigation principale mobile">
       {navItems.map((item) => {
@@ -44,13 +52,13 @@ export default function BottomNav() {
         if (item.soon) {
           // Élément désactivé (annoncé “bientôt”)
           return (
-            <span
+            <button
               key={item.href}
               className={classes}
-              aria-disabled="true"
-              role="link"
+              type="button"
               title={item.title || item.label}
-              data-soon="true"
+              onClick={() => setSoonToast(`${item.label} — bientôt disponible`)}
+              aria-disabled="true"
             >
               {icon}
               <span>{item.label}</span>
@@ -73,5 +81,11 @@ export default function BottomNav() {
         );
       })}
     </nav>
+
+    {/* Toast discret */}
+    {soonToast && (
+      <div className="toast" role="status" aria-live="polite">{soonToast}</div>
+    )}
+    </>
   );
 }
