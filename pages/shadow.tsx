@@ -184,6 +184,10 @@ export default function Shadow() {
 
   const startPrecount = async () => {
     setError("");
+
+    // remonte en haut pour voir la flèche centrée
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch {}
+
     if (!canGo) { setError("Choisis au moins une direction."); return; }
 
     intMsRef.current = Math.round(intervalSec * 1000);
@@ -312,12 +316,13 @@ export default function Shadow() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Flèche géante : taille adaptée
   const arrowSize = useMemo(() => {
-    const vw = typeof window !== "undefined" ? window.innerWidth : 1200;
-    const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-    const mobile = vw <= 768;
-    return mobile ? Math.floor(Math.min(vw, vh) * 0.9) : Math.min(600, Math.floor(Math.min(vw, vh) * 0.5));
+    if (typeof window === "undefined") return 600;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const s = Math.min(vw, vh);
+    // mobile : occupe ~95% de la plus petite dimension ; desktop : 70% (max 700)
+    return (vw <= 900) ? Math.floor(s * 0.95) : Math.min(700, Math.floor(s * 0.70));
   }, [phase]);
 
   return (

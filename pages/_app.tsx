@@ -86,6 +86,7 @@ export default function App({ Component, pageProps }: AppProps) {
             rel="stylesheet"
           />
           <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@700&display=swap" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2:wght@700&display=swap" rel="stylesheet" />
 
 
         {/* Favicons (assure-toi que les fichiers sont bien dans /public) */}
