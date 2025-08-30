@@ -371,10 +371,12 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 
 /* ====== SHADOW ====== */
 
-.shadow-page { padding: 20px 5% 90px; }
+.shadow-page { padding: 18px 5% 90px; }
 .shadow-topbar {
-  display:flex; align-items:center; justify-content:space-between;
-  gap:10px; margin-bottom:14px;
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr; /* gauche - centre - droite */
+  align-items:center;
+  gap:10px; margin-bottom:12px;
 }
 .back-pill{
   display:inline-flex; align-items:center; gap:8px;
@@ -382,6 +384,11 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   border:1px solid rgba(255,255,255,.18);
   background:rgba(255,255,255,.04);
   color:#EAF2FF; font-weight:700;
+}
+/* Back: icône seule, sans texte */
+.back-pill.back-icon{
+  padding:8px; width:40px; height:40px;
+  display:inline-flex; align-items:center; justify-content:center;
 }
 .back-pill:hover{ background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.28); }
 .back-ic{ width:18px; height:18px; }
@@ -393,26 +400,48 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   -webkit-background-clip:text; background-clip:text; color:transparent;
   margin:0; text-transform:uppercase;
 }
-.shadow-actions{ display:flex; align-items:center; gap:8px; }
+.shadow-left{ display:flex; align-items:center; gap:8px; }
+.shadow-actions{ display:flex; justify-content:flex-end; gap:8px; }
+
 
 /* Carte des paramètres */
 .shadow-card{
   border:1px solid rgba(255,255,255,.10); background:#0a1428;
-  border-radius:16px; padding:18px; box-shadow:0 6px 26px rgba(0,0,0,.22);
-  max-width:1000px; margin:0 auto;
+  border-radius:16px; padding:16px; box-shadow:0 6px 26px rgba(0,0,0,.22);
+  max-width:920px; margin:0 auto;
+  display: grid; gap: 14px;
 }
-.shadow-group{ margin-bottom:18px; }
-.shadow-label{ font-weight:700; margin:0 0 6px; display:block; }
+.shadow-group{ display:block; margin-bottom:4px; }
+.shadow-label{ font-weight:800; margin:0 0 8px; display:block; }
 .shadow-scale{ display:flex; justify-content:space-between; color:#9BA8BF; font-size:12px; margin-top:6px; }
 .shadow-check{ display:flex; align-items:center; gap:8px; margin-top:6px; }
 .shadow-error{ color:#FF7A1A; font-weight:700; margin:10px 0 0; }
 .shadow-cta{ display:flex; justify-content:center; margin-top:14px; }
+
+/* Back: icône seule, sans texte */
+.back-pill.back-icon{
+  padding:8px; width:40px; height:40px;
+  display:inline-flex; align-items:center; justify-content:center;
+}
 
 /* Grille directions : 2 colonnes mobile, 3/4 desktop */
 .dir-grid{
   display:grid; gap:12px;
   grid-template-columns: 1fr 1fr;
 }
+
+/* Déplacements : 2 colonnes partout (PC compris) */
+.dir-grid.dir-grid--two-cols{
+  display:grid; gap:12px;
+  grid-template-columns: 1fr 1fr;
+}
+.dir-card{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; padding:12px; border-radius:12px; text-align:center;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+}
+
 @media (min-width: 720px){
   .dir-grid{ grid-template-columns: repeat(3, 1fr); }
 }
@@ -421,7 +450,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 }
 .dir-card{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:6px; padding:10px; border-radius:12px; text-align:center;
+  gap:6px; padding:12px; border-radius:12px; text-align:center;
   border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04);
 }
 .dir-card:hover{ background:rgba(255,255,255,.08); }
@@ -489,4 +518,88 @@ input[type="range"]{ width:100%; }
 .dir-card.is-active .dir-char{
   color: #041225; /* flèche sombre sur fond turquoise actif */
 }
+
+/* Hover uniquement si le device a un vrai hover */
+@media (hover: hover) {
+  .dir-card:hover{ background:rgba(255,255,255,.08); }
+}
+.dir-card.is-active{
+  background: linear-gradient(180deg, #12D8DF, #0EC2C9);
+  color:#041225; border-color: transparent;
+  box-shadow: 0 5px 12px rgba(18,216,223,.30), 0 0 0 1px rgba(0,0,0,.08) inset;
+}
+
+/* Flèches et labels BLANCS par défaut */
+.dir-char{
+  font-family: 'IBM Plex Sans KR', system-ui, -apple-system, Segoe UI, Arial;
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1;
+  color: #FFFFFF;
+  text-shadow: 0 8px 24px rgba(0,0,0,.35);
+  -webkit-text-stroke: 2px rgba(4,18,37,.25);
+}
+.dir-card .dir-label{ font-weight:800; color:#FFFFFF; }
+.dir-card.is-active .dir-char{ color:#041225; -webkit-text-stroke: 0; }
+.dir-card.is-active .dir-label{ color:#041225; }
+
+/* Précompte plus gros */
+.precount-num{
+  font-family:"Audiowide","Outfit",system-ui;
+  font-size: clamp(72px, 18vw, 140px);
+  font-weight:800; letter-spacing:1px;
+}
+
+/* Flèche géante */
+.big-arrow{
+  line-height: 1;
+  font-weight: 900;
+  text-shadow: 0 10px 30px rgba(0,0,0,.35);
+  -webkit-text-stroke: 3px rgba(4,18,37,.35);
+}
+
+/* Scène exercice */
+.shadow-stage{ position:relative; min-height: calc(100vh - 220px);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.shadow-remaining{
+  position:absolute; top:0; left:0; right:0; text-align:center; color:#C7D2E0; padding:8px 0;
+}
+.arrow-wrap{ display:flex; align-items:center; justify-content:center; }
+.paused-badge{
+  position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+  padding:6px 10px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06);
+  font-weight:700;
+}
+
+/* Boutons couleurs (Arrêter/Pause/Reprendre) */
+.btn--danger{
+  border:1px solid rgba(255,61,46,.45);
+  background: rgba(255,61,46,.12);
+  color:#FF3D2E;
+}
+.btn--danger:hover{ background: rgba(255,61,46,.18); }
+
+.btn--warning{
+  border:1px solid rgba(255,122,26,.45);
+  background: rgba(255,122,26,.12);
+  color:#FF7A1A;
+}
+.btn--warning:hover{ background: rgba(255,122,26,.18); }
+
+.btn--success{
+  border:1px solid rgba(18,216,223,.45);
+  background: rgba(18,216,223,.12);
+  color:#12D8DF;
+}
+.btn--success:hover{ background: rgba(18,216,223,.18); }
+
+/* Erreur inline */
+.shadow-error{ color:#FF7A1A; font-weight:800; margin:8px 0 0; }
+
+/* CTA GO */
+.shadow-cta{ display:flex; justify-content:center; margin-top:8px; }
+
+/* Inputs range un peu plus confort */
+input[type="range"]{ width:100%; }
 

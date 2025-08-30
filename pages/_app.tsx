@@ -85,6 +85,8 @@ export default function App({ Component, pageProps }: AppProps) {
             href="https://fonts.googleapis.com/css2?family=Audiowide&family=Outfit:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
           />
+          <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@700&display=swap" rel="stylesheet" />
+
 
         {/* Favicons (assure-toi que les fichiers sont bien dans /public) */}
         <link rel="icon" href="/favicon.ico" />
