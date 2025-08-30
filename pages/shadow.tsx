@@ -4,27 +4,26 @@ import Link from "next/link";
 
 // ---------- Types & constantes ----------
 type DirKey = "AG" | "AD" | "G" | "D" | "DG" | "DD";
-type Phase = "param" | "precount" | "run" | "paused" | "finished";
+type Phase = "param" | "precount" | "running" | "paused" | "finished";
 
 const LS_KEY = "shadow.v1";
 
-// Nouveau libellé + flèches en caractères
-const DIRS: Record<DirKey, { key: DirKey; label: string; char: string; svg:string }> = {
-  AG: { key: "AG", label: "Amorti gauche",         char: "↖", svg: "/shadow/arrow-AG.svg" },
-  AD: { key: "AD", label: "Amorti droit",          char: "↗", svg: "/shadow/arrow-AD.svg" },
-  G:  { key: "G",  label: "Défense à gauche",      char: "←", svg: "/shadow/arrow-G.svg" },
-  D:  { key: "D",  label: "Défense à droite",      char: "→", svg: "/shadow/arrow-D.svg" },
-  DG: { key: "DG", label: "Dégagement gauche",     char: "↙", svg: "/shadow/arrow-DG.svg" },
-  DD: { key: "DD", label: "Dégagement droit",      char: "↘", svg: "/shadow/arrow-DD.svg" },
+const DIRS: Record<DirKey, { key: DirKey; label: string; svg: string }> = {
+  AG: { key: "AG", label: "Amorti gauche",     svg: "/shadow/arrow-AG.svg" },
+  AD: { key: "AD", label: "Amorti droit",      svg: "/shadow/arrow-AD.svg" },
+  G:  { key: "G",  label: "Défense à gauche",  svg: "/shadow/arrow-G.svg"  },
+  D:  { key: "D",  label: "Défense à droite",  svg: "/shadow/arrow-D.svg"  },
+  DG: { key: "DG", label: "Dégagement gauche", svg: "/shadow/arrow-DG.svg" },
+  DD: { key: "DD", label: "Dégagement droit",  svg: "/shadow/arrow-DD.svg" },
 };
 
 const MIN_TOTAL = 30;   // secondes
 const MAX_TOTAL = 180;  // 3 min
 const STEP_TOTAL = 5;
 
-const MIN_INT = 2;   // secondes
+const MIN_INT = 2;      // secondes
 const MAX_INT = 8;
-const STEP_INT = 0.5; // pas 0.5s
+const STEP_INT = 0.5;   // 0.5s
 
 const VISIBLE_RATIO = 2 / 3;
 
@@ -38,16 +37,20 @@ const fmt = (sec: number) => {
 const ceilTo = (value: number, step: number) =>
   Math.ceil(value / step) * step;
 
-// localStorage
+// localStorage helpers
 const loadState = () => {
   try {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return null;
     return JSON.parse(raw);
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 };
 const saveState = (v: unknown) => {
-  try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch {}
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(v));
+  } catch {}
 };
 
 // Audio (silencieux si fichier absent)
@@ -58,34 +61,26 @@ function useAudio(src: string | null) {
     ref.current = new Audio(src);
   }, [src]);
   return {
-    play: () => { ref.current && (ref.current.currentTime = 0, ref.current.play().catch(() => {})); },
-    stop: () => { if (!ref.current) return; ref.current.pause(); ref.current.currentTime = 0; },
+    play: () => {
+      if (!ref.current) return;
+      try {
+        ref.current.currentTime = 0;
+        void ref.current.play();
+      } catch {}
+    },
+    stop: () => {
+      if (!ref.current) return;
+      ref.current.pause();
+      ref.current.currentTime = 0;
+    },
   };
-}
-
-// Wake Lock
-function useWakeLock() {
-  const wl = useRef<any>(null);
-  const request = async () => {
-    try {
-      // @ts-ignore
-      if (navigator?.wakeLock?.request) {
-        // @ts-ignore
-        wl.current = await navigator.wakeLock.request("screen");
-      }
-    } catch {}
-  };
-  const release = async () => {
-    try { if (wl.current?.release) await wl.current.release(); wl.current = null; } catch {}
-  };
-  return { request, release };
 }
 
 export default function Shadow() {
   // Réglages (persistants)
   const [totalSec, setTotalSec] = useState<number>(60);
   const [intervalSec, setIntervalSec] = useState<number>(5);
-  const [selected, setSelected] = useState<DirKey[]>(["AG","AD","G","D","DG","DD"]);
+  const [selected, setSelected] = useState<DirKey[]>(["AG", "AD", "G", "D", "DG", "DD"]);
   const [hideProgress, setHideProgress] = useState<boolean>(false);
 
   // État runtime
@@ -93,32 +88,57 @@ export default function Shadow() {
   const [countdown, setCountdown] = useState<number>(3); // 3→2→1→GO
   const [currentDir, setCurrentDir] = useState<DirKey | null>(null);
   const [showArrow, setShowArrow] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-
   const [remaining, setRemaining] = useState<number>(60); // s
 
-  // Refs timers
-  const rafRef = useRef<number | null>(null);
-  const startTsRef = useRef<number>(0);
-  const lastIndexRef = useRef<number>(-1);
-  const totalMsRef = useRef<number>(0);
-  const effectiveTotalMsRef = useRef<number>(0);
-  const visibleMsRef = useRef<number>(0);
-  const intMsRef = useRef<number>(0);
-  const precountTimers = useRef<number[]>([]);
+  // Gestion du temps
+  const startedAtRef = useRef<number | null>(null);
+  const pausedAccumRef = useRef<number>(0);
+  const pausedAtRef = useRef<number | null>(null);
 
-  // Sons (noms demandés)
+  // Timers
+  const preTimeoutRef = useRef<number | null>(null);
+  const hideTimeoutRef = useRef<number | null>(null);
+  const nextTimeoutRef = useRef<number | null>(null);
+  const remainingIntervalRef = useRef<number | null>(null);
+
+  // Sons
   const sPre = useAudio("/sounds/Precompte.mp3"); // 3,2,1
   const sGo  = useAudio("/sounds/Go.mp3");        // GO!
   const sTick= useAudio("/sounds/Bip.mp3");       // nouvelle flèche
   const sEnd = useAudio("/sounds/End.mp3");       // fin
 
-  // WakeLock
-  const wl = useWakeLock();
-
   // Migration depuis anciens codes NW/NE/...
-  const mapOld: Record<string, DirKey> = { NW:"AG", NE:"AD", W:"G", E:"D", SW:"DG", SE:"DD" };
+  const mapOld: Record<string, DirKey> = { NW: "AG", NE: "AD", W: "G", E: "D", SW: "DG", SE: "DD" };
 
+  // Wake Lock (empêche la mise en veille)
+  type WakeLockSentinel = any;
+  const wakeRef = useRef<WakeLockSentinel | null>(null);
+
+  async function acquireWakeLock() {
+    try {
+      if ("wakeLock" in navigator && (navigator as any).wakeLock?.request) {
+        wakeRef.current = await (navigator as any).wakeLock.request("screen");
+        wakeRef.current?.addEventListener?.("release", () => {});
+      }
+    } catch {}
+  }
+  function releaseWakeLock() {
+    try { wakeRef.current?.release?.(); } catch {}
+    wakeRef.current = null;
+  }
+
+  // Re-demande le wake lock si on revient visible pendant un run
+  useEffect(() => {
+    const onVis = () => {
+      if (document.visibilityState === "visible" && phase === "running") {
+        void acquireWakeLock();
+      }
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [phase]);
+
+  // Charger l'état sauvegardé
   useEffect(() => {
     const saved = loadState();
     if (!saved) return;
@@ -130,6 +150,7 @@ export default function Shadow() {
     if (typeof saved.hideProgress === "boolean") setHideProgress(saved.hideProgress);
   }, []);
 
+  // Sauvegarder l’état
   useEffect(() => {
     saveState({ totalSec, intervalSec, dirs: selected, hideProgress });
   }, [totalSec, intervalSec, selected, hideProgress]);
@@ -137,180 +158,166 @@ export default function Shadow() {
   const canGo = selected.length > 0;
 
   const toggleDir = (k: DirKey) => {
-    setSelected(prev => {
+    setSelected((prev) => {
       if (prev.includes(k)) {
-        const next = prev.filter(x => x !== k);
+        const next = prev.filter((x) => x !== k);
         return next.length ? next : prev; // toujours ≥1
       }
       return [...prev, k];
     });
   };
 
-  const randomDir = () => {
-    const idx = Math.floor(Math.random() * selected.length);
-    return selected[idx];
-  };
+  // Durée totale effective (on allonge pour compléter le dernier intervalle)
+  const effectiveTotalSec = useMemo(() => ceilTo(totalSec, intervalSec), [totalSec, intervalSec]);
 
-  // Effective total : on **allonge** à la fin pour boucler l’intervalle en cours,
-  // mais l’utilisateur a bien réglé "1:00" (affiché comme tel dans les réglages).
-  const effectiveTotalSec = useMemo(() => {
-    return ceilTo(totalSec, intervalSec);
-  }, [totalSec, intervalSec]);
+  // Helpers timers
+  function clearAllTimers() {
+    if (preTimeoutRef.current) { clearTimeout(preTimeoutRef.current); preTimeoutRef.current = null; }
+    if (hideTimeoutRef.current) { clearTimeout(hideTimeoutRef.current); hideTimeoutRef.current = null; }
+    if (nextTimeoutRef.current) { clearTimeout(nextTimeoutRef.current); nextTimeoutRef.current = null; }
+    if (remainingIntervalRef.current) { clearInterval(remainingIntervalRef.current); remainingIntervalRef.current = null; }
+  }
 
-  // ---- Précompte ----
-  const clearPrecount = () => {
-    precountTimers.current.forEach(id => clearTimeout(id));
-    precountTimers.current = [];
-  };
+  // Mise à jour du temps restant (toutes les 200ms)
+  function startRemainingTicker() {
+    if (remainingIntervalRef.current) clearInterval(remainingIntervalRef.current);
+    remainingIntervalRef.current = window.setInterval(() => {
+      if (startedAtRef.current == null) return;
+      const elapsed = Date.now() - startedAtRef.current - pausedAccumRef.current;
+      const restMs = Math.max(0, Math.round(effectiveTotalSec * 1000) - elapsed);
+      setRemaining(Math.min(totalSec, restMs / 1000));
+      if (restMs <= 0) {
+        finishExercise();
+      }
+    }, 200);
+  }
 
-  const startPrecount = async () => {
-    setError("");
-
-    // remonte en haut pour voir la flèche centrée
-    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch {}
-
-    if (!canGo) { setError("Choisis au moins une direction."); return; }
-
-    intMsRef.current = Math.round(intervalSec * 1000);
-    visibleMsRef.current = Math.round(intMsRef.current * VISIBLE_RATIO);
-    totalMsRef.current = Math.round(totalSec * 1000);
-    effectiveTotalMsRef.current = Math.round(effectiveTotalSec * 1000);
-
-    setRemaining(totalSec); // on affiche la cible (ex: 1:00) côté UI
-    setPhase("precount");
-    await wl.request();
-
-    // 3,2,1 → GO
-    setCountdown(3); sPre.play();
-    clearPrecount();
-    precountTimers.current.push(
-      window.setTimeout(() => { setCountdown(2); sPre.play(); }, 1000),
-      window.setTimeout(() => { setCountdown(1); sPre.play(); }, 2000),
-      window.setTimeout(() => { setCountdown(0); sGo.play(); }, 3000),
-      window.setTimeout(() => { startRun(); }, 4000)
-    );
-  };
-
-  // ---- Run loop ----
-  const stopRaf = () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); rafRef.current = null; };
-
-  const startRun = () => {
-    clearPrecount();
-    setPhase("run");
-    startTsRef.current = performance.now();
-    lastIndexRef.current = -1;
-    setCurrentDir(randomDir());
+  // Cycle des flèches (une seule “horloge”)
+  function cycleArrow() {
+    // choisit et montre
+    const pool = selected.length ? selected : (Object.keys(DIRS) as DirKey[]);
+    const dir = pool[Math.floor(Math.random() * pool.length)];
+    setCurrentDir(dir);
     setShowArrow(true);
     sTick.play();
 
-    const loop = () => {
-      const now = performance.now();
-      const elapsed = now - startTsRef.current;
+    const intervalMs = Math.round(intervalSec * 1000);
+    const hideDelay = Math.max(150, Math.round(intervalMs * VISIBLE_RATIO));
 
-      const totalEff = effectiveTotalMsRef.current;
-      const int = intMsRef.current;
-      const visible = visibleMsRef.current;
+    // masque avant la prochaine
+    hideTimeoutRef.current = window.setTimeout(() => {
+      setShowArrow(false);
+    }, hideDelay);
 
-      // Fin (sur total **effectif**)
-      if (elapsed >= totalEff) {
-        setRemaining(0);
-        sEnd.play();
-        stopRaf(); wl.release();
-        setPhase("finished");
-        return;
+    // planifie la suivante
+    nextTimeoutRef.current = window.setTimeout(() => {
+      // vérifie la fin ici aussi (en complément du ticker)
+      if (startedAtRef.current != null) {
+        const elapsed = Date.now() - startedAtRef.current - pausedAccumRef.current;
+        if (elapsed >= effectiveTotalSec * 1000) {
+          finishExercise();
+          return;
+        }
       }
+      cycleArrow();
+    }, intervalMs);
+  }
 
-      // Affiche un restant "cible" jusqu’à atteindre 0
-      const rest = Math.max(0, totalEff - elapsed);
-      // on essaie de ne pas "dépasser" la cible dans l’affichage :
-      const displayRest = Math.max(0, Math.min(rest / 1000, totalSec));
-      setRemaining(displayRest);
+  // Lancement : pré-compte 3-2-1-GO!, puis début run
+  async function startExercise() {
+    if (!canGo) return;
+    // remonte en haut pour bien voir la flèche
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch {}
 
-      // Intervalle : apparition / gap
-      const index = Math.floor(elapsed / int);
-      if (index !== lastIndexRef.current) {
-        lastIndexRef.current = index;
-        setCurrentDir(randomDir());
-        sTick.play();
-      }
-      const tIn = elapsed % int;
-      setShowArrow(tIn < visible);
+    clearAllTimers();
+    pausedAccumRef.current = 0;
+    pausedAtRef.current = null;
 
-      rafRef.current = requestAnimationFrame(loop);
+    await acquireWakeLock();
+
+    setPhase("precount");
+    setCountdown(3);
+    sPre.play(); // "3"
+
+    const tick = (n: number) => {
+      preTimeoutRef.current = window.setTimeout(() => {
+        if (n > 1) {
+          setCountdown(n - 1);
+          sPre.play();            // "2", puis "1"
+          tick(n - 1);
+        } else {
+          // Affiche "GO !" pendant 1s
+          setCountdown(0);
+          sGo.play();
+          preTimeoutRef.current = window.setTimeout(() => {
+            beginRun();
+          }, 1000);
+        }
+      }, 1000);
     };
+    tick(3);
+  }
 
-    rafRef.current = requestAnimationFrame(loop);
-  };
+  function beginRun() {
+    clearAllTimers();
+    setPhase("running");
+    startedAtRef.current = Date.now();
+    startRemainingTicker();
+    cycleArrow();
+  }
 
-  const pause = () => {
-    if (phase !== "run") return;
-    stopRaf(); setPhase("paused");
-  };
+  function pause() {
+    if (phase !== "running") return;
+    clearAllTimers();
+    pausedAtRef.current = Date.now();
+    setPhase("paused");
+  }
 
-  const resume = () => {
+  function resume() {
     if (phase !== "paused") return;
-    const remainingMs = Math.max(0, remaining * 1000);
-    startTsRef.current = performance.now() - (effectiveTotalMsRef.current - remainingMs);
-    setPhase("run");
-    rafRef.current = requestAnimationFrame(function loop() {
-      const now = performance.now();
-      const elapsed = now - startTsRef.current;
+    // accumule le temps en pause
+    if (pausedAtRef.current != null) {
+      pausedAccumRef.current += Date.now() - pausedAtRef.current;
+      pausedAtRef.current = null;
+    }
+    setPhase("running");
+    startRemainingTicker();
+    cycleArrow();
+  }
 
-      const totalEff = effectiveTotalMsRef.current;
-      const int = intMsRef.current;
-      const visible = visibleMsRef.current;
+  function finishExercise() {
+    clearAllTimers();
+    setShowArrow(false);
+    setPhase("finished");
+    releaseWakeLock();
+    sEnd.play();
+  }
 
-      if (elapsed >= totalEff) {
-        setRemaining(0);
-        sEnd.play();
-        stopRaf(); wl.release();
-        setPhase("finished");
-        return;
-      }
-
-      const rest = Math.max(0, totalEff - elapsed);
-      const displayRest = Math.max(0, Math.min(rest / 1000, totalSec));
-      setRemaining(displayRest);
-
-      const index = Math.floor(elapsed / int);
-      if (index !== lastIndexRef.current) {
-        lastIndexRef.current = index;
-        setCurrentDir(randomDir());
-        sTick.play();
-      }
-      const tIn = elapsed % int;
-      setShowArrow(tIn < visible);
-
-      rafRef.current = requestAnimationFrame(loop);
-    });
-  };
-
-  const stopAll = () => {
-    clearPrecount(); stopRaf(); wl.release();
+  function stopAll() {
+    clearAllTimers();
+    setShowArrow(false);
     setPhase("param"); // retour aux réglages, on garde l’état
-  };
+    releaseWakeLock();
+  }
 
-  const restartSame = () => { startPrecount(); };
+  function restartSame() {
+    // relance directement un nouveau run avec les mêmes réglages
+    startExercise();
+  }
 
-  useEffect(() => {
-    return () => { clearPrecount(); stopRaf(); wl.release(); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  // Arrow size responsive
   const arrowSize = useMemo(() => {
     if (typeof window === "undefined") return 600;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const s = Math.min(vw, vh);
-    // mobile : occupe ~95% de la plus petite dimension ; desktop : 70% (max 700)
-    return (vw <= 900) ? Math.floor(s * 0.95) : Math.min(700, Math.floor(s * 0.70));
+    // mobile : ~95% ; desktop : 70% (max 700)
+    return vw <= 900 ? Math.floor(s * 0.95) : Math.min(700, Math.floor(s * 0.7));
   }, [phase]);
 
   return (
     <main className="shadow-page" aria-live="polite">
-      {/* Topbar locale (sans titre – titre déjà dans la navbar globale).
-         - Le bouton Retour n’apparaît QUE dans les paramètres
-         - Pendant l’exercice : Stop (rouge), Pause (orange) / Reprendre (vert) */}
+      {/* Topbar locale */}
       <div className="shadow-topbar">
         <div className="shadow-left">
           {phase === "param" && (
@@ -319,16 +326,22 @@ export default function Shadow() {
             </Link>
           )}
         </div>
-        <div className="shadow-center">{/* vide (respiration) */}</div>
+        <div className="shadow-center">{/* respiration */}</div>
         <div className="shadow-actions">
-          {(phase === "precount" || phase === "run" || phase === "paused") && (
-            <button className="btn btn--danger" onClick={stopAll} aria-label="Arrêter">Arrêter</button>
+          {(phase === "precount" || phase === "running" || phase === "paused") && (
+            <button className="btn btn--danger" onClick={stopAll} aria-label="Arrêter">
+              Arrêter
+            </button>
           )}
-          {phase === "run" && (
-            <button className="btn btn--warning" onClick={pause} aria-label="Mettre en pause">Pause</button>
+          {phase === "running" && (
+            <button className="btn btn--warning" onClick={pause} aria-label="Mettre en pause">
+              Pause
+            </button>
           )}
           {phase === "paused" && (
-            <button className="btn btn--success" onClick={resume} aria-label="Reprendre">Reprendre</button>
+            <button className="btn btn--success" onClick={resume} aria-label="Reprendre">
+              Reprendre
+            </button>
           )}
         </div>
       </div>
@@ -350,7 +363,7 @@ export default function Shadow() {
                 value={totalSec}
                 onChange={(e) => setTotalSec(Number(e.target.value))}
               />
-              {/* Affinage direct (rendu sliders moins “rigides”) */}
+              {/* champ numérique pour affiner */}
               <input
                 className="numbox"
                 type="number"
@@ -358,7 +371,9 @@ export default function Shadow() {
                 max={MAX_TOTAL}
                 step={STEP_TOTAL}
                 value={totalSec}
-                onChange={(e) => setTotalSec(Math.max(MIN_TOTAL, Math.min(MAX_TOTAL, Number(e.target.value))))}
+                onChange={(e) =>
+                  setTotalSec(Math.max(MIN_TOTAL, Math.min(MAX_TOTAL, Number(e.target.value))))
+                }
               />
               <span className="numbox-suffix">s</span>
             </div>
@@ -389,7 +404,9 @@ export default function Shadow() {
                 max={MAX_INT}
                 step={STEP_INT}
                 value={intervalSec}
-                onChange={(e) => setIntervalSec(Math.max(MIN_INT, Math.min(MAX_INT, Number(e.target.value))))}
+                onChange={(e) =>
+                  setIntervalSec(Math.max(MIN_INT, Math.min(MAX_INT, Number(e.target.value))))
+                }
               />
               <span className="numbox-suffix">s</span>
             </div>
@@ -414,20 +431,13 @@ export default function Shadow() {
                     aria-pressed={active}
                     aria-label={d.label}
                   >
-                    {/* Remplacement du caractère par l'image */}
-                    <img
-                      src={d.svg}
-                      alt=""
-                      className="dir-icon"
-                      aria-hidden
-                    />
+                    <img src={d.svg} alt="" className="dir-icon" aria-hidden />
                     <div className="dir-label">{d.label}</div>
                   </button>
                 );
               })}
             </div>
           </div>
-
 
           <label className="shadow-check">
             <input
@@ -438,15 +448,15 @@ export default function Shadow() {
             Épurer l’interface (masque le temps restant)
           </label>
 
-          {error && <p className="shadow-error">{error}</p>}
-
           <div className="shadow-cta">
-            <button className="cta-primary" onClick={startPrecount}>GO !</button>
+            <button className="cta-primary" onClick={startExercise} disabled={!canGo}>
+              GO !
+            </button>
           </div>
         </section>
       )}
 
-      {/* PRÉCOMPTE */}
+      {/* PRÉ-COMPTE */}
       {phase === "precount" && (
         <section className="shadow-stage">
           {!hideProgress && (
@@ -461,7 +471,7 @@ export default function Shadow() {
       )}
 
       {/* RUN / PAUSED */}
-      {(phase === "run" || phase === "paused") && (
+      {(phase === "running" || phase === "paused") && (
         <section className="shadow-stage">
           {!hideProgress && (
             <div className="shadow-remaining">
@@ -476,7 +486,7 @@ export default function Shadow() {
                 style={{
                   width: `${arrowSize}px`,
                   height: `${arrowSize}px`,
-                  filter: 'drop-shadow(0 14px 36px rgba(0,0,0,.35))'
+                  filter: "drop-shadow(0 14px 36px rgba(0,0,0,.35))",
                 }}
               />
             )}
