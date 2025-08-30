@@ -9,7 +9,7 @@ type Phase = "param" | "precount" | "run" | "paused" | "finished";
 const LS_KEY = "shadow.v1";
 
 // Nouveau libellé + flèches en caractères
-const DIRS: Record<DirKey, { key: DirKey; label: string; char: string }> = {
+const DIRS: Record<DirKey, { key: DirKey; label: string; char: string; svg;string }> = {
   AG: { key: "AG", label: "Amorti gauche",         char: "↖", svg: "/shadow/arrow-AG.svg" },
   AD: { key: "AD", label: "Amorti droit",          char: "↗", svg: "/shadow/arrow-AD.svg" },
   G:  { key: "G",  label: "Défense à gauche",      char: "←", svg: "/shadow/arrow-G.svg" },
