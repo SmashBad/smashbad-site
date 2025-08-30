@@ -87,6 +87,12 @@ export default function App({ Component, pageProps }: AppProps) {
           />
           <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@700&display=swap" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols+2:wght@700&display=swap" rel="stylesheet" />
+          <link rel="preload" as="image" href="/shadow/arrow-AG.svg" />
+          <link rel="preload" as="image" href="/shadow/arrow-AD.svg" />
+          <link rel="preload" as="image" href="/shadow/arrow-G.svg" />
+          <link rel="preload" as="image" href="/shadow/arrow-D.svg" />
+          <link rel="preload" as="image" href="/shadow/arrow-DG.svg" />
+          <link rel="preload" as="image" href="/shadow/arrow-DD.svg" />
 
 
         {/* Favicons (assure-toi que les fichiers sont bien dans /public) */}

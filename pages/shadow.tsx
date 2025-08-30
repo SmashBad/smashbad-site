@@ -10,12 +10,12 @@ const LS_KEY = "shadow.v1";
 
 // Nouveau libellé + flèches en caractères
 const DIRS: Record<DirKey, { key: DirKey; label: string; char: string }> = {
-  AG: { key: "AG", label: "Amorti gauche",         char: "↖" },
-  AD: { key: "AD", label: "Amorti droit",          char: "↗" },
-  G:  { key: "G",  label: "Défense à gauche",      char: "←" },
-  D:  { key: "D",  label: "Défense à droite",      char: "→" },
-  DG: { key: "DG", label: "Dégagement gauche",     char: "↙" },
-  DD: { key: "DD", label: "Dégagement droit",      char: "↘" },
+  AG: { key: "AG", label: "Amorti gauche",         char: "↖", svg: "/shadow/arrow-AG.svg" },
+  AD: { key: "AD", label: "Amorti droit",          char: "↗", svg: "/shadow/arrow-AD.svg" },
+  G:  { key: "G",  label: "Défense à gauche",      char: "←", svg: "/shadow/arrow-G.svg" },
+  D:  { key: "D",  label: "Défense à droite",      char: "→", svg: "/shadow/arrow-D.svg" },
+  DG: { key: "DG", label: "Dégagement gauche",     char: "↙", svg: "/shadow/arrow-DG.svg" },
+  DD: { key: "DD", label: "Dégagement droit",      char: "↘", svg: "/shadow/arrow-DD.svg" },
 };
 
 const MIN_TOTAL = 30;   // secondes
@@ -79,25 +79,6 @@ function useWakeLock() {
     try { if (wl.current?.release) await wl.current.release(); wl.current = null; } catch {}
   };
   return { request, release };
-}
-
-// Flèche géante (caractère)
-function BigArrowChar({ char, size = 600, color = "#F4F8FF" }:{
-  char: string; size?: number; color?: string;
-}) {
-  return (
-    <div
-      className="big-arrow"
-      role="img"
-      aria-label="Direction"
-      style={{
-        fontSize: `${Math.floor(size * 0.85)}px`,
-        color,
-      }}
-    >
-      {char}
-    </div>
-  );
 }
 
 export default function Shadow() {
@@ -433,13 +414,20 @@ export default function Shadow() {
                     aria-pressed={active}
                     aria-label={d.label}
                   >
-                    <div className="dir-char">{d.char}</div>
+                    {/* Remplacement du caractère par l'image */}
+                    <img
+                      src={d.svg}
+                      alt=""
+                      className="dir-icon"
+                      aria-hidden
+                    />
                     <div className="dir-label">{d.label}</div>
                   </button>
                 );
               })}
             </div>
           </div>
+
 
           <label className="shadow-check">
             <input
@@ -482,7 +470,15 @@ export default function Shadow() {
           )}
           <div className="arrow-wrap">
             {currentDir && showArrow && (
-              <BigArrowChar char={DIRS[currentDir].char} size={arrowSize} />
+              <img
+                src={DIRS[currentDir].svg}
+                alt="Direction"
+                style={{
+                  width: `${arrowSize}px`,
+                  height: `${arrowSize}px`,
+                  filter: 'drop-shadow(0 14px 36px rgba(0,0,0,.35))'
+                }}
+              />
             )}
           </div>
           {phase === "paused" && <div className="paused-badge">En pause</div>}

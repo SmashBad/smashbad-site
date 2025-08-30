@@ -501,12 +501,12 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 /* Range un peu plus visibles */
 input[type="range"]{ width:100%; }
 
-/* Flèche géante en caractères */
+/* Flèche géante en caractères 
 .big-arrow{
   line-height: 1;
   font-weight: 900;
   text-shadow: 0 12px 34px rgba(0,0,0,.35);
-}
+}*/
 
 /* Mini caractères dans les cartes */
 .dir-char{
@@ -552,13 +552,13 @@ input[type="range"]{ width:100%; }
   font-weight:800; letter-spacing:1px;
 }
 
-/* Flèche géante */
+/* Flèche géante 
 .big-arrow{
   line-height: 1;
   font-weight: 900;
   text-shadow: 0 10px 30px rgba(0,0,0,.35);
   -webkit-text-stroke: 3px rgba(4,18,37,.35);
-}
+}*/
 
 /* Scène exercice */
 .shadow-stage{ position:relative; min-height: calc(100vh - 220px);
@@ -607,3 +607,55 @@ input[type="range"]{ width:100%; }
 
 .range-line .numbox { display: none; }
 .range-line .numbox-suffix{ display:none; }
+
+.dir-icon{
+  width: 56px;
+  height:56px;
+  display: block;
+  margin: 6px auto 6px;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,.28));
+}
+
+@media (max-width: 900px){
+  .dir-icon{ width: 44px; height: 44px; }
+}
+
+.dir-label{
+  font-weight: 700;
+  text-align: center;
+  color: #FFFFFF; /* meilleur contraste */
+}
+
+/* état actif / inactif : laisser comme tu l'avais,
+   mais on peut accentuer l’icône avec un petit glow */
+.dir-card.is-active .dir-icon{
+  filter: drop-shadow(0 10px 22px rgba(18,216,223,.33));
+}
+
+/* ------- Flèche géante pendant l’exercice ------- */
+.arrow-wrap{
+  display:flex; align-items:center; justify-content:center;
+  width:100%; height: calc(100vh - 160px); /* approx header+barres */
+}
+
+@media (max-width: 900px){
+  .dir-icon{ width: 44px; height: 44px; }
+}
+
+.dir-label{
+  font-weight: 700;
+  text-align: center;
+  color: #FFFFFF; /* meilleur contraste */
+}
+
+/* état actif / inactif : laisser comme tu l'avais,
+   mais on peut accentuer l’icône avec un petit glow */
+.dir-card.is-active .dir-icon{
+  filter: drop-shadow(0 10px 22px rgba(18,216,223,.33));
+}
+
+/* ------- Flèche géante pendant l’exercice ------- */
+.arrow-wrap{
+  display:flex; align-items:center; justify-content:center;
+  width:100%; height: calc(100vh - 160px); /* approx header+barres */
+}
