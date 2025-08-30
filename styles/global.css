@@ -51,6 +51,7 @@ a{ color:inherit; text-decoration:none }
 
 /* Marque */
 .brand{ display:flex; align-items:center; gap:12px; position: relative; z-index: 2; }
+.nav__actions{ position:relative; z-index:2; }
 .brand__logo{ height:36px; width:auto }
 .brand__wordmark{
   font-weight:800; font-size:20px; text-transform:uppercase; letter-spacing:.6px;
@@ -60,20 +61,36 @@ a{ color:inherit; text-decoration:none }
 
 /* Titre centré (mobile) — caché par défaut */
 .nav__title{
-  margin-left: 6px;                   /* même espace que le wordmark */
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  margin:0;
+
+  display:none;                 /* caché par défaut */
+  line-height:1;
+
+  /* même look que le wordmark */
   font-family:'Audiowide','Outfit',system-ui;
-  font-weight:800; font-size:20px; text-transform:uppercase; letter-spacing:.6px;
+  font-weight:800;
+  font-size:20px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
   background:linear-gradient(90deg,#F4F8FF 0%,#12D8DF 60%,#F4F8FF 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent;
-  display:none;                       /* caché par défaut */
-  position:absolute; left:50%; transform:translateX(-50%);
-  top:50%; transform:translate(-50%,-50%);  /* verticalement centré aussi */
-  z-index:5;                                 /* au-dessus du lien de marque */
-  font-weight:800; letter-spacing:.4px;
-  opacity:1; pointer-events:auto;            /* on intercepte les clics */
-  margin:0;
-  line-height:1;
+
+  width:70%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  /* le titre ne doit pas être cliquable */
+  pointer-events:none;
+
+  /* passe sous les zones clic (brand / actions) */
+  z-index:1;
 }
+
 
 /* Liens principaux (pills) */
 .nav__links{ display:flex; align-items:center; gap:20px }
@@ -273,7 +290,7 @@ body.is-mobile .nav{
   column-gap: 8px;
 }
 
-body.is-mobile .nav__actions{ grid-column: 4; justify-self: end; }
+body.is-mobile .nav__actions{ justify-self: end; }
 
 
 /* éviter que la bottomnav recouvre le contenu */
@@ -283,10 +300,11 @@ body.is-mobile .footer{ margin-bottom: calc(var(--bottomnav-h) + env(safe-area-i
 
 /* — MOBILE réel : on masque le wordmark, on montre le titre DANS la brand */
 body.is-mobile:not(.is-home) .brand__wordmark { display:none; }
-body.is-mobile:not(.is-home) .nav__title     { display:inline; }
+body.is-mobile:not(.is-home) .nav__title     { display:block; }
 
 /* sur la home mobile, on cache au contraire le titre */
 body.is-mobile.is-home .nav__title { display:none; }
+body.is-mobile.is-home .brand__wordmark{ display:inline; }
 
 /* — PC ÉTROIT (~<=600px, non mobile) — */
 body.is-desktop-narrow .nav__links{ display:flex; }
@@ -478,12 +496,6 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   padding:8px 0;
 }
 
-/* Précompte */
-.precount-num{
-  font-family:"Audiowide","Outfit",system-ui;
-  font-size: clamp(56px, 14vw, 120px); font-weight:800; letter-spacing:1px;
-}
-
 /* Flèche géante */
 .arrow-wrap{
   display:flex; align-items:center; justify-content:center;
@@ -566,18 +578,8 @@ input[type="range"]{ width:100%; }
   -webkit-text-stroke: 3px rgba(4,18,37,.35);
 }*/
 
-/* Scène exercice */
-.shadow-stage{ position:relative; min-height: calc(100vh - 220px);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; }
 .shadow-remaining{
   position:absolute; top:0; left:0; right:0; text-align:center; color:#C7D2E0; padding:8px 0;
-}
-.arrow-wrap{ display:flex; align-items:center; justify-content:center; }
-.paused-badge{
-  position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
-  padding:6px 10px; border-radius:999px;
-  border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06);
-  font-weight:700;
 }
 
 /* Boutons couleurs (Arrêter/Pause/Reprendre) */
@@ -620,28 +622,6 @@ input[type="range"]{ width:100%; }
   display: block;
   margin: 6px auto 6px;
   filter: drop-shadow(0 6px 16px rgba(0,0,0,.28));
-}
-
-@media (max-width: 900px){
-  .dir-icon{ width: 44px; height: 44px; }
-}
-
-.dir-label{
-  font-weight: 700;
-  text-align: center;
-  color: #FFFFFF; /* meilleur contraste */
-}
-
-/* état actif / inactif : laisser comme tu l'avais,
-   mais on peut accentuer l’icône avec un petit glow */
-.dir-card.is-active .dir-icon{
-  filter: drop-shadow(0 10px 22px rgba(18,216,223,.33));
-}
-
-/* ------- Flèche géante pendant l’exercice ------- */
-.arrow-wrap{
-  display:flex; align-items:center; justify-content:center;
-  width:100%; height: calc(100vh - 160px); /* approx header+barres */
 }
 
 @media (max-width: 900px){
