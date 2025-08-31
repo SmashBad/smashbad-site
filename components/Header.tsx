@@ -25,9 +25,10 @@ export default function Header({ title }: HeaderProps)
       <a href="/" className="brand" aria-label="Page d’accueil">
         <img src="/logo.png" alt="SMASH.bad" className="brand__logo" />
         <span className="brand__wordmark">SMASH</span>
-        {/* Titre mobile : même style que le wordmark, visible hors-home */}
-        {title && <span className="nav__title">{title.toUpperCase()}</span>}
       </a>
+      {/* Titre mobile : même style que le wordmark, visible hors-home */}
+      {title && <div className="nav__title">{title.toUpperCase()}</div>}
+      
 
       {/* Pills */}
       <nav className="nav__links" aria-label="Navigation principale">
