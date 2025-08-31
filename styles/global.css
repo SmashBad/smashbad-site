@@ -290,7 +290,7 @@ body.is-mobile .nav{
   column-gap: 8px;
 }
 
-body.is-mobile .nav__actions{ justify-self: end; }
+body.is-mobile .nav__actions{ grid-column: 3; justify-self: end;  }
 
 
 /* éviter que la bottomnav recouvre le contenu */
