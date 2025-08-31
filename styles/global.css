@@ -62,7 +62,7 @@ a{ color:inherit; text-decoration:none }
 /* Titre centré (mobile) — caché par défaut */
 .nav__title{
   position:absolute;
-  left:15%;
+  left:35%;
   top:50%;
   transform:translate(-50%,-50%);
   margin:0;
