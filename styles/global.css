@@ -279,6 +279,7 @@ body.is-mobile .nav__title{
   -webkit-background-clip:text; background-clip:text; color:transparent;
   text-transform: uppercase;
   font-size:20px;
+  grid-column: 2;
 }
 
 body.is-mobile .nav{
