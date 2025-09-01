@@ -18,12 +18,12 @@ export default function Home() {
             <div className="hero-split__text">
               <p className="kicker">Bienvenue sur SMASH</p>
               <h1>
-                Votre partenaire
+                Ton partenaire
                 <br />
                 <span className="accent">Badminton</span>
               </h1>
               <p className="lead">
-                Progresser, s’équiper, jouer : tout ce qu’il te faut pour vivre
+                Progresser, s’équiper, jouer : ce qu’il te faut pour vivre
                 le badminton à fond.
               </p>
             </div>
