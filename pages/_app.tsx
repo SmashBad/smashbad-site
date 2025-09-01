@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import "../styles/global.css";
+import { Analytics } from "@vercel/analytics/next"
 
 // Importe les composants du layout (chemins relatifs pour être sûrs)
 import Header from "../components/Header";
