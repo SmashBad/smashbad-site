@@ -82,7 +82,7 @@ export default function Header({ title }: HeaderProps)
         >
           {/* Deux icônes, on swap au :hover via CSS, sans wrapper supplémentaire */}
           <img src="/AskContact.svg"     alt="" className="nav-ic icon--default" aria-hidden />
-          <img src="/AskContact_On.svg"  alt="" className="nav-ic icon--hover"  aria-hidden />
+          {/* <img src="/AskContact_On.svg"  alt="" className="nav-ic icon--hover"  aria-hidden /> */}
         </a>
 
         {/* Version icône seule (PC étroit) */}
