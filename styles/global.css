@@ -688,7 +688,7 @@ input[type="range"]{ width:100%; }
 .sb-iframe {
   display: block;
   width: 100%;
-  height: 78vh;                     /* hauteur responsive */
+  height: 84vh;                     /* hauteur responsive */
   min-height: 680px;                /* minimum pour petit écran */
   max-height: 1100px;               /* évite la tour infinie */
   border: 0;
