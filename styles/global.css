@@ -700,3 +700,24 @@ input[type="range"]{ width:100%; }
   .sb-h1 { font-size: 26px; }
   .sb-iframe { min-height: 720px; } /* un peu plus grand sur mobile */
 }
+
+/* Bouton "ghost" de base (tu l'as déjà, à compléter si besoin) */
+.btn{ cursor: default; user-select: none; }
+.btn--ghost{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; height:36px; padding:0 12px; border-radius:999px;
+  background: rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  color:#fff; text-decoration:none;
+  transition: background .2s ease, transform .1s ease;
+}
+.btn--ghost:hover{ background: rgba(255,255,255,.10); }
+.btn--icon{ width:36px; padding:0; }         /* icône seule */
+
+.nav-ic{ width:18px; height:18px; display:block; }
+
+/* Swap d'icône au hover (sans wrapper) */
+.icon--hover{ display:none; }
+.btn--icon:hover .icon--default{ display:none; }
+.btn--icon:hover .icon--hover{ display:block; }
+

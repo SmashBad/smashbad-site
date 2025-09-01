@@ -1,6 +1,7 @@
 // components/Header.tsx
 import React from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 type HeaderProps = {
   /** Titre affiché au centre en version mobile (header minimal) */
@@ -73,6 +74,17 @@ export default function Header({ title }: HeaderProps)
 
       {/* Actions à droite */} 
       <div className="nav__actions">
+        <a
+          href="/contact"
+          className="btn btn--ghost btn--icon"
+          aria-label="Contact / rester informé"
+          title="Contact / rester informé"
+        >
+          {/* Deux icônes, on swap au :hover via CSS, sans wrapper supplémentaire */}
+          <img src="/AskContact.svg"     alt="" className="nav-ic icon--default" aria-hidden />
+          <img src="/AskContact_On.svg"  alt="" className="nav-ic icon--hover"  aria-hidden />
+        </a>
+
         {/* Version icône seule (PC étroit) */}
         <button
           className="btn btn--ghost btn--icon login--icon-only"
