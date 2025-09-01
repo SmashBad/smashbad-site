@@ -1,3 +1,8 @@
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState, useMemo } from "react";
+import { Analytics } from '@vercel/analytics/react';
 
 // Importe les composants du layout (chemins relatifs pour être sûrs)
 import Header from "../components/Header";
