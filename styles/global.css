@@ -649,3 +649,54 @@ input[type="range"]{ width:100%; }
   display:flex; align-items:center; justify-content:center;
   width:100%; height: calc(100vh - 160px); /* approx header+barres */
 }
+
+/* Section générique (espace sous la navbar) */
+.sb-section {
+  padding: 28px 0 64px;
+}
+
+/* Contenant centré et respirant */
+.sb-container {
+  max-width: 920px;      /* largeur lisible */
+  margin: 0 auto;
+  padding: 0 24px;       /* air sur mobile */
+  color: #fff;
+}
+
+.sb-h1 {
+  margin: 0 0 8px 0;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.sb-sub {
+  margin: 0 0 18px 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* Card sombre qui "cadre" l'iframe */
+.sb-card-embed {
+  border-radius: 16px;
+  overflow: hidden;                 /* arrondit aussi l'iframe */
+  border: 1px solid #12D8DF33;      /* turquoise léger */
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* Iframe plein large, hauteur confortable, bords invisibles */
+.sb-iframe {
+  display: block;
+  width: 100%;
+  height: 78vh;                     /* hauteur responsive */
+  min-height: 680px;                /* minimum pour petit écran */
+  max-height: 1100px;               /* évite la tour infinie */
+  border: 0;
+  background: #ffffff;              /* Airtable aime un fond clair */
+}
+
+/* Petites retouches responsive */
+@media (max-width: 640px) {
+  .sb-h1 { font-size: 26px; }
+  .sb-iframe { min-height: 720px; } /* un peu plus grand sur mobile */
+}

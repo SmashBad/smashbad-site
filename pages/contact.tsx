@@ -1,16 +1,26 @@
 // pages/contact.tsx
 import Head from "next/head";
 
+const AIRTABLE_FORM_URL =
+  "https://airtable.com/embed/appErxcur9vTL9X8t/paggdZiHNRGqOeORz/form";
+
 export default function ContactPage() {
   return (
     <>
-        <iframe
-            className="airtable-embed"
-            src="https://airtable.com/embed/appErxcur9vTL9X8t/paggdZiHNRGqOeORz/form"
-            width="60%"
-            height={700}
-            style={{ background: "#040E2E", border: "1px solid #12D8DF" }}
-        />
+        <section className="sb-section">
+            <div className="sb-container">
+
+            <div className="sb-card-embed">
+                <iframe
+                    src={AIRTABLE_FORM_URL}
+                    className="sb-iframe"
+                    title="Formulaire de contact Airtable"
+                    loading="lazy"
+                    />
+            </div>
+            </div>
+
+        </section>
     </>
   );
 }
