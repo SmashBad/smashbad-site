@@ -8,6 +8,7 @@ import { Analytics } from '@vercel/analytics/react';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
+import "../styles/global.css";
 
 /** Seuil (en pixels) pour considérer un "PC étroit" */
 const NARROW_MAX = 1200; // ajuste cette valeur si besoin (ex: 700/900)
