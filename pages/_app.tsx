@@ -109,6 +109,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <main>
         <Component {...pageProps} />
+        <Analytics />
       </main>
 
       <Footer />
