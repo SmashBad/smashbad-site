@@ -173,7 +173,7 @@ export default function Shadow() {
   // Masquer la chrome (Header/BottomNav) en mode épuré pendant l'exo
   useEffect(() => {
     const shouldHide =
-      MinimalUi && (phase === "precount" || phase === "running" || phase === "paused");
+      minimalUi && (phase === "precount" || phase === "running" || phase === "paused");
     const cls = "sb-chrome-hidden";
     const b = document.body;
 
