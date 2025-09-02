@@ -533,8 +533,7 @@ export default function Shadow() {
       {/* PRÉ-COMPTE */}
       {phase === "precount" && (
         <section className="shadow-stage">
-                    {!minimalUi && (
-          )}
+          {!minimalUi}
           <div className="precount">
             <div className="precount-num">{countdown > 0 ? countdown : "GO !"}</div>
           </div>
@@ -544,9 +543,7 @@ export default function Shadow() {
       {/* RUN / PAUSED */}
       {(phase === "running" || phase === "paused") && (
         <section className="shadow-stage">
-
-          {!minimalUi && (
-          )}
+          {!minimalUi}
           <div className="arrow-wrap">
             {currentDir && showArrow && (
               <img
