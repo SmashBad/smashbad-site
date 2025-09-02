@@ -108,6 +108,9 @@ a{ color:inherit; text-decoration:none }
 }
 .nav-pill:hover{ background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.28); color:#fff; transform:translateY(-1px) }
 
+.nav-pill,
+.btn { position: relative; }
+
 /* Icônes (dans pills et boutons) */
 .nav-ic{ width:18px; height:18px; display:block; flex:0 0 18px; opacity:1 }
 
@@ -117,21 +120,21 @@ a{ color:inherit; text-decoration:none }
 .btn--disabled{ opacity:.55; cursor:not-allowed; position:relative }
 
 .tooltip{
-  position:absolute;
-  top:calc(100% + 6px);
-  left:50%;
-  transform:translateX(-50%);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;                /* ⬅️ cachée par défaut */
   max-width: min(260px, calc(100vw - 24px));
-  padding:8px 10px;
-  white-space:normal;
-  overflow-wrap: anywhere;
-  background:#121A2A;
-  color:#EAF2FF;
-  font-size:12px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,.85);
+  color: #fff;
+  font-size: 12px;
   line-height: 1.3;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:8px;
-  z-index:500;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 8px;
+  white-space: nowrap;          /* ⬅️ évite la colonne verticale */
+  z-index: 500;
   /*  
   box-shadow:0 6px 18px rgba(0,0,0,.25);
   opacity:0;
@@ -141,6 +144,12 @@ a{ color:inherit; text-decoration:none }
 .is-soon:hover .tooltip, .btn--disabled:hover .tooltip{ opacity:1 }
 .nav-pill:hover .nav-ic, .btn--ghost:hover .nav-ic{ opacity:1 }
 
+.nav-pill:hover .tooltip,
+.nav-pill:focus-within .tooltip,
+.btn:hover .tooltip,
+.btn:focus-within .tooltip{
+  display: block;}
+
 /* Boutons génériques */
 .btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; font-weight:600 }
 .btn--ghost{ border:1px solid rgba(255,255,255,.25); background:transparent; color:#fff }
@@ -148,6 +157,7 @@ a{ color:inherit; text-decoration:none }
 
 /* Zone actions à droite */
 .nav__actions{ display:flex; align-items:center; gap:10px }
+
 .nav__actions > *:last-child .tooltip{
   left: auto;      /* on annule le centrage */
   right: 0;        /* on colle au bord droit du bouton */
@@ -469,7 +479,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 .shadow-progress__bar{
   height: 100%;
   background: linear-gradient(90deg, #12D8DF, #FF7A1A);
-  transition: width .15s linear;
+  transition: none;
 }
 
 /* Carte des paramètres */

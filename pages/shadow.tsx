@@ -145,6 +145,7 @@ export default function Shadow() {
   const [showArrow, setShowArrow] = useState<boolean>(true);
   const [remaining, setRemaining] = useState<number>(60); // s
   const [remainingEff, setRemainingEff] = useState<number>(60); // reste basé sur effectiveTotalSec
+  const [progressView, setProgressView] = useState(0); // 0..1 pour l'affichage
 
 
   // Gestion du temps
@@ -216,7 +217,7 @@ export default function Shadow() {
   useEffect(() => {
     saveState({ totalSec, intervalSec, dirs: selected, minimalUi });
   }, [totalSec, intervalSec, selected, minimalUi]);
-
+  
   // Masquer la chrome (Header/BottomNav) en mode épuré pendant l'exo
   useEffect(() => {
     const shouldHide =
@@ -242,6 +243,32 @@ export default function Shadow() {
 
   // Durée totale effective (on allonge pour compléter le dernier intervalle)
   const effectiveTotalSec = useMemo(() => ceilTo(totalSec, intervalSec), [totalSec, intervalSec]);
+
+  useEffect(() => {
+    let raf = 0;
+
+    const loop = () => {
+      if (phase === "running" || phase === "paused") {
+        const started = startedAtRef.current;
+        if (started != null) {
+          const pausedExtra = pausedAtRef.current ? (Date.now() - pausedAtRef.current) : 0;
+          const pausedTotal = pausedAccumRef.current + pausedExtra;
+          const elapsed = Math.max(0, Date.now() - started - pausedTotal);
+          const totalMs = Math.max(1, Math.round(effectiveTotalSec * 1000));
+          const p = Math.min(1, elapsed / totalMs);
+          setProgressView(p);
+        }
+      } else {
+        // precount / param / finished
+        setProgressView(0);
+      }
+      raf = requestAnimationFrame(loop);
+    };
+
+  raf = requestAnimationFrame(loop);
+  return () => cancelAnimationFrame(raf);
+}, [phase, effectiveTotalSec]);
+
 
   // Progression de l'exercice (0..1)
   const progress = useMemo(() => {
@@ -413,7 +440,7 @@ export default function Shadow() {
             {/* Barre de progression — uniquement en mode standard */}
             {!minimalUi && (
               <div className="shadow-progress" aria-hidden>
-                <div className="shadow-progress__bar" style={{ width: `${Math.round(progress * 100)}%` }}
+                <div className="shadow-progress__bar" style={{ width: `${Math.round(progressView * 100)}%` }}
                 />
               </div>
             )}
