@@ -54,21 +54,21 @@ export default function Header({ title }: HeaderProps)
         <span className="nav-pill is-soon" aria-disabled="true">
           <img src="/Racket.svg" className="nav-ic" alt="" />
           <span className="label">Matériel</span>
-          <span className="tooltip">Matériel - Bientôt disponible</span>
+          <span className="tooltip">Bientôt disponible</span>
         </span>
 
         {/* Partenaires (soon) */}
         <span className="nav-pill is-soon" aria-disabled="true">
           <img src="/Partner.svg" className="nav-ic" alt="" />
           <span className="label">Partenaires</span>
-          <span className="tooltip">Partenaires - Bientôt disponible</span>
+          <span className="tooltip">Bientôt disponible</span>
         </span>
 
         {/* Boutique (soon) */}
         <span className="nav-pill is-soon" aria-disabled="true">
           <img src="/Shop.svg" alt="" className="nav-ic" aria-hidden />
           <span className="label">Boutique</span>
-          <span className="tooltip">Boutique - Bientôt disponible</span>
+          <span className="tooltip">Bientôt disponible</span>
         </span>
       </nav>
 
@@ -85,7 +85,6 @@ export default function Header({ title }: HeaderProps)
               className={`nav-pill ${active ? "is-active" : ""}`}
             >
               <img src={icon} className="nav-ic" alt="" aria-hidden />
-              <span className="label">Contact</span>
             </a>
           );
         })()}
@@ -98,7 +97,7 @@ export default function Header({ title }: HeaderProps)
           type="button"
         >
           <img src="/Login.svg" alt="" className="nav-ic" aria-hidden />
-          <span className="tooltip">Bientôt disponible</span>
+          <span className="tooltip">Login - Bientôt disponible</span>
         </button>
 
         {/* Version texte (PC large) */}
