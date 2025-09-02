@@ -249,7 +249,7 @@ export default function Shadow() {
     if (remainingIntervalRef.current) { clearInterval(remainingIntervalRef.current); remainingIntervalRef.current = null; }
   }
 
-  // Mise à jour du temps restant (toutes les 200ms)
+  // Mise à jour du temps restant (toutes les 50ms)
   function startRemainingTicker() {
     if (remainingIntervalRef.current) clearInterval(remainingIntervalRef.current);
     remainingIntervalRef.current = window.setInterval(() => {
@@ -260,7 +260,7 @@ export default function Shadow() {
       if (restMs <= 0) {
         finishExercise();
       }
-    }, 200);
+    }, 50);
   }
 
   // Cycle des flèches (une seule “horloge”)
@@ -401,6 +401,21 @@ export default function Shadow() {
               <button className="btn btn--success btn--lg" onClick={resume} aria-label="Reprendre">Reprendre</button>
             )}
           </div>
+
+          {/* Barre de progression — uniquement en mode standard */}
+            {!minimalUi && (
+              <div className="shadow-progress" aria-hidden>
+                <div
+                  className="shadow-progress__bar"
+                  style={{
+                    transform: `scaleX(${Math.max(0, Math.min(1,
+                      1 - (remaining / (effectiveTotalSec || 1))
+                    ))})`,
+                  }}
+                />
+              </div>
+            )}
+
         )}
       </div>
 
@@ -518,24 +533,7 @@ export default function Shadow() {
       {/* PRÉ-COMPTE */}
       {phase === "precount" && (
         <section className="shadow-stage">
-          {/* Barre de progression – seulement en mode standard */}
-          {!minimalUi && (
-            <div className="shadow-progress" aria-hidden>
-              <div
-                className="shadow-progress__bar"
-                style={{
-                  transform: `scaleX(${Math.max(0, Math.min(1,
-                    1 - (remaining / (effectiveTotalSec || 1))
-                  ))})`,
-                }}
-              />
-            </div>
-          )}
-
-          {!minimalUi && (
-            <div className="shadow-remaining">
-              Temps restant : <strong>{fmt(remaining)}</strong>
-            </div>
+                    {!minimalUi && (
           )}
           <div className="precount">
             <div className="precount-num">{countdown > 0 ? countdown : "GO !"}</div>
@@ -547,24 +545,7 @@ export default function Shadow() {
       {(phase === "running" || phase === "paused") && (
         <section className="shadow-stage">
 
-          {/* Barre de progression – seulement en mode standard */}
-        {!minimalUi && (
-          <div className="shadow-progress" aria-hidden>
-            <div
-              className="shadow-progress__bar"
-              style={{
-                transform: `scaleX(${Math.max(0, Math.min(1,
-                  1 - (remaining / (effectiveTotalSec || 1))
-                ))})`,
-              }}
-            />
-          </div>
-        )}
-
           {!minimalUi && (
-            <div className="shadow-remaining">
-              Temps restant : <strong>{fmt(remaining)}</strong>
-            </div>
           )}
           <div className="arrow-wrap">
             {currentDir && showArrow && (

@@ -433,18 +433,12 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 
 /* fine barre juste sous les boutons (superposée en haut, n’occupe pas d’espace) */
 .shadow-progress{
-  position: fixed;
-  top: calc(
-    max(env(safe-area-inset-top), 8px) + var(--nav-offset, 0px) + 8px
-    + 44px /* ≈ hauteur des boutons + petit écart */
-  );
-  left: 50%; transform: translateX(-50%);
   width: min(680px, 92vw);
   height: 3px;
   background: rgba(255,255,255,.08);
   border-radius: 2px;
   overflow: hidden;
-  z-index: 250;
+  pointer-events: none; 
 }
 .shadow-progress__bar{
   height: 100%;
@@ -666,16 +660,16 @@ input[type="range"]{ width:100%; }
 .shadow-controls{
   position: fixed;
   /* top “safe” pour encoche & barres */
-  top: calc(max(env(safe-area-inset-top), 8px) + var(--nav-offset, 0px) + 8px);
+  top: calc(max(env(safe-area-inset-top), 0px) + var(--nav-offset, 0px) + 12px);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 300;
+  z-index: 200;
   
 
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 10px;
   align-items: center;
-  justify-content: center;
 
   /* pas de fond, on garde tes pills colorés */
   pointer-events: none;            /* permet de cliquer/scroll en dessous */
