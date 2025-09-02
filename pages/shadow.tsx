@@ -144,6 +144,8 @@ export default function Shadow() {
   const [currentDir, setCurrentDir] = useState<DirKey | null>(null);
   const [showArrow, setShowArrow] = useState<boolean>(true);
   const [remaining, setRemaining] = useState<number>(60); // s
+  const [remainingEff, setRemainingEff] = useState<number>(60); // reste basé sur effectiveTotalSec
+
 
   // Gestion du temps
   const startedAtRef = useRef<number | null>(null);
@@ -244,7 +246,8 @@ export default function Shadow() {
   // Progression de l'exercice (0..1)
   const progress = useMemo(() => {
     if (phase === "running" || phase === "paused") {
-      return Math.max(0, Math.min(1, 1 - (remaining / (effectiveTotalSec || 1))));
+      const p = 1 - (remainingEff / (effectiveTotalSec || 1));
+      return Math.max(0, Math.min(1, p));
     }
     // precount / param / finished : 0
     return 0;
@@ -266,6 +269,7 @@ export default function Shadow() {
       if (startedAtRef.current == null) return;
       const elapsed = Date.now() - startedAtRef.current - pausedAccumRef.current;
       const restMs = Math.max(0, Math.round(effectiveTotalSec * 1000) - elapsed);
+      setRemainingEff(restMS / 1000);
       setRemaining(Math.min(totalSec, restMs / 1000));
       if (restMs <= 0) {
         finishExercise();
@@ -409,7 +413,8 @@ export default function Shadow() {
             {/* Barre de progression — uniquement en mode standard */}
             {!minimalUi && (
               <div className="shadow-progress" aria-hidden>
-                <div className="shadow-progress__bar" style={{transform: `scaleX($progress)` }} />
+                <div className="shadow-progress__bar" style={{ width: `${Math.round(progress * 100)}%` }}
+                />
               </div>
             )}
 
