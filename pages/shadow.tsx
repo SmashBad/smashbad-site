@@ -241,6 +241,16 @@ export default function Shadow() {
   // Durée totale effective (on allonge pour compléter le dernier intervalle)
   const effectiveTotalSec = useMemo(() => ceilTo(totalSec, intervalSec), [totalSec, intervalSec]);
 
+  // Progression de l'exercice (0..1)
+  const progress = useMemo(() => {
+    if (phase === "running" || phase === "paused") {
+      return Math.max(0, Math.min(1, 1 - (remaining / (effectiveTotalSec || 1))));
+    }
+    // precount / param / finished : 0
+    return 0;
+  }, [phase, remaining, effectiveTotalSec]);
+
+
   // Helpers timers
   function clearAllTimers() {
     if (preTimeoutRef.current) { clearTimeout(preTimeoutRef.current); preTimeoutRef.current = null; }
@@ -396,25 +406,18 @@ export default function Shadow() {
       >
         {(phase === "precount" || phase === "running" || phase === "paused") && (
           <>
+            {/* Barre de progression — uniquement en mode standard */}
+            {!minimalUi && (
+              <div className="shadow-progress" aria-hidden>
+                <div className="shadow-progress__bar" style={{transform: `scaleX($progress)` }} />
+              </div>
+            )}
+
             <div className="shadow-controls__actions" role="toolbar" aria-label="Contrôles de l'exercice">
               <button className="btn btn--danger btn--lg" onClick={stopAll}>Arrêter</button>
               {phase === "running" && <button className="btn btn--warning btn--lg" onClick={pause}>Pause</button>}
               {phase === "paused"  && <button className="btn btn--success btn--lg" onClick={resume}>Reprendre</button>}
             </div>
-
-            {/* Barre de progression — uniquement en mode standard */}
-            {!minimalUi && (
-              <div className="shadow-progress" aria-hidden>
-                <div
-                  className="shadow-progress__bar"
-                  style={{
-                    transform: `scaleX(${Math.max(0, Math.min(1,
-                      1 - (remaining / (effectiveTotalSec || 1))
-                    ))})`,
-                  }}
-                />
-              </div>
-            )}
           </>
         )}
       </div>

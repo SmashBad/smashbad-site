@@ -434,9 +434,9 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 /* fine barre juste sous les boutons (superposée en haut, n’occupe pas d’espace) */
 .shadow-progress{
   width: min(680px, 92vw);
-  height: 3px;
+  height: 8px;
   background: rgba(255,255,255,.08);
-  border-radius: 2px;
+  border-radius: 3px;
   overflow: hidden;
   pointer-events: none; 
 }
@@ -518,7 +518,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   place-items: center;
   overflow: hidden;
   background: #0b1426; /* ton fond */
-  z-index: 100;
+  z-index: 0;
 }
 
 .shadow-remaining {
@@ -664,7 +664,6 @@ input[type="range"]{ width:100%; }
   left: 50%;
   transform: translateX(-50%);
   z-index: 200;
-  
 
   display: flex;
   flex-direction: column;
@@ -674,7 +673,6 @@ input[type="range"]{ width:100%; }
   /* pas de fond, on garde tes pills colorés */
   pointer-events: none;            /* permet de cliquer/scroll en dessous */
 }
-
 
 /* Grossir légèrement sans changer ton design */
 .btn--lg{
