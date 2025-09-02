@@ -702,8 +702,8 @@ input[type="range"]{ width:100%; }
 
 /* Grossir légèrement sans changer ton design */
 .btn--lg{
-  height: var(--shadow-btn-height)
-  padding: 0 var(var(--shadow-btn-hpad))
+  height: var(--shadow-btn-height);
+  padding: 0 var(var(--shadow-btn-hpad));
   font-size: 15px;
   border-radius: 999px;
 }
@@ -720,7 +720,7 @@ input[type="range"]{ width:100%; }
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--shadow-btn-gap)
+  gap: var(--shadow-btn-gap);
   pointer-events: auto;
 }
 
