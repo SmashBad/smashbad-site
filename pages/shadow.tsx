@@ -504,7 +504,7 @@ export default function Shadow() {
               checked={minimalUi}
               onChange={(e) => setMinimalUi(e.target.checked)}
             />
-            Interface minimaliste
+            Épurer l'interface (idéal pour maximiser l'immersion ou pour les petits écrans)
           </label>
 
           <div className="shadow-cta">
@@ -518,6 +518,20 @@ export default function Shadow() {
       {/* PRÉ-COMPTE */}
       {phase === "precount" && (
         <section className="shadow-stage">
+          {/* Barre de progression – seulement en mode standard */}
+          {!minimalUi && (
+            <div className="shadow-progress" aria-hidden>
+              <div
+                className="shadow-progress__bar"
+                style={{
+                  transform: `scaleX(${Math.max(0, Math.min(1,
+                    1 - (remaining / (effectiveTotalSec || 1))
+                  ))})`,
+                }}
+              />
+            </div>
+          )}
+
           {!minimalUi && (
             <div className="shadow-remaining">
               Temps restant : <strong>{fmt(remaining)}</strong>
@@ -532,6 +546,21 @@ export default function Shadow() {
       {/* RUN / PAUSED */}
       {(phase === "running" || phase === "paused") && (
         <section className="shadow-stage">
+
+          {/* Barre de progression – seulement en mode standard */}
+        {!minimalUi && (
+          <div className="shadow-progress" aria-hidden>
+            <div
+              className="shadow-progress__bar"
+              style={{
+                transform: `scaleX(${Math.max(0, Math.min(1,
+                  1 - (remaining / (effectiveTotalSec || 1))
+                ))})`,
+              }}
+            />
+          </div>
+        )}
+
           {!minimalUi && (
             <div className="shadow-remaining">
               Temps restant : <strong>{fmt(remaining)}</strong>

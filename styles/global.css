@@ -431,6 +431,26 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 .shadow-left{ display:flex; align-items:center; gap:8px; }
 .shadow-actions{ display:flex; justify-content:flex-end; gap:8px; }
 
+/* fine barre juste sous les boutons (superposée en haut, n’occupe pas d’espace) */
+.shadow-progress{
+  position: fixed;
+  top: calc(
+    max(env(safe-area-inset-top), 8px) + var(--nav-offset, 0px) + 8px
+    + 44px /* ≈ hauteur des boutons + petit écart */
+  );
+  left: 50%; transform: translateX(-50%);
+  width: min(680px, 92vw);
+  height: 3px;
+  background: rgba(255,255,255,.08);
+  border-radius: 2px;
+  overflow: hidden;
+  z-index: 190;
+}
+.shadow-progress__bar{
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #12D8DF, #FF7A1A);
+}
 
 /* Carte des paramètres */
 .shadow-card{
