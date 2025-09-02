@@ -75,23 +75,25 @@ function useAudio(src: string | null) {
     },
   };
 }
-// tout en haut de Shadow()
-  useEffect(() => {
-    const setVH = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    };
-    setVH();
-    window.addEventListener('resize', setVH);
-    window.addEventListener('orientationchange', setVH);
-    return () => {
-      window.removeEventListener('resize', setVH);
-      window.removeEventListener('orientationchange', setVH);
-    };
-  }, []);
+
 
 
 export default function Shadow() {
+  // tout en haut de Shadow()
+    useEffect(() => {
+      const setVH = () => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      };
+      setVH();
+      window.addEventListener('resize', setVH);
+      window.addEventListener('orientationchange', setVH);
+      return () => {
+        window.removeEventListener('resize', setVH);
+        window.removeEventListener('orientationchange', setVH);
+      };
+    }, []);
+
   // Réglages (persistants)
   const [totalSec, setTotalSec] = useState<number>(60);
   const [intervalSec, setIntervalSec] = useState<number>(5);
