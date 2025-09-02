@@ -478,13 +478,10 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   height: 8px;
   background: rgba(255,255,255,.08);
   border-radius: 3px;
-  overflow: hidden;
-  pointer-events: none; 
 }
 .shadow-progress__bar{
   height: 100%;
   background: linear-gradient(90deg, #12D8DF, #FF7A1A);
-  transition: none;
 }
 
 /* Carte des paramètres */
