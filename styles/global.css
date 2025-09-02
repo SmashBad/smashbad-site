@@ -699,7 +699,6 @@ input[type="range"]{ width:100%; }
   width: 100%;
   max-width: 100%;
   overflow: hidden;
-  height: calc(100vh - 160px);
 }
 
 /* Un peu d'air latéral pour la flèche géante */
