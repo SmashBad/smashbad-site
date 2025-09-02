@@ -444,7 +444,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   background: rgba(255,255,255,.08);
   border-radius: 2px;
   overflow: hidden;
-  z-index: 190;
+  z-index: 250;
 }
 .shadow-progress__bar{
   height: 100%;
@@ -524,11 +524,17 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   place-items: center;
   overflow: hidden;
   background: #0b1426; /* ton fond */
+  z-index: 100;
 }
 
-.shadow-remaining{
-  position:absolute; top:0; left:0; right:0; text-align:center; color:#C7D2E0;
-  padding:8px 0;
+.shadow-remaining {
+  position: fixed;
+  top: calc(
+    max(env(safe-area-inset-top), 8px) + var(--nav-offset, 0px) + 8px
+    + 44px + 6px /* juste sous la barre */
+  );
+  left: 50%; transform: translateX(-50%);
+  z-index: 250;
 }
 
 /* La flèche reste centrée et ne déborde pas */
@@ -663,7 +669,8 @@ input[type="range"]{ width:100%; }
   top: calc(max(env(safe-area-inset-top), 8px) + var(--nav-offset, 0px) + 8px);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 20;
+  z-index: 300;
+  
 
   display: flex;
   gap: 12px;
