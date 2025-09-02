@@ -6,17 +6,18 @@ import React, { useEffect, useState } from "react";
 type NavItem = {
   href: string;
   label: string;
-  icon: string;     // chemin vers l’icône (public/)
-  iconOn?: string;  // version active (turquoise)
-  soon?: boolean;   // état “bientôt”
-  title?: string;   // attribut title optionnel
+  icon: string;       // chemin vers l’icône (public/)
+  iconOn?: string;    // version active (turquoise)
+  soon?: boolean;     // état “bientôt”
+  title?: string;     // attribut title optionnel
+  aliases?: string[]; // routes qui doivent aussi activer cet item
 };
 
 export default function BottomNav() {
   const router = useRouter();
 
   const navItems: NavItem[] = [
-    { href: "/entrainements", label: "Entraînement", icon: "/Bolt.svg",    iconOn: "/Bolt_On.svg",    title: "Voir les entraînements" },
+    { href: "/entrainements", label: "Entraînement", icon: "/Bolt.svg",    iconOn: "/Bolt_On.svg",    title: "Voir les entraînements", aliases: ["/shadow"]},
     { href: "/materiel",      label: "Matériel",     icon: "/Racket.svg",  iconOn: "/Racket_On.svg",  title: "Matériel - Bientôt disponible",    soon: true },
     { href: "/partenaires",   label: "Partenaires",  icon: "/Partner.svg", iconOn: "/Partner_On.svg", title: "Partenaires - Bientôt disponible",    soon: true },
     { href: "/shop",          label: "Boutique",     icon: "/Shop.svg",    iconOn: "/Shop_On.svg",    title: "Boutique - Bientôt disponible",    soon: true },
@@ -42,7 +43,9 @@ export default function BottomNav() {
     <>
       <nav className="bottomnav" aria-label="Navigation principale mobile">
         {navItems.map((item) => {
-          const active = isActive(item.href);
+          const active =
+            isActive(item.href) ||
+            (item.aliases?.some((a) => isActive(a)) ?? false);
           const classes = [
             "bottomnav__item",
             active ? "is-active" : "",

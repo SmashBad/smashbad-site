@@ -13,11 +13,13 @@ export default function Header({ title }: HeaderProps)
   const router = useRouter();
   const p = router.pathname;
 
-  const isActive = (href: string) => {
+  const isActiveAny = (hrefs: string[]) => {
     const cur = p.replace(/\/+$/, "") || "/";
-    const target = href.replace(/\/+$/, "") || "/";
-    if (target === "/") return cur === "/";
-    return cur === target || cur.startsWith(target + "/");
+    return hrefs.some((href) => {
+      const target = href.replace(/\/+$/, "") || "/";
+      if (target === "/") return cur === "/";
+      return cur === target || cur.startsWith(target + "/");
+    });
   };
 
   return (
@@ -35,7 +37,7 @@ export default function Header({ title }: HeaderProps)
       <nav className="nav__links" aria-label="Navigation principale">
         {/* Entraînement */}
         {(() => {
-          const active = isActive("/entrainements");
+          const active = isActiveAny(["/entrainements","/shadow"]);
           const icon = active ? "/Bolt_On.svg" : "/Bolt.svg";
           return (
             <a
@@ -74,30 +76,34 @@ export default function Header({ title }: HeaderProps)
 
       {/* Actions à droite */} 
       <div className="nav__actions">
-        <a
-          href="/contact"
-          className="btn btn--ghost btn--icon"
-          aria-label="Contact / rester informé"
-          title="Contact / rester informé"
-        >
-          {/* Deux icônes, on swap au :hover via CSS, sans wrapper supplémentaire */}
-          <img src="/AskContact.svg"     alt="" className="nav-ic icon--default" aria-hidden />
-          {/* <img src="/AskContact_On.svg"  alt="" className="nav-ic icon--hover"  aria-hidden /> */}
-        </a>
+        {(() => {
+          const active = isActive("/contact");
+          const icon = active ? "/AskContact_On.svg" : "/AskContact.svg";
+          return (
+            <a
+              href="/contact"
+              className={`nav-pill ${active ? "is-active" : ""}`}
+            >
+              <img src={icon} className="nav-ic" alt="" aria-hidden />
+              <span className="label">Contact</span>
+            </a>
+          );
+        })()}
 
         {/* Version icône seule (PC étroit) */}
         <button
-          className="btn btn--ghost btn--icon login--icon-only"
+          className="btn btn--ghost btn--icon login--icon-only is-soon"
           aria-disabled="true"
           title="Se connecter (bientôt)"
           type="button"
         >
           <img src="/Login.svg" alt="" className="nav-ic" aria-hidden />
+          <span className="tooltip">Bientôt disponible</span>
         </button>
 
         {/* Version texte (PC large) */}
         <button
-          className="btn btn--ghost btn--disabled login--full"
+          className="btn btn--ghost btn--disabled login--full is-soon"
           aria-disabled="true"
           type="button"
         >
