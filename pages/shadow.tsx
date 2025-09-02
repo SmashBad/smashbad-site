@@ -438,7 +438,7 @@ export default function Shadow() {
             {/* Barre de progression — uniquement en mode standard */}
             {!minimalUi && (
               <div className="shadow-progress" aria-hidden>
-                <div className="shadow-progress__bar" style={{ width: `${Math.round(progressView * 100)}%` }}
+                <div className="shadow-progress__bar" style={{ width: `${(progressView * 100).toFixed(3)}%` }}
                 />
               </div>
             )}
