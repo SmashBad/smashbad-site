@@ -75,13 +75,28 @@ function useAudio(src: string | null) {
     },
   };
 }
+// tout en haut de Shadow()
+  useEffect(() => {
+    const setVH = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', setVH);
+    return () => {
+      window.removeEventListener('resize', setVH);
+      window.removeEventListener('orientationchange', setVH);
+    };
+  }, []);
+
 
 export default function Shadow() {
   // Réglages (persistants)
   const [totalSec, setTotalSec] = useState<number>(60);
   const [intervalSec, setIntervalSec] = useState<number>(5);
   const [selected, setSelected] = useState<DirKey[]>(["AG", "AD", "G", "D", "DG", "DD"]);
-  const [hideProgress, setHideProgress] = useState<boolean>(false);
+  const [minimalUi, setMinimalUi] = useState<boolean>(false);
 
   // État runtime
   const [phase, setPhase] = useState<Phase>("param");
@@ -147,24 +162,24 @@ export default function Shadow() {
     if (Array.isArray(saved.dirs) && saved.dirs.length) {
       setSelected(saved.dirs.map((k: string) => mapOld[k] ?? k) as DirKey[]);
     }
-    if (typeof saved.hideProgress === "boolean") setHideProgress(saved.hideProgress);
+    if (typeof saved.minimalUi === "boolean") setMinimalUi(saved.minimalUi);
   }, []);
 
   // Sauvegarder l’état
   useEffect(() => {
-    saveState({ totalSec, intervalSec, dirs: selected, hideProgress });
-  }, [totalSec, intervalSec, selected, hideProgress]);
+    saveState({ totalSec, intervalSec, dirs: selected, minimalUi });
+  }, [totalSec, intervalSec, selected, minimalUi]);
 
   // Masquer la chrome (Header/BottomNav) en mode épuré pendant l'exo
   useEffect(() => {
     const shouldHide =
-      hideProgress && (phase === "precount" || phase === "running" || phase === "paused");
+      MinimalUi && (phase === "precount" || phase === "running" || phase === "paused");
     const cls = "sb-chrome-hidden";
     const b = document.body;
 
     if (shouldHide) b.classList.add(cls); else b.classList.remove(cls);
     return () => b.classList.remove(cls); // sécurité au démontage
-  }, [hideProgress, phase]);
+  }, [minimalUi, phase]);
 
   const canGo = selected.length > 0;
 
@@ -330,14 +345,6 @@ export default function Shadow() {
     <main className="shadow-page" aria-live="polite">
       {/* Bandeau de contrôle */}
       <div className="shadow-controls">
-        {phase === "param" && (
-          <div className="shadow-controls__back">
-            <Link href="/entrainements" className="back-pill back-icon" title="Retour">
-              <img src="/Back.svg" alt="Retour" className="back-ic" />
-            </Link>
-          </div>
-        )}
-
         {(phase === "precount" || phase === "running" || phase === "paused") && (
           <div className="shadow-controls__actions" role="toolbar" aria-label="Contrôles de l'exercice">
             <button className="btn btn--danger btn--lg" onClick={stopAll} aria-label="Arrêter">Arrêter</button>
@@ -449,10 +456,10 @@ export default function Shadow() {
           <label className="shadow-check">
             <input
               type="checkbox"
-              checked={hideProgress}
-              onChange={(e) => setHideProgress(e.target.checked)}
+              checked={minimalUi}
+              onChange={(e) => setMinimalUi(e.target.checked)}
             />
-            Épurer l’interface (masque le temps restant)
+            Interface minimaliste
           </label>
 
           <div className="shadow-cta">
@@ -466,7 +473,7 @@ export default function Shadow() {
       {/* PRÉ-COMPTE */}
       {phase === "precount" && (
         <section className="shadow-stage">
-          {!hideProgress && (
+          {!minimalUi && (
             <div className="shadow-remaining">
               Temps restant : <strong>{fmt(remaining)}</strong>
             </div>
@@ -480,7 +487,7 @@ export default function Shadow() {
       {/* RUN / PAUSED */}
       {(phase === "running" || phase === "paused") && (
         <section className="shadow-stage">
-          {!hideProgress && (
+          {!minimalUi && (
             <div className="shadow-remaining">
               Temps restant : <strong>{fmt(remaining)}</strong>
             </div>

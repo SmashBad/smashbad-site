@@ -492,13 +492,18 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 .dir-arrow{ height:64px; display:flex; align-items:center; justify-content:center; }
 .dir-label{ font-weight:700; }
 
-/* Scènes */
+/* La scène recouvre tout l’écran, rien ne la pousse */
 .shadow-stage{
-  min-height: 100svh;            /* viewport "small" = fiable sur mobile */
+  position: fixed;
+  inset: 0;
+  /* dvh = vrai viewport ; svh pour iOS < 16, vh en secours */
+  min-height: 100dvh;
+  min-height: 100svh;
+  min-height: calc(var(--vh, 1vh) * 100);  /* fallback JS */
   display: grid;
   place-items: center;
-  padding-top: 72px;             /* laisse la place aux boutons du haut */
-  padding-bottom: 12px;          /* un peu d'air en bas */
+  overflow: hidden;
+  background: #0b1426; /* ton fond */
 }
 
 .shadow-remaining{
@@ -506,9 +511,13 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   padding:8px 0;
 }
 
-/* Flèche géante */
+/* La flèche reste centrée et ne déborde pas */
 .arrow-wrap{
-  display:flex; align-items:center; justify-content:center;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 /* Pause */
@@ -629,14 +638,29 @@ input[type="range"]{ width:100%; }
 
 /* Bandeau en haut, centré */
 .shadow-controls{
-  position: sticky; /* suit le scroll si besoin, sinon reste en haut */
-  top: 0;
-  z-index: 5;
-  display: grid;
-  grid-template-columns: 1fr minmax(200px, 520px) 1fr;
+  position: fixed;
+  /* top “safe” pour encoche & barres */
+  top: max(env(safe-area-inset-top), 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+
+  display: flex;
+  gap: 12px;
   align-items: center;
-  min-height: 56px;
-  padding-top: 8px;
+  justify-content: center;
+
+  /* pas de fond, on garde tes pills colorés */
+  pointer-events: none;            /* permet de cliquer/scroll en dessous */
+}
+
+
+/* Grossir légèrement sans changer ton design */
+.btn--lg{
+  height: 40px;
+  padding: 0 16px;
+  font-size: 15px;
+  border-radius: 999px;
 }
 
 /* Colonne gauche (retour) */
@@ -652,6 +676,7 @@ input[type="range"]{ width:100%; }
   justify-content: center;
   align-items: center;
   gap: 12px;
+  pointer-events: auto;
 }
 
 /* Inputs range un peu plus confort */
@@ -659,14 +684,6 @@ input[type="range"]{ width:100%; }
 
 .range-line .numbox { display: none; }
 .range-line .numbox-suffix{ display:none; }
-
-/* Grossir légèrement sans changer ton design */
-.btn--lg{
-  height: 40px;
-  padding: 0 16px;
-  font-size: 15px;
-  border-radius: 999px;
-}
 
 .dir-icon{
   width: 56px;
