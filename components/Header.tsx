@@ -77,7 +77,7 @@ export default function Header({ title }: HeaderProps)
       {/* Actions à droite */} 
       <div className="nav__actions">
         {(() => {
-          const active = isActiveAny("/contact");
+          const active = isActiveAny(["/contact"]);
           const icon = active ? "/AskContact_On.svg" : "/AskContact.svg";
           return (
             <a
