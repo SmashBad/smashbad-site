@@ -388,21 +388,21 @@ export default function Shadow() {
 
   return (
     <main className="shadow-page" aria-live="polite">
-      {/* Bandeau de contrôle */}
-      <div ref={controlsRef} className="shadow-controls" style={{ ["--nav-offset" as any]: minimalUi ? "0px" : "64px" }}>
+      {/* Bandeau de contrôle + barre (tout au même endroit) */}
+      <div
+        ref={controlsRef}
+        className="shadow-controls"
+        style={{ ["--nav-offset" as any]: minimalUi ? "0px" : "64px" }}
+      >
         {(phase === "precount" || phase === "running" || phase === "paused") && (
-          <div className="shadow-controls__actions" role="toolbar" aria-label="Contrôles de l'exercice">
-            <button className="btn btn--danger btn--lg" onClick={stopAll} aria-label="Arrêter">Arrêter</button>
+          <>
+            <div className="shadow-controls__actions" role="toolbar" aria-label="Contrôles de l'exercice">
+              <button className="btn btn--danger btn--lg" onClick={stopAll}>Arrêter</button>
+              {phase === "running" && <button className="btn btn--warning btn--lg" onClick={pause}>Pause</button>}
+              {phase === "paused"  && <button className="btn btn--success btn--lg" onClick={resume}>Reprendre</button>}
+            </div>
 
-            {phase === "running" && (
-              <button className="btn btn--warning btn--lg" onClick={pause} aria-label="Mettre en pause">Pause</button>
-            )}
-            {phase === "paused" && (
-              <button className="btn btn--success btn--lg" onClick={resume} aria-label="Reprendre">Reprendre</button>
-            )}
-          </div>
-
-          {/* Barre de progression — uniquement en mode standard */}
+            {/* Barre de progression — uniquement en mode standard */}
             {!minimalUi && (
               <div className="shadow-progress" aria-hidden>
                 <div
@@ -415,7 +415,7 @@ export default function Shadow() {
                 />
               </div>
             )}
-
+          </>
         )}
       </div>
 
