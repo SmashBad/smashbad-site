@@ -91,7 +91,7 @@ export default function Header({ title }: HeaderProps)
 
         {/* Version icône seule (PC étroit) */}
         <button
-          className="btn btn--ghost btn--icon login--icon-only is-soon"
+          className="btn btn--ghost btn--icon login--icon-only is-soon tooltip-edge"
           aria-disabled="true"
           title="Se connecter (bientôt)"
           type="button"
@@ -102,7 +102,7 @@ export default function Header({ title }: HeaderProps)
 
         {/* Version texte (PC large) */}
         <button
-          className="btn btn--ghost btn--disabled login--full is-soon"
+          className="btn btn--ghost btn--disabled login--full is-soon tooltip-edge"
           aria-disabled="true"
           type="button"
         >

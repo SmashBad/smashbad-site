@@ -255,8 +255,7 @@ export default function Shadow() {
           const pausedTotal = pausedAccumRef.current + pausedExtra;
           const elapsed = Math.max(0, Date.now() - started - pausedTotal);
           const totalMs = Math.max(1, Math.round(effectiveTotalSec * 1000));
-          const p = Math.min(1, elapsed / totalMs);
-          setProgressView(p);
+          setProgressView(Math.min(1, elapsed / totalMs));
         }
       } else {
         // precount / param / finished
@@ -264,7 +263,6 @@ export default function Shadow() {
       }
       raf = requestAnimationFrame(loop);
     };
-
   raf = requestAnimationFrame(loop);
   return () => cancelAnimationFrame(raf);
 }, [phase, effectiveTotalSec]);
