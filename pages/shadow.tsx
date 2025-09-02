@@ -79,6 +79,8 @@ function useAudio(src: string | null) {
 
 
 export default function Shadow() {
+  const [minimalUi, setMinimalUi] = useState<boolean>(false);
+
   // tout en haut de Shadow()
     useEffect(() => {
       const setVH = () => {
@@ -94,11 +96,47 @@ export default function Shadow() {
       };
     }, []);
 
+    useEffect(() => {
+      const calcSize = () => {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        const navH = minimalUi ? 0 : 64; // navbar visible en standard
+        const ctrlH = controlsRef.current?.offsetHeight ?? 0;
+
+        // bottomnav si présente (mobile)
+        const bn = document.querySelector<HTMLElement>(".bottomnav");
+        const bottomH = (bn && getComputedStyle(bn).display !== "none") ? bn.offsetHeight : 0;
+
+        // marge de confort
+        const margins = 24;
+
+        const availW = vw - margins * 2;
+        const availH = vh - navH - ctrlH - bottomH - margins * 2;
+
+        const base = Math.max(120, Math.min(availW, availH));     // côté utilisable
+        const size = Math.floor(base * 0.80);                     // ~80%
+        setArrowPx(size);
+      };
+
+      calcSize();
+      const ro = new ResizeObserver(calcSize);
+      controlsRef.current && ro.observe(controlsRef.current);
+      window.addEventListener("resize", calcSize);
+      window.addEventListener("orientationchange", calcSize);
+      return () => {
+        ro.disconnect();
+        window.removeEventListener("resize", calcSize);
+        window.removeEventListener("orientationchange", calcSize);
+      };
+    }, [minimalUi]);
+
+
   // Réglages (persistants)
   const [totalSec, setTotalSec] = useState<number>(60);
   const [intervalSec, setIntervalSec] = useState<number>(5);
   const [selected, setSelected] = useState<DirKey[]>(["AG", "AD", "G", "D", "DG", "DD"]);
-  const [minimalUi, setMinimalUi] = useState<boolean>(false);
+  
 
   // État runtime
   const [phase, setPhase] = useState<Phase>("param");
@@ -123,6 +161,11 @@ export default function Shadow() {
   const sGo  = useAudio("/sounds/Go.mp3");        // GO!
   const sTick= useAudio("/sounds/Bip.mp3");       // nouvelle flèche
   const sEnd = useAudio("/sounds/End.mp3");       // fin
+
+  //Calcul la taille de flèche en fonction de l'espace disponible
+  const controlsRef = useRef<HTMLDivElement | null>(null);
+  const [arrowPx, setArrowPx] = useState<number>(480);
+
 
   // Migration depuis anciens codes NW/NE/...
   const mapOld: Record<string, DirKey> = { NW: "AG", NE: "AD", W: "G", E: "D", SW: "DG", SE: "DD" };
@@ -346,7 +389,7 @@ export default function Shadow() {
   return (
     <main className="shadow-page" aria-live="polite">
       {/* Bandeau de contrôle */}
-      <div className="shadow-controls">
+      <div ref={controlsRef} className="shadow-controls" style={{ ["--nav-offset" as any]: minimalUi ? "0px" : "64px" }}>
         {(phase === "precount" || phase === "running" || phase === "paused") && (
           <div className="shadow-controls__actions" role="toolbar" aria-label="Contrôles de l'exercice">
             <button className="btn btn--danger btn--lg" onClick={stopAll} aria-label="Arrêter">Arrêter</button>
@@ -500,8 +543,8 @@ export default function Shadow() {
                 src={DIRS[currentDir].svg}
                 alt="Direction"
                 style={{
-                  width: `${arrowSize}px`,
-                  height: `${arrowSize}px`,
+                  width: `${arrowPx}px`,
+                  height: `${arrowPx}px`,
                   filter: "drop-shadow(0 14px 36px rgba(0,0,0,.35))",
                 }}
               />

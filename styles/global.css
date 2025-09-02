@@ -640,7 +640,7 @@ input[type="range"]{ width:100%; }
 .shadow-controls{
   position: fixed;
   /* top “safe” pour encoche & barres */
-  top: max(env(safe-area-inset-top), 8px);
+  top: calc(max(env(safe-area-inset-top), 8px) + var(--nav-offset, 0px) + 8px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
