@@ -155,6 +155,17 @@ export default function Shadow() {
     saveState({ totalSec, intervalSec, dirs: selected, hideProgress });
   }, [totalSec, intervalSec, selected, hideProgress]);
 
+  // Masquer la chrome (Header/BottomNav) en mode épuré pendant l'exo
+  useEffect(() => {
+    const shouldHide =
+      hideProgress && (phase === "precount" || phase === "running" || phase === "paused");
+    const cls = "sb-chrome-hidden";
+    const b = document.body;
+
+    if (shouldHide) b.classList.add(cls); else b.classList.remove(cls);
+    return () => b.classList.remove(cls); // sécurité au démontage
+  }, [hideProgress, phase]);
+
   const canGo = selected.length > 0;
 
   const toggleDir = (k: DirKey) => {
@@ -317,34 +328,30 @@ export default function Shadow() {
 
   return (
     <main className="shadow-page" aria-live="polite">
-      {/* Topbar locale */}
-      <div className="shadow-topbar">
-        <div className="shadow-left">
-          {phase === "param" && (
+      {/* Bandeau de contrôle */}
+      <div className="shadow-controls">
+        {phase === "param" && (
+          <div className="shadow-controls__back">
             <Link href="/entrainements" className="back-pill back-icon" title="Retour">
               <img src="/Back.svg" alt="Retour" className="back-ic" />
             </Link>
-          )}
-        </div>
-        <div className="shadow-center">{/* respiration */}</div>
-        <div className="shadow-actions">
-          {(phase === "precount" || phase === "running" || phase === "paused") && (
-            <button className="btn btn--danger" onClick={stopAll} aria-label="Arrêter">
-              Arrêter
-            </button>
-          )}
-          {phase === "running" && (
-            <button className="btn btn--warning" onClick={pause} aria-label="Mettre en pause">
-              Pause
-            </button>
-          )}
-          {phase === "paused" && (
-            <button className="btn btn--success" onClick={resume} aria-label="Reprendre">
-              Reprendre
-            </button>
-          )}
-        </div>
+          </div>
+        )}
+
+        {(phase === "precount" || phase === "running" || phase === "paused") && (
+          <div className="shadow-controls__actions" role="toolbar" aria-label="Contrôles de l'exercice">
+            <button className="btn btn--danger btn--lg" onClick={stopAll} aria-label="Arrêter">Arrêter</button>
+
+            {phase === "running" && (
+              <button className="btn btn--warning btn--lg" onClick={pause} aria-label="Mettre en pause">Pause</button>
+            )}
+            {phase === "paused" && (
+              <button className="btn btn--success btn--lg" onClick={resume} aria-label="Reprendre">Reprendre</button>
+            )}
+          </div>
+        )}
       </div>
+
 
       {/* PARAMÈTRES */}
       {phase === "param" && (
