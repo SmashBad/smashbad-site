@@ -269,7 +269,7 @@ export default function Shadow() {
       if (startedAtRef.current == null) return;
       const elapsed = Date.now() - startedAtRef.current - pausedAccumRef.current;
       const restMs = Math.max(0, Math.round(effectiveTotalSec * 1000) - elapsed);
-      setRemainingEff(restMS / 1000);
+      setRemainingEff( restMs / 1000);
       setRemaining(Math.min(totalSec, restMs / 1000));
       if (restMs <= 0) {
         finishExercise();
