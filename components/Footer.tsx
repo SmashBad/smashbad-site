@@ -12,7 +12,7 @@ export default function Footer() {
           aria-label="Formulaire de contact"
         >
         Contact
-        </Link><br>
+        </Link><br />
         © {new Date().getFullYear()} SMASH.bad — Tous droits réservés
       </small>
     </footer>
