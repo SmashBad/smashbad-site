@@ -199,9 +199,10 @@ a{ color:inherit; text-decoration:none }
   color:var(--muted);
   text-align:center;
   display:flex;
+  flex-direction: column;
   align-items:center;
   justify-content:center;
-  gap:12px;
+  gap:8px;
   flex-wrap:wrap;
   font-family: 'Outfit', sans-serif;
   font-size: 13px;    
