@@ -815,14 +815,17 @@ input[type="range"]{ width:100%; }
 .sb-h1 {
   font-family: 'Audiowide', sans-serif;
   margin: 0 0 8px 0;
-  font-size: 2rem;
   line-height: 1.2;
   font-weight: 400;
+  font-size: clamp(28px, 4.2vw, 40px);
+  text-align: center;
+  margin: 0 0 18px;
 }
 
 .sb-sub {
   margin: 0 0 18px 0;
   color: rgba(255, 255, 255, 0.82);
+  text-align: center;
 }
 
 /* Card sombre qui "cadre" l'iframe */
@@ -872,7 +875,7 @@ input[type="range"]{ width:100%; }
 .btn--icon:hover .icon--hover{ display:block; }
 
 /* === Contact form === */
-.sb-form{ display:grid; gap:14px; }
+.sb-form{ display:grid; gap:14px; align-items: center;}
 .sb-grid{ display:grid; gap:12px; grid-template-columns: 1fr; }
 @media (min-width:700px){ .sb-grid{ grid-template-columns: 1fr 1fr; } }
 

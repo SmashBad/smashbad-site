@@ -80,7 +80,7 @@ export default function ContactPage() {
               {state === "error" && <span className="sb-err" role="alert">{error}</span>}
             </div>
 
-            <p className="sb-legal">En contact smash.bad, tu acceptes d’être recontacté par e-mail.</p>
+            <p className="sb-legal">En contactant smash.bad, tu acceptes d’être recontacté par e-mail.</p>
           </form>
         </div>
       </section>
