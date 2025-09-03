@@ -52,12 +52,12 @@ export default function ContactPage() {
             <div className="sb-grid">
               <label className="sb-field">
                 <span>Prénom</span>
-                <input name="firstName" type="text" required placeholder="Ex. Simon" />
+                <input name="firstName" type="text" required placeholder="Ton prénom" />
               </label>
 
               <label className="sb-field">
                 <span>Email</span>
-                <input name="email" type="email" required placeholder="exemple@domaine.fr" />
+                <input name="email" type="email" required placeholder="Ton adresse mail" />
               </label>
             </div>
 
@@ -80,7 +80,7 @@ export default function ContactPage() {
               {state === "error" && <span className="sb-err" role="alert">{error}</span>}
             </div>
 
-            <p className="sb-legal">En envoyant, tu acceptes d’être recontacté par e-mail.</p>
+            <p className="sb-legal">En contact smash.bad, tu acceptes d’être recontacté par e-mail.</p>
           </form>
         </div>
       </section>
