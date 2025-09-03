@@ -853,3 +853,42 @@ input[type="range"]{ width:100%; }
 .btn--icon:hover .icon--default{ display:none; }
 .btn--icon:hover .icon--hover{ display:block; }
 
+/* === Contact form === */
+.sb-form{ display:grid; gap:14px; }
+.sb-grid{ display:grid; gap:12px; grid-template-columns: 1fr; }
+@media (min-width:700px){ .sb-grid{ grid-template-columns: 1fr 1fr; } }
+
+.sb-field{ display:flex; flex-direction:column; gap:6px; }
+.sb-field > span{ font-weight:700; color:#EAF2FF; }
+.sb-field input,
+.sb-field textarea{
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color:#fff;
+  outline: none;
+}
+.sb-field input:focus,
+.sb-field textarea:focus{
+  border-color: #12D8DF;
+  box-shadow: 0 0 0 3px rgba(18,216,223,.18);
+}
+.sb-actions{ display:flex; align-items:center; gap:12px; }
+.sb-ok{ color:#12D8DF; font-weight:700; }
+.sb-err{ color:#FF7A1A; font-weight:700; }
+.sb-legal{ color:var(--muted); font-size:14px; margin:6px 0 0; }
+
+/* Honeypot caché */
+.sb-form .hp{ position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+
+/* Footer sur une ligne + lien visible */
+.footer{
+  padding:26px 5%;
+  border-top:1px solid rgba(255,255,255,.06);
+  color:var(--muted);
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  flex-wrap:wrap; text-align:center;
+}
+.footer a{ text-decoration: underline; }
+.footer a:hover{ text-decoration: none; }
