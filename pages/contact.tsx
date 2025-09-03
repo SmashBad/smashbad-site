@@ -77,7 +77,7 @@ export default function ContactPage() {
               </button>
 
               {state === "sent" && <span className="sb-ok" role="status">Ton message a bien été envoyé, merci !</span>}
-              {state === "error" && <span className="sb-err" role="alert">{error}</span>}
+              {state === "error" && <span className="sb-err" role="alert">Quelque chose n'a pas fonctionné. Remplis bien tous les champs et assure toi que ton adresse mail présente bien le format badminton@example.com</span>}
             </div>
 
             <p className="sb-legal">En contactant smash.bad, tu acceptes d’être recontacté par e-mail.</p>
