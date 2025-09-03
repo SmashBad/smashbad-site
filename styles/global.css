@@ -1004,6 +1004,21 @@ input[type="range"]{ width:100%; }
   display: grid; gap: 6px;
   font-size: 15px;
 }
+
+.partners-card__meta li::before,
+.desc-line::before {
+  content: "";
+  display: inline-block;
+  width: 20px;            /* ajuste si besoin */
+  height: 20px;
+  margin-right: 10px;
+  flex: 0 0 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: drop-shadow(0 0 0 rgba(0,0,0,0)); /* antialias propre */
+}
+
 .partners-card__meta li { display: flex; align-items: center; gap: 10px; }
 .partners-card__meta .i-date::before   { background-image: url("/Planning.svg"); }
 .partners-card__meta .i-place::before  { background-image: url("/Location.svg"); }
