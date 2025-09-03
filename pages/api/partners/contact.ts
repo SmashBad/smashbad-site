@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { createContactRequest, getAdForContact } from "@/lib/data/airtable";
+import { createContactRequest, getAdForContact } from "../../../lib/data/airtable";
 // import { sendMail } from "@/lib/mail/send"; // on branchera quand tu seras prêt
 
 function isEmail(v: unknown){ return typeof v === "string" && /.+@.+\..+/.test(v); }

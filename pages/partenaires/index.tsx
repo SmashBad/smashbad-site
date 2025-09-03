@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-type Ad = import("@/lib/data/airtable").AdPublic;
+type Ad = import("../../lib/data/airtable").AdPublic;
 
 export default function PartenairesPage(){
   const [items, setItems] = useState<Ad[]>([]);
