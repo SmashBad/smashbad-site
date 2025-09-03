@@ -1,29 +1,59 @@
-import { Resend } from "resend";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-  const { firstName, email, message } = req.body;
+  const { firstName, email, message, website } = req.body || {};
+
+  // Anti-bot (honeypot)
+  if (website) return res.status(200).json({ ok: true });
+
   if (!firstName || !email || !message) {
-    return res.status(400).json({ error: "Champs requis manquants" });
+    return res.status(400).json({ error: "Champs requis manquants." });
   }
 
   try {
-    await resend.emails.send({
-      from: "SMASH.bad <onboarding@resend.dev>", // l'adresse d'envoi par défaut
-      to: process.env.CONTACT_TO!,
-      reply_to: email,
+    const payload = {
+      from: "SMASH.bad <onboarding@resend.dev>", // ok tant que ton domaine n'est pas vérifié
+      to: [process.env.CONTACT_TO!],             // ex. "smashbad.contact@gmail.com"
+      reply_to: email,                           // pour répondre direct au visiteur
       subject: `Contact SMASH.bad — ${firstName}`,
-      html: `<p><b>Prénom :</b> ${firstName}</p>
-             <p><b>Email :</b> ${email}</p>
-             <p><b>Message :</b><br/>${message.replace(/\n/g, "<br/>")}</p>`,
+      html: `
+        <h2>Nouveau message</h2>
+        <p><b>Prénom :</b> ${escapeHtml(firstName)}</p>
+        <p><b>Email :</b> ${escapeHtml(email)}</p>
+        <p><b>Message :</b><br/>${escapeHtml(message).replace(/\n/g,"<br/>")}</p>
+      `,
+    };
+
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
     });
 
-    res.status(200).json({ ok: true });
-  } catch (error: any) {
-    res.status(500).json({ error: "Erreur d’envoi" });
+    if (!r.ok) {
+      const txt = await r.text().catch(() => "");
+      return res.status(500).json({ error: `Erreur Resend ${r.status} ${txt}` });
+    }
+
+    return res.status(200).json({ ok: true });
+  } catch (e: any) {
+    console.error(e);
+    return res.status(500).json({ error: "Impossible d’envoyer le message." });
   }
+}
+
+function escapeHtml(str: string) {
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
