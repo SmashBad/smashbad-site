@@ -6,9 +6,7 @@ export default function Footer() {
   return (
     <footer className="footer" role="contentinfo">
       <small>
-        © {new Date().getFullYear()} SMASH.bad — Tous droits réservés - 
-        </small>
-        <small>
+        © {new Date().getFullYear()} SMASH.bad — Tous droits réservés  -  
       <Link
           href="/contact"
           className="underline underline-offset-4 hover:no-underline"
