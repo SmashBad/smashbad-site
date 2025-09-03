@@ -33,8 +33,8 @@ export default function AdDetail(){
   return (
     <main className="partners-page">
       <article className="ad-card">
-        <h2>{ad.title}</h2>
-        <p>{ad.city}{ad.dept ? `, ${ad.dept}` : ""}</p>
+        <h2>{ad.titre}</h2>
+        <p>{ad.ville}{ad.dept ? `, ${ad.dept}` : ""}</p>
         {/* … autres infos … */}
       </article>
 

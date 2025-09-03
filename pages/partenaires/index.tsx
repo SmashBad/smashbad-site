@@ -51,19 +51,19 @@ export default function PartenairesPage(){
         {items.map(ad => (
           <article key={ad.id} className="ad-card">
             <div className="ad-card__head">
-              <h3>{ad.title}</h3>
-              {ad.event_link && (
-                <a className="btn btn--ghost" href={ad.event_link} target="_blank" rel="noreferrer">Fiche BadNet</a>
+              <h3>{ad.titre}</h3>
+              {ad.lienBadNet && (
+                <a className="btn btn--ghost" href={ad.lienBadNet} target="_blank" rel="noreferrer">Fiche BadNet</a>
               )}
             </div>
 
             <ul className="ad-card__meta">
               <li>📅 {ad.dates?.start} → {ad.dates?.end}</li>
-              <li>📍 {ad.city}{ad.dept ? `, ${ad.dept}` : ""}</li>
-              <li>🎯 {ad.draw || "?"} · {ad.ranking || "classement ?"} · {ad.sex === "F" ? "femme" : ad.sex === "H" ? "homme" : "?"}</li>
+              <li>📍 {ad.ville}{ad.dept ? `, ${ad.dept}` : ""}</li>
+              <li>🎯 {ad.tableau || "?"} · {ad.classement || "classement ?"} · {ad.sexe === "F" ? "femme" : ad.sexe === "H" ? "homme" : "?"}</li>
             </ul>
 
-            {ad.looking_for && <p className="ad-card__desc">{ad.looking_for}</p>}
+            {ad.rechercheSexe && <p className="ad-card__desc">{ad.rechercheSexe}</p>}
 
             <div className="ad-card__cta">
               <Link href={`/partenaires/${ad.id}`} className="btn cta-secondary">Contacter</Link>
