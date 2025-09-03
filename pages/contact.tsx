@@ -76,7 +76,7 @@ export default function ContactPage() {
                 {state === "sending" ? "Envoi…" : "Envoyer"}
               </button>
 
-              {state === "sent" && <span className="sb-ok" role="status">Message envoyé ✅</span>}
+              {state === "sent" && <span className="sb-ok" role="status">Ton message a bien été envoyé, merci !</span>}
               {state === "error" && <span className="sb-err" role="alert">{error}</span>}
             </div>
 

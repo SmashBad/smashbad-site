@@ -896,8 +896,8 @@ input[type="range"]{ width:100%; }
   box-shadow: 0 0 0 3px rgba(18,216,223,.18);
 }
 .sb-actions{ display:flex; align-items:center; gap:12px; }
-.sb-ok{ color:#12D8DF; font-weight:700; }
-.sb-err{ color:#FF7A1A; font-weight:700; }
+.sb-ok{ color:#92f6fa; font-weight:700; }
+.sb-err{ color:#fa2313; font-weight:700; }
 .sb-legal{ color:var(--muted); font-size:14px; margin:6px 0 0; }
 
 /* Honeypot caché */
