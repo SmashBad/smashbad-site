@@ -7,6 +7,8 @@ export default function Footer() {
     <footer className="footer" role="contentinfo">
       <small>
         © {new Date().getFullYear()} SMASH.bad — Tous droits réservés - 
+        </small>
+        <small>
       <Link
           href="/contact"
           className="underline underline-offset-4 hover:no-underline"
