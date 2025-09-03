@@ -11,8 +11,8 @@ const CLASSEMENTS = ["N1","N2","N3","R4","R5","R6","D7","D8","D9","P10","P11","P
 
 type SortKey = "date-asc" | "date-desc" | "recents";
 const SORTS: { key: SortKey; label: string }[] = [
-  { key: "date-asc",  label: "date : chronologique" },
-  { key: "date-desc", label: "date : anti-chronologique" },
+  { key: "date-asc",  label: "date : du plus récent au plus lointain" },
+  { key: "date-desc", label: "date : du plus lointain au plus récent" },
   { key: "recents",   label: "annonces récentes" },
 ];
 

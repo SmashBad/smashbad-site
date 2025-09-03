@@ -1005,14 +1005,14 @@ input[type="range"]{ width:100%; }
   font-size: 15px;
 }
 .partners-card__meta li { display: flex; align-items: center; gap: 10px; }
-.partners-card__meta .i-date::before   { content: "📅"; }
-.partners-card__meta .i-place::before  { content: "📍"; }
+.partners-card__meta .i-date::before   { background-image: url("/Planning.svg"); }
+.partners-card__meta .i-place::before  { background-image: url("/Location.svg"); }
 
 .partners-card__desc{ margin: 10px 0 6px; display: grid; gap: 6px; font-size: 15px; }
 .desc-line{ display: flex; gap: 8px; align-items: baseline; }
-.desc-line.i-id::before     { content: "🪪"; }
-.desc-line.i-draw::before   { content: "🏆"; }
-.desc-line.i-search::before { content: "🔎"; }
+.desc-line.i-id::before     { background-image: url("/Id.svg"); }
+.desc-line.i-draw::before   { background-image: url("/Trophy.svg"); }
+.desc-line.i-search::before { background-image: url("/LookFor.svg"); }
 
 .partners-card__cta{ display: flex; justify-content: center; margin-top: 14px; }
 .partners-card__cta .cta-primary{ border-radius: 999px; padding: 12px 22px; }
