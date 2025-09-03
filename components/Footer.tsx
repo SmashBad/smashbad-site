@@ -13,9 +13,7 @@ export default function Footer() {
           Contact
         </Link>
          <br />
-        <small>
          © {new Date().getFullYear()} SMASH.bad — Tous droits réservés
-        </small>
     </footer>
   );
 }
