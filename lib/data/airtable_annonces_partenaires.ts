@@ -5,9 +5,9 @@ const API_URL = "https://api.airtable.com/v0";
 const BASE_ID = process.env.AIRTABLE_BASE_ID || "appkxlroj23rDP2Ep";                 // ex: appXXXXXXXXXXXX
 const API_TOKEN = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN || "";
 
-const ADS = process.env.AIRTABLE_TABLE_ADS || "Annonces";           // table des annonces
-const CONTACTS = process.env.AIRTABLE_TABLE_CONTACTS || "ContactRequests"; // table des prises de contact
-const VIEW_PUBLIC = process.env.AIRTABLE_VIEW_PUBLIC || "public_list";    // vue filtrée des annonces publiques
+const ADS = process.env.AIRTABLE_PARTNERS_ADS || "Partenaires_Annonces";           // table des annonces
+const CONTACTS = process.env.AIRTABLE_PARTNERS_RESPONSES || "Partenaires_Reponses"; // table des prises de contact
+const VIEW_PUBLIC = process.env.AIRTABLE_PARTNERS_VIEW || "public_list";    // vue filtrée des annonces publiques
 
 /* ========= Types ========= */
 export type AdPublic = {

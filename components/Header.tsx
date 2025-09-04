@@ -77,11 +77,11 @@ export default function Header({ title }: HeaderProps)
       {/* Actions à droite */} 
       <div className="nav__actions">
         {(() => {
-          const active = isActiveAny(["/AskContact"]);
+          const active = isActiveAny(["/rester_informe"]);
           const icon = active ? "/AskContact_On.svg" : "/AskContact.svg";
           return (
             <a
-              href="/AskContact"
+              href="/Resté Informé"
               className={`nav-pill ${active ? "is-active" : ""}`}
             >
               <img src={icon} className="nav-ic" alt="" aria-hidden />
