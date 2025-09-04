@@ -395,7 +395,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 }
 .shadow-hero p{
   font-family: "Outfit", system-ui, sans-serif;
-  font-size: clamp(14px, 1.6vw, 18px);
+  font-size: clamp(10px, 1.4vw, 14px);
   opacity: .9;
   margin: 0;
 }
