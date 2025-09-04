@@ -167,7 +167,6 @@ export async function listAdsPublic(query: {
 
   return records.map(mapAd);
 }
-}
 
 /* ========= Détail + e-mail privé auteur pour /contact ========= */
 export async function getAdForContact(id: string) {
