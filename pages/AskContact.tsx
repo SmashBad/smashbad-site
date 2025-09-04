@@ -2,7 +2,7 @@
 import Head from "next/head";
 
 const AIRTABLE_FORM_URL =
-  "https://airtable.com/embed/appErxcur9vTL9X8t/paggdZiHNRGqOeORz/form";
+  "https://airtable.com/embed/appkxlroj23rDP2Ep/pagYIt0nbUloCXCSd/form";
 
 export default function ContactPage() {
   return (
