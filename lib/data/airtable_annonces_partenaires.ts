@@ -13,16 +13,18 @@ const VIEW_PUBLIC = process.env.AIRTABLE_PARTNERS_VIEW || "public_list";    // v
 export type AdPublic = {
   id: string;
   titre?: string;
-  dept?: string;
-  ville?: string;
-  dates?: { start?: string; end?: string; text?: string };
-  lienBadNet?: string;
   tournoi?: string;
-  sexe?: "H" | "F" | string;
+  ville?: string;
+  dept?: string;                 // ✅ département
+  sexe?: string;
   classement?: string;
-  tableau?: string; // "Double Dame" | "Double Homme" | "Double Mixte" | "Double Intergenre"
+  tableau?: string;
   rechercheSexe?: string;
-  rechercheClassement?: string;
+  rechercheClassement?: string[] | string;
+  lienBadNet?: string;
+  dates?: { start?: string; end?: string; text?: string };
+  age?: number | null;           // ✅ âge (peut être null)
+  age_hidden?: boolean;          // ✅ "Âge non public" (checkbox)
   created_at?: string;
 };
 
@@ -73,17 +75,24 @@ async function airPost(path: string, body: unknown) {
 
 /** Mapping brut Airtable -> objet public côté site */
 function mapAd(rec: AdRecord): AdPublic {
-  const f = rec.fields || {};
-  // "Date" peut être un champ texte, un date-range ({start,end}) ou deux dates selon ta config.
+  const f = (rec.fields || {}) as Record<string, any>;
+
+  // "Date" peut être un champ texte, un date-range ({start,end}) ou deux dates, selon ta config.
   let dates: AdPublic["dates"] = undefined;
   const rawDate = f["Date"];
   if (rawDate && typeof rawDate === "object" && ("start" in rawDate || "end" in rawDate)) {
     dates = { start: rawDate.start, end: rawDate.end };
   } else if (typeof rawDate === "string") {
     dates = { text: rawDate };
-  } else {
-    dates = undefined;
   }
+
+  // Âge (nombre) + logique d’affichage
+  const rawAge = f["Âge"];
+  const age = typeof rawAge === "number" ? rawAge : (rawAge ? Number(rawAge) : null);
+
+  // Case à cocher "Âge_Ok" : si coché => on peut afficher l’âge
+  const ageOk = !!f["Âge_Ok"];
+  const age_hidden = !ageOk; // true = ne pas afficher
 
   return {
     id: rec.id,
@@ -98,9 +107,12 @@ function mapAd(rec: AdRecord): AdPublic {
     tableau: f["Tableau"],
     rechercheSexe: f["Recherche Sexe"],
     rechercheClassement: f["Recherche Classement"],
-    created_at: f["Créé le"],
+    created_at: f["Créé le"] || rec.createdTime, // garde ta colonne, sinon fallback sur createdTime
+    age,
+    age_hidden,
   };
 }
+
 
 /* ========= Lecture liste publique avec filtres multi ========= */
 export async function listAdsPublic(query: {

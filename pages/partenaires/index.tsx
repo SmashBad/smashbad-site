@@ -299,10 +299,10 @@ export default function PartenairesPage() {
           // --- nettoyage & normalisation ---
           const tournoi   = clean(ad.tournoi || ad.titre);
           const ville     = clean(ad.ville);
-          const dept      = clean(ad.dept || ad.departement);
+          const dept      = clean(ad.dept);
           const sex       = clean(ad.sexe);
           const classement= clean(ad.classement);
-          const age       = ad.age as (number | string | undefined);
+          const age = ad.age_hidden ? "" : (ad.age ?? ""); 
 
           const wishTab   = fullTableau(ad.tableau);
           // recherche de classement : string "R5,R6" OU tableau
