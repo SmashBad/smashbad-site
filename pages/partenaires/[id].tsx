@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-type Ad = import("../../lib/data/airtable").AdPublic;
+type Ad = import("../../lib/data/airtable_annonces_partenaires").AdPublic;
 
 export default function AdDetail(){
   const router = useRouter();

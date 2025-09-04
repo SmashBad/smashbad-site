@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { listAdsPublic } from "../../../lib/data/airtable";
+import { listAdsPublic } from "../../../lib/data/airtable_annonces_partenaires";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {

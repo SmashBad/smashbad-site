@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
-// Type des annonces (vient de lib/data/airtable)
-type Ad = import("../../lib/data/airtable").AdPublic;
+// Type des annonces (vient de lib/data/airtable_annonces_partenaires.ts)
+type Ad = import("../../lib/data/airtable_annonces_partenaires").AdPublic;
 
 /* ---------- Constantes filtres ---------- */
 const DEPTS = Array.from({ length: 95 }, (_, i) => String(i + 1).padStart(2, "0"));
@@ -159,7 +159,7 @@ export default function PartenairesPage() {
         {sorted.map((ad) => (
           <article key={ad.id} className="partners-card">
             <div className="partners-card__head">
-              <h3 className="partners-card__title">{ad.titre || "Annonce"}</h3>
+              <h3 className="partners-card__title">{ad.tournoi || "Annonce"}</h3>
               <a
                 className="btn btn--ghost partners-card__ext"
                 href={ad.lienBadNet || "https://badnet.fr/"}
