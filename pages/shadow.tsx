@@ -452,6 +452,17 @@ export default function Shadow() {
         )}
       </div>
 
+      {phase === "param" && (
+        <section className="shadow-hero">
+          <h1>Shadow</h1>
+          <p>
+            Un exercice simple et efficace pour travailler tes déplacements. Prends ta raquette, positionne toi au milieu du terrain face au filet.
+            Pose ton téléphone devant toi et réagis aux flèches. Chaque flèche t'indique le déplacement à travailler. 
+            Gère la durée et le rythme, puis lance-toi. Idéal en solo à l’entraînement.
+          </p>
+        </section>
+      )}
+
 
       {/* PARAMÈTRES */}
       {phase === "param" && (

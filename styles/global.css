@@ -375,6 +375,32 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
    ========================= */
 .shadow-page { padding: 18px 5% 90px; background: #0b1426; }
 
+.range-line .numbox,
+.range-line .numbox-suffix{
+  display: none !important;
+}
+
+/* Shadow – en-tête façon “hero” court */
+.shadow-hero{
+  text-align: center;
+  margin: 8px auto 14px;
+  max-width: 980px;
+  padding: 0 5%;
+}
+.shadow-hero h1{
+  font-family: "Audiowide", system-ui, sans-serif;
+  font-size: clamp(28px, 4.2vw, 40px);
+  margin: 6px 0 6px;
+  letter-spacing: .5px;
+}
+.shadow-hero p{
+  font-family: "Outfit", system-ui, sans-serif;
+  font-size: clamp(14px, 1.6vw, 18px);
+  opacity: .9;
+  margin: 0;
+}
+
+
 /* Topbar locale / retour / actions */
 .shadow-topbar {
   display:grid;
@@ -434,8 +460,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 
 /* Grille directions */
 .dir-grid{ display:grid; gap:12px; grid-template-columns: 1fr 1fr; }
-@media (min-width: 720px){ .dir-grid{ grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1000px){ .dir-grid{ grid-template-columns: repeat(3, 1fr); } }
+
 .dir-card{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:6px; padding:12px; border-radius:12px; text-align:center;
