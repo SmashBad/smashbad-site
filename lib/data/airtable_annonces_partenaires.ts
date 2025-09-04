@@ -1,3 +1,27 @@
+const API_URL = "https://api.airtable.com/v0";
+const BASE_ID = process.env.AIRTABLE_BASE_ID || ""; // tu dois l’avoir défini dans Vercel
+const ADS = "Annonces"; // le nom de ta table dans Airtable
+const VIEW_PUBLIC = "Vue publique"; // le nom de ta vue (ou à adapter)
+
+/**
+ * Helper générique pour GET sur Airtable
+ */
+async function airGet(path: string, params?: Record<string, string>) {
+  const url = new URL(`${API_URL}/${BASE_ID}/${path}`);
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      url.searchParams.set(k, v);
+    }
+  }
+  const res = await fetch(url.toString(), {
+    headers: {
+      Authorization: `Bearer ${process.env.AIRTABLE_TOKEN}`,
+    },
+  });
+  if (!res.ok) throw new Error(`Airtable error: ${res.status} ${res.statusText}`);
+  return await res.json();
+}
+
 export async function listAdsPublic(query: {
   id?: string;
   depts?: string[];           // ex ["92","75","2A"]
