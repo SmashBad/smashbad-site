@@ -37,6 +37,76 @@ function sexeLabel(s?: string) {
   return { personne: "un·e joueur·se", classe: "classé·e" };
 }
 
+// --- Helpers "propres" ---
+const clean = (v: unknown) => (v ?? "").toString().trim();
+
+const fullTableau = (t?: string) => {
+  const x = clean(t).toUpperCase();
+  if (x === "DH" || x === "DOUBLE HOMME") return "Double Homme";
+  if (x === "DD" || x === "DOUBLE DAME")  return "Double Dame";
+  if (x === "DM" || x === "DOUBLE MIXTE") return "Double Mixte";
+  if (x === "DI" || x === "DOUBLE INTERGENRE") return "Double Intergenre";
+  // déjà en toutes lettres, on renvoie tel quel
+  return clean(t);
+};
+
+type SexKind = "H" | "F" | "AUTRE"; // adapte aux valeurs de ta table si besoin
+
+function nounsForSex(sexRaw?: string) {
+  const s = clean(sexRaw).toUpperCase();
+  const sex: SexKind = s === "H" ? "H" : s === "F" ? "F" : "AUTRE";
+  if (sex === "H") return { art:"un",   noun:"joueur",  classWord:"classé",   partner:"un joueur",   partnerClass:"classé" };
+  if (sex === "F") return { art:"une",  noun:"joueuse", classWord:"classée",  partner:"une joueuse", partnerClass:"classée" };
+  return            { art:"un·e", noun:"joueur·se", classWord:"classé·e", partner:"un·e joueur·se", partnerClass:"classé·e" };
+}
+
+/** "Je suis une joueuse classée R5 de 25 ans" / "... qui ne souhaite pas préciser son âge" / "... âge non précisé" */
+function formatPlayer(sex?: string, classement?: string, age?: number | string) {
+  const { art, noun, classWord } = nounsForSex(sex);
+  const cl = clean(classement);
+  const ageStr = clean(age);
+  let agePart = "";
+
+  if (ageStr) {
+    // valeur présente et non vide
+    agePart = ` de ${ageStr} ans`;
+  } else {
+    // pas d’info / non précisé
+    agePart = ` qui ne souhaite pas préciser son âge`;
+  }
+
+  return `Je suis ${art} ${noun} ${classWord} ${cl}${agePart}`.replace(/\s+/g, " ").trim();
+}
+
+/** "Double Homme" (jamais d’abréviation) */
+function formatWishTableau(t?: string) {
+  const ft = fullTableau(t);
+  return `Je souhaite jouer en ${ft}`.trim();
+}
+
+/** Classements de recherche : 
+ * 1 -> "R6" ; 2 -> "R5 ou R6" ; 3+ -> "D9, D8, D7 ou R6"
+ */
+function formatListWithOu(values: string[]) {
+  const arr = values.map(v => clean(v)).filter(Boolean);
+  if (arr.length <= 1) return arr.join(", ");
+  if (arr.length === 2) return `${arr[0]} ou ${arr[1]}`;
+  const last = arr[arr.length - 1];
+  return `${arr.slice(0, -1).join(", ")} ou ${last}`;
+}
+
+/** "Je souhaite jouer avec un joueur classé R5 ou R6" (accord selon Recherche Sexe) */
+function formatSearch(sexWanted?: string, classementsWanted?: string[] | string) {
+  const { partner, partnerClass } = nounsForSex(sexWanted);
+  const list = Array.isArray(classementsWanted)
+    ? classementsWanted
+    : (clean(classementsWanted) ? clean(classementsWanted).split(/[,\s;/]+/) : []);
+  const txt = formatListWithOu(list);
+  if (txt) return `Je souhaite jouer avec ${partner} ${partnerClass} ${txt}`;
+  return `Je souhaite jouer avec ${partner}`;
+}
+
+
 function useOutsideClose<T extends HTMLElement>(open: boolean, onClose: () => void) {
   const ref = useRef<T | null>(null);
   useEffect(() => {
@@ -226,70 +296,88 @@ export default function PartenairesPage() {
         )}
 
         {sorted.map((ad) => {
-          const g = sexeLabel(ad.sexe);
+          // --- nettoyage & normalisation ---
+          const tournoi   = clean(ad.tournoi || ad.titre);
+          const ville     = clean(ad.ville);
+          const dept      = clean(ad.dept || ad.departement);
+          const sex       = clean(ad.sexe);
+          const classement= clean(ad.classement);
+          const age       = ad.age as (number | string | undefined);
+
+          const wishTab   = fullTableau(ad.tableau);
+          // recherche de classement : string "R5,R6" OU tableau
+          const searchCls = Array.isArray(ad.rechercheClassement)
+            ? ad.rechercheClassement.map(clean)
+            : (clean(ad.rechercheClassement) ? clean(ad.rechercheClassement).split(/[,\s;/]+/) : []);
+
           return (
             <article key={ad.id} className="partners-card">
-              <div className="partners-card__head">
-                <h3 className="partners-card__title">{ad.tournoi || "Annonce"}</h3>
-                <a
-                  className="btn btn--ghost partners-card__ext"
-                  href={ad.lienBadNet || "https://badnet.fr/"}
-                  target="_blank"
-                  rel="noreferrer"
+              {/* Titre + bouton externe (désactivé, tooltip) */}
+              <header className="partners-card__head">
+                <h3 className="partners-card__title">{tournoi || "Annonce"}</h3>
+
+                <button
+                  type="button"
+                  className="btn btn--ghost is-soon partners-card__ext"
+                  aria-disabled="true"
+                  title="Bientôt disponible"
                 >
                   Fiche BadNet
-                </a>
-              </div>
+                  <span className="tooltip">Bientôt disponible</span>
+                </button>
+              </header>
 
+              {/* Métadonnées : dates + lieu */}
               <ul className="partners-card__meta">
                 <li className="i-date">
                   {ad.dates?.start || ad.dates?.end ? (
                     <>Du {fmtDate(ad.dates?.start)} au {fmtDate(ad.dates?.end)}</>
                   ) : (
-                    <>{ad.dates?.text || "Dates à préciser"}</>
+                    <>{clean(ad.dates?.text) || "Dates à préciser"}</>
                   )}
                 </li>
                 <li className="i-place">
-                  <strong>{ad.ville || "Ville ?"}</strong>
-                  {ad.dept ? `, ${ad.dept}` : ""}
+                  <strong>{ville || "Ville ?"}</strong>{dept ? `, ${dept}` : ""}
                 </li>
               </ul>
 
+              {/* Description */}
               <div className="partners-card__desc">
+                {/* Je suis un(e) joueur/joueuse classé(e) ... + âge ou "ne souhaite pas préciser" */}
                 <div className="desc-line i-id">
-                  Je suis {g.personne}
-                  {ad.classement ? <> {g.classe} <strong>{ad.classement}</strong></> : null}
+                  {formatPlayer(sex, classement, age)}
                 </div>
 
-                {ad.tableau && (
+                {/* Tableau souhaité — toujours en toutes lettres */}
+                {wishTab && (
                   <div className="desc-line i-draw">
-                    Je souhaite jouer en <strong>{ad.tableau}</strong>
+                    {formatWishTableau(wishTab)}
                   </div>
                 )}
 
-                {(ad.rechercheSexe || ad.rechercheClassement) && (
+                {/* Recherche partenaire : sexe + classements joliment listés */}
+                {(ad.rechercheSexe || searchCls.length) && (
                   <div className="desc-line i-search">
-                    Je souhaite jouer avec&nbsp;
-                    {ad.rechercheSexe && (
-                      <>
-                        {ad.rechercheSexe === "F" ? "une " : ad.rechercheSexe === "H" ? "un " : ""}
-                        <strong>{ad.rechercheSexe === "F" ? "femme" : ad.rechercheSexe === "H" ? "homme" : ad.rechercheSexe}</strong>
-                      </>
-                    )}
-                    {ad.rechercheSexe && ad.rechercheClassement ? " classé(e) " : ""}
-                    {ad.rechercheClassement && <strong>{ad.rechercheClassement}</strong>}
+                    {formatSearch(ad.rechercheSexe, searchCls)}
                   </div>
                 )}
               </div>
 
+              {/* CTA (temporaire : lien externe) */}
               <div className="partners-card__cta">
-                <a className="cta-primary" href={ad.lienBadNet || "https://badnet.fr/"} target="_blank" rel="noreferrer">
+                <a
+                  className="cta-primary"
+                  href={ad.lienBadNet || "https://badnet.fr/"}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Contacter
                 </a>
               </div>
             </article>
           );
         })}
+
       </section>
     </main>
   );
