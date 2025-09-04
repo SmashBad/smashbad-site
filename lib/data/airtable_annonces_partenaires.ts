@@ -30,6 +30,7 @@ export type AdPublic = {
 
 type AdRecord = {
   id: string;
+  createdTime?: string;
   fields: Record<string, any>;
 };
 
@@ -107,7 +108,7 @@ function mapAd(rec: AdRecord): AdPublic {
     tableau: f["Tableau"],
     rechercheSexe: f["Recherche Sexe"],
     rechercheClassement: f["Recherche Classement"],
-    created_at: f["Créé le"] || rec.createdTime, // garde ta colonne, sinon fallback sur createdTime
+    created_at: f["Créé le"] || rec.createdTime || undefined, // garde ta colonne, sinon fallback sur createdTime
     age,
     age_hidden,
   };
