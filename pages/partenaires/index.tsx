@@ -40,6 +40,8 @@ function sexeLabel(s?: string) {
 // --- Helpers "propres" ---
 const clean = (v: unknown) => (v ?? "").toString().trim();
 
+type SexKind = "H" | "F" | "AUTRE";
+
 const fullTableau = (t?: string) => {
   const x = clean(t).toUpperCase();
   if (x === "DH" || x === "DOUBLE HOMME") return "Double Homme";
@@ -50,14 +52,18 @@ const fullTableau = (t?: string) => {
   return clean(t);
 };
 
-type SexKind = "H" | "F" | "AUTRE"; // adapte aux valeurs de ta table si besoin
-
 function nounsForSex(sexRaw?: string) {
-  const s = clean(sexRaw).toUpperCase();
-  const sex: SexKind = s === "H" ? "H" : s === "F" ? "F" : "AUTRE";
-  if (sex === "H") return { art:"un",   noun:"joueur",  classWord:"classé",   partner:"un joueur",   partnerClass:"classé" };
-  if (sex === "F") return { art:"une",  noun:"joueuse", classWord:"classée",  partner:"une joueuse", partnerClass:"classée" };
-  return            { art:"un·e", noun:"joueur·se", classWord:"classé·e", partner:"un·e joueur·se", partnerClass:"classé·e" };
+  const s = clean(sexRaw).toLowerCase();
+  const isH =
+    s === "h" || s === "homme" || s === "m" || s === "male" || s === "masculin";
+  const isF =
+    s === "f" || s === "femme" || s === "w" || s === "female" || s === "féminin" || s === "feminin";
+  const sex: SexKind = isH ? "H" : isF ? "F" : "AUTRE";
+  if (sex === "H")
+    return { art: "un", noun: "joueur", classWord: "classé", partner: "un homme", partnerClass: "classé" };
+  if (sex === "F")
+    return { art: "une", noun: "joueuse", classWord: "classée", partner: "une femme", partnerClass: "classée" };
+  return { art: "un·e", noun: "joueur·se", classWord: "classé·e", partner: "un·e joueur·se", partnerClass: "classé·e" };
 }
 
 /** "Je suis une joueuse classée R5 de 25 ans" / "... qui ne souhaite pas préciser son âge" / "... âge non précisé" */
@@ -219,6 +225,10 @@ function SortPill({ sort, setSort }: { sort: SortKey; setSort: (s: SortKey)=>voi
   );
 }
 
+const Em = ({ children }: { children: React.ReactNode }) => (
+  <span className="partners-em">{children}</span>
+);
+
 /* ===================== Page ===================== */
 export default function PartenairesPage() {
   const [items, setItems] = useState<Ad[]>([]);
@@ -343,25 +353,75 @@ export default function PartenairesPage() {
 
               {/* Description */}
               <div className="partners-card__desc">
-                {/* Je suis un(e) joueur/joueuse classé(e) ... + âge ou "ne souhaite pas préciser" */}
-                <div className="desc-line i-id">
-                  {formatPlayer(sex, classement, age)}
-                </div>
+                {/* Ligne identité */}
+                {(() => {
+                  const { art, noun, classWord } = nounsForSex(ad.sexe);
+                  const cl = clean(ad.classement);
+                  const ageNum = typeof ad.age === "number" ? ad.age : undefined;
 
-                {/* Tableau souhaité — toujours en toutes lettres */}
-                {wishTab && (
+                  return (
+                    <div className="desc-line i-id">
+                      {/* Je suis une / un / un·e  */}
+                      Je suis {art} {noun}
+                      {cl && (
+                        <>
+                          {" "} {classWord} <Em>{cl}</Em>
+                        </>
+                      )}
+                      {ad.age_hidden
+                        ? " qui ne souhaite pas préciser son âge"
+                        : ageNum
+                        ? (
+                            <>
+                              {" "}de <Em>{ageNum}</Em> ans
+                            </>
+                          )
+                        : ""}
+                    </div>
+                  );
+                })()}
+
+                {/* Ligne tableau souhaité */}
+                {ad.tableau && (
                   <div className="desc-line i-draw">
-                    {formatWishTableau(wishTab)}
+                    Je souhaite jouer en <Em>{ad.tableau}</Em>
                   </div>
                 )}
 
-                {/* Recherche partenaire : sexe + classements joliment listés */}
-                {(ad.rechercheSexe || searchCls.length) && (
+                {/* Ligne recherche partenaire */}
+                {(ad.rechercheSexe || ad.rechercheClassement) && (
                   <div className="desc-line i-search">
-                    {formatSearch(ad.rechercheSexe, searchCls)}
+                    {(() => {
+                      const { partner, partnerClass } = nounsForSex(ad.rechercheSexe);
+                      // accepte "R5,R6", "R5 R6", etc.
+                      const list = Array.isArray(ad.rechercheClassement)
+                        ? ad.rechercheClassement
+                        : (clean(ad.rechercheClassement)
+                            ? clean(ad.rechercheClassement).split(/[,\s;/]+/).filter(Boolean)
+                            : []);
+
+                      const txt =
+                        list.length <= 1
+                          ? list.join("")
+                          : list.length === 2
+                            ? `${list[0]} ou ${list[1]}`
+                            : `${list.slice(0, -1).join(", ")} ou ${list[list.length - 1]}`;
+
+                      return (
+                        <>
+                          Je souhaite jouer avec {partner}
+                          {txt && (
+                            <>
+                              {" "} {partnerClass} <Em>{txt}</Em>
+                            </>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                 )}
               </div>
+
 
               {/* CTA (temporaire : lien externe) */}
               <div className="partners-card__cta">
