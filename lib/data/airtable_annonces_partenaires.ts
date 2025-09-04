@@ -3,6 +3,11 @@ const BASE_ID = process.env.AIRTABLE_BASE_ID || ""; // tu dois l’avoir défini
 const ADS = "Annonces"; // le nom de ta table dans Airtable
 const VIEW_PUBLIC = "Vue publique"; // le nom de ta vue (ou à adapter)
 
+type AdRecord = {
+  id: string;
+  fields: Record<string, any>;
+};
+
 /**
  * Helper générique pour GET sur Airtable
  */
