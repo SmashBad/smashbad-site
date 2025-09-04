@@ -105,9 +105,9 @@ function mapAd(rec: AdRecord): AdPublic {
 /* ========= Lecture liste publique avec filtres multi ========= */
 export async function listAdsPublic(query: {
   id?: string;
-  depts?: string[];           // ex: ["92","75","2A"]
-  classements?: string[];     // ex: ["D9","D8"]
-  tableaux?: string[];        // ex: ["Double Homme","Double Mixte"]
+  depts?: string[];
+  classements?: string[];
+  tableaux?: string[];
   search?: string;
   maxRecords?: number;
 }) {
@@ -117,10 +117,13 @@ export async function listAdsPublic(query: {
     return [mapAd(json)];
   }
 
-  const params: Record<string, string> = {
-    view: VIEW_PUBLIC,
+  // 1) Construire params
+  const paramsBase: Record<string, string> = {
     pageSize: String(query.maxRecords || 50),
   };
+  // On ne met "view" que si elle est définie (ENV) et non vide
+  const useView = !!(VIEW_PUBLIC && VIEW_PUBLIC.trim());
+  if (useView) paramsBase.view = VIEW_PUBLIC.trim();
 
   const orsEq = (field: string, values: string[]) =>
     values.length ? `OR(${values.map(v => `{${field}} = '${esc(v)}'`).join(",")})` : "";
@@ -134,12 +137,36 @@ export async function listAdsPublic(query: {
         SEARCH(LOWER('${esc(query.search)}'), LOWER({Ville})),
         SEARCH(LOWER('${esc(query.search)}'), LOWER({Tournoi})))`
   );
+  if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
 
-  if (formula.length) params.filterByFormula = `AND(${formula.join(",")})`;
+  // 2) Premier essai (avec view si fournie)
+  let json = (await airGet(encodeURIComponent(ADS), paramsBase)) as AirtableListResponse;
+  let records: AdRecord[] = json.records || [];
 
-  const json = (await airGet(encodeURIComponent(ADS), params)) as AirtableListResponse;
-  const records: AdRecord[] = json.records || [];
+  // 3) Auto-fallback : si 0 record ET qu’on avait mis une view → retenter sans view
+  if (records.length === 0 && useView) {
+    const { view, ...paramsNoView } = paramsBase;
+    try {
+      const json2 = (await airGet(encodeURIComponent(ADS), paramsNoView)) as AirtableListResponse;
+      const records2: AdRecord[] = json2.records || [];
+      if (records2.length > 0) {
+        console.warn(
+          `[partners] 0 record avec view="${VIEW_PUBLIC}", mais ${records2.length} sans view. Vérifie le nom de vue ou ses filtres.`
+        );
+        records = records2;
+      }
+    } catch (e) {
+      // on ignore, c’était juste un fallback de diagnostic
+    }
+  }
+
+  // 4) Logs utiles (sans secrets)
+  console.log(
+    `[partners] fetched=${records.length} table="${ADS}" base="${(BASE_ID||'').slice(0,6)}…" view="${useView?VIEW_PUBLIC:''}"`
+  );
+
   return records.map(mapAd);
+}
 }
 
 /* ========= Détail + e-mail privé auteur pour /contact ========= */

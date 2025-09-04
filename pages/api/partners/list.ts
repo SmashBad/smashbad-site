@@ -3,28 +3,19 @@ import { listAdsPublic } from "../../../lib/data/airtable_annonces_partenaires";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    if (process.env.PARTNERS_FEATURE_ENABLED !== "true") return res.status(404).end();
-    if (req.method !== "GET") return res.status(405).end();
+    const { q, depts, tableaux, classements, max } = req.query;
 
-    const parseList = (v: unknown) =>
-      typeof v === "string" && v.trim()
-        ? v.split(",").map(s => s.trim()).filter(Boolean)
-        : undefined;
-
-    const { id, dept, classement, tableau, q } = req.query;
-
-    const items = await listAdsPublic({
-      id: typeof id === "string" ? id : undefined,
-      depts: parseList(dept),
-      classements: parseList(classement),
-      tableaux: parseList(tableau),
+    const data = await listAdsPublic({
       search: typeof q === "string" ? q : undefined,
-      maxRecords: 200,
+      depts: typeof depts === "string" ? depts.split(",").map(s => s.trim()) : undefined,
+      tableaux: typeof tableaux === "string" ? tableaux.split(",").map(s => s.trim()) : undefined,
+      classements: typeof classements === "string" ? classements.split(",").map(s => s.trim()) : undefined,
+      maxRecords: typeof max === "string" ? Number(max) : undefined,
     });
 
-    res.status(200).json({ items });
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "failed" });
+    res.status(200).json({ ok: true, count: data.length, items: data });
+  } catch (e: any) {
+    console.error("[partners] API error:", e?.message || e);
+    res.status(500).json({ ok: false, error: e?.message || "Unknown error" });
   }
 }
