@@ -1,20 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { listAdsPublic } from "../../../lib/data/airtable_annonces_partenaires";
+import { listAdsPublic } from "../../lib/data/airtable_annonces_partenaires";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     if (process.env.PARTNERS_FEATURE_ENABLED !== "true") return res.status(404).end();
     if (req.method !== "GET") return res.status(405).end();
 
+    const parseList = (v: unknown) =>
+      typeof v === "string" && v.trim()
+        ? v.split(",").map(s => s.trim()).filter(Boolean)
+        : undefined;
+
     const { id, dept, classement, tableau, q } = req.query;
+
     const items = await listAdsPublic({
       id: typeof id === "string" ? id : undefined,
-      dept: typeof dept === "string" ? dept : undefined,
-      classement: typeof classement === "string" ? classement : undefined,
-      tableau: typeof tableau === "string" ? tableau : undefined,
+      depts: parseList(dept),
+      classements: parseList(classement),
+      tableaux: parseList(tableau),
       search: typeof q === "string" ? q : undefined,
-      maxRecords: 100,
+      maxRecords: 200,
     });
+
     res.status(200).json({ items });
   } catch (e) {
     console.error(e);

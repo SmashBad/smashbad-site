@@ -933,6 +933,35 @@ input[type="range"]{ width:100%; }
   margin: 6px auto 14px;
 }
 
+.partners-pill__chips{
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+  margin-bottom: 8px;
+}
+
+.chip--add{ background: rgba(18,216,223,.18); border-color: rgba(18,216,223,.45); }
+
+.partners-chip{
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.partners-chip:hover{ background: rgba(255,255,255,.18); }
+
+.partners-pill__search{
+  flex: 1 1 140px;
+  min-width: 140px;
+  border-radius: 10px; border: 1px solid rgba(255,255,255,.2);
+  padding: 8px 10px; background: rgba(255,255,255,.06); color: #fff;
+}
+
+.partners-pill__footer{
+  display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;
+}
+
 /* Pill générique */
 .partners-pill{ position: relative; }
 .partners-pill__btn{
@@ -975,7 +1004,10 @@ input[type="range"]{ width:100%; }
 .partners-cards{
   max-width: 1200px; margin: 18px auto 0;
   display: grid; gap: 18px;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: 1fr;
+}
+@media (min-width: 980px){
+  .partners-cards{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .partners-loading, .partners-empty{
   text-align: center; opacity: .8; padding: 24px;
