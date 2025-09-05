@@ -2,7 +2,7 @@
 
 /* ========= Config ========= */
 const API_URL = "https://api.airtable.com/v0";
-const BASE_ID = process.env.AIRTABLE_BASE_ID || "appkxlroj23rDP2Ep";                 // ex: appXXXXXXXXXXXX
+const BASE_ID = process.env.AIRTABLE_BASE_ID ;
 const API_TOKEN = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN || "";
 
 const ADS = process.env.AIRTABLE_PARTNERS_ADS || "Partenaires_Annonces";           // table des annonces
@@ -213,4 +213,52 @@ export async function createContactRequest(payload: {
     ],
   };
   return airPost(encodeURIComponent(CONTACTS), body);
+}
+
+/** Création d’une annonce dans Airtable (table Partenaires_Annonces) */
+export async function createPartnerAd(payload: {
+  tournoi: string;
+  ville: string;
+  dept: string;
+  date_text?: string;
+  tableau: string;
+  sexe: string;
+  classement: string;
+  age?: number;
+  age_ok: boolean;
+  recherche_sexe?: string;
+  recherche_classement?: string[];   // déjà normalisé en tableau
+  email: string;
+  message?: string;
+}) {
+  // Colonnes Airtable (exactes) :
+  // "Tournoi", "Ville", "Département", "Date", "Tableau",
+  // "Sexe", "Classement", "Âge", "Âge_Ok",
+  // "Recherche Sexe", "Recherche Classement",
+  // "Contact (e-mail)", "Notes", "Statut", "Validée"
+  const body = {
+    records: [
+      {
+        fields: {
+          "Tournoi": payload.tournoi,
+          "Ville": payload.ville,
+          "Département": payload.dept,
+          "Date": payload.date_text || "",
+          "Tableau": payload.tableau,
+          "Sexe": payload.sexe,
+          "Classement": payload.classement,
+          "Âge": payload.age ?? null,
+          "Âge_Ok": payload.age_ok ? true : false,
+          "Recherche Sexe": payload.recherche_sexe || "",
+          "Recherche Classement": (payload.recherche_classement || []).join(", "),
+          "Contact (e-mail)": payload.email,
+          "Notes": payload.message || "",
+          "Statut": "Actif",
+          "Validée": false
+        }
+      }
+    ]
+  };
+
+  return airPost(encodeURIComponent(ADS), body);
 }
