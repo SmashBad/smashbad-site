@@ -3,19 +3,23 @@ import { listAdsPublic } from "../../../lib/data/airtable_annonces_partenaires";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { q, depts, tableaux, classements, max } = req.query;
+    const q = req.query;
 
-    const data = await listAdsPublic({
-      search: typeof q === "string" ? q : undefined,
-      depts: typeof depts === "string" ? depts.split(",").map(s => s.trim()) : undefined,
-      tableaux: typeof tableaux === "string" ? tableaux.split(",").map(s => s.trim()) : undefined,
-      classements: typeof classements === "string" ? classements.split(",").map(s => s.trim()) : undefined,
-      maxRecords: typeof max === "string" ? Number(max) : undefined,
-    });
+    const toArr = (v: string | string[] | undefined) =>
+      (Array.isArray(v) ? v.join(",") : (v || ""))
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
 
-    res.status(200).json({ ok: true, count: data.length, items: data });
+    const depts       = toArr(q.dept as any);
+    const tableaux    = toArr(q.tableau as any);
+    const classements = toArr(q.classement as any);
+    const search      = typeof q.search === "string" ? q.search : undefined;
+    const sort        = (q.sort === "date-desc" || q.sort === "recents") ? (q.sort as any) : "date-asc";
+
+    const items = await listAdsPublic({ depts, tableaux, classements, search, maxRecords: 200, sort });
+    res.status(200).json({ items });
   } catch (e: any) {
-    console.error("[partners] API error:", e?.message || e);
-    res.status(500).json({ ok: false, error: e?.message || "Unknown error" });
+    res.status(500).json({ error: e?.message || "Server error" });
   }
 }
