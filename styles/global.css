@@ -756,18 +756,21 @@ input[type="range"]{ width:100%; }
 .partners-card__head{
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   margin-bottom: 10px;
-  min-height:48px;
+  min-height:52px;
 }
 .partners-card__title{
   font-family: "Outfit", system-ui, sans-serif;
   font-weight: 800; font-size: clamp(18px, 2.4vw, 26px);
   margin: 0;
+  line-height: 1.15;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.partners-card__ext{ border-radius: 12px; padding: 8px 12px; }
+.partners-card__ext{ border-radius: 12px; padding: 8px 12px; white-space:nowrap; flex-shrink:0; }
 
 .partners-card__meta{
   list-style: none; padding: 0; margin: 10px 0 10px;
-  display: grid; gap: 8px; font-size: 15px;
+  display: grid; gap: 8px; font-size: 15px; line-height: 1.45;
 }
 .partners-card__meta li { display: flex; align-items: center; gap: 10px; line-height: 1.25; }
 
@@ -784,7 +787,7 @@ input[type="range"]{ width:100%; }
 .partners-card__meta .i-date::before   { background-image: url("/Planning.svg"); }
 .partners-card__meta .i-place::before  { background-image: url("/Location.svg"); }
 
-.partners-card__desc{ margin: 12px 0 10px; display: grid; gap: 10px; font-size: 15px; }
+.partners-card__desc{ margin: 12px 0 10px; display: grid; gap: 10px; font-size: 15px; line-height: 1.45;}
 .desc-line{ display: flex; gap: 8px; align-items: baseline; }
 .desc-line.i-id::before     { background-image: url("/Id.svg"); }
 .desc-line.i-draw::before   { background-image: url("/Trophy.svg"); }
@@ -803,3 +806,5 @@ input[type="range"]{ width:100%; }
 }
 .partners-filterbar__label--split{ margin-left: 16px; }
 
+display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;

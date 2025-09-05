@@ -22,6 +22,8 @@ const SORTS: { key: SortKey; label: string }[] = [
   { key: "date-desc", label: "date : anti-chronologique" },
   { key: "recents",   label: "annonces récentes" },
 ];
+/* -- esapce insécable -- */
+const NBSP = "\u00A0"; 
 
 /* ---------- Helpers ---------- */
 const fmtDate = (iso?: string) => {
@@ -29,6 +31,37 @@ const fmtDate = (iso?: string) => {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return String(iso);
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+};
+
+// normalise beaucoup de variantes "sexe"
+const normalizeSex = (raw?: string) => {
+  const s = (raw || "").toLowerCase();
+  if (/^h|hom/i.test(s) || /masc/.test(s) || s === "m") return "H" as const;
+  if (/^f|fem/i.test(s) || /fém/.test(s))               return "F" as const;
+  return "AUTRE" as const;
+};
+
+const nounsForSex = (sexRaw?: string) => {
+  const s = normalizeSex(sexRaw);
+  if (s === "H") return { noun:"joueur",  classWord:"classé"   };
+  if (s === "F") return { noun:"joueuse", classWord:"classée"  };
+  return            { noun:"joueur·se", classWord:"classé·e" };
+};
+
+const expandTableau = (t?: string) => {
+  const x = (t || "").toUpperCase().trim();
+  if (x === "DD" || x === "DOUBLE DAME")        return "Double Dame";
+  if (x === "DH" || x === "DOUBLE HOMME")       return "Double Homme";
+  if (x === "DM" || x === "DOUBLE MIXTE")       return "Double Mixte";
+  if (x === "DI" || x === "DOUBLE INTERGENRE")  return "Double Intergenre";
+  return (t || "").trim();
+};
+
+const listWithOu = (arr: string[]) => {
+  const clean = arr.map(s => s.trim()).filter(Boolean);
+  if (clean.length <= 1) return clean.join("");
+  if (clean.length === 2) return `${clean[0]}${NBSP}ou${NBSP}${clean[1]}`;
+  return `${clean.slice(0, -1).join(", ")}${NBSP}ou${NBSP}${clean[clean.length - 1]}`;
 };
 
 function sexeLabel(s?: string) {
@@ -264,17 +297,19 @@ export default function PartenairesPage() {
   /* ----- Fetch des annonces (via /api) ----- */
   useEffect(() => {
     const url = new URL("/api/partners/list", window.location.origin);
-    if (depts.length) url.searchParams.set("dept", depts.join(","));
-    if (tableaux.length) url.searchParams.set("tableau", tableaux.join(","));
+    if (depts.length)       url.searchParams.set("dept", depts.join(","));
+    if (tableaux.length)    url.searchParams.set("tableau", tableaux.join(","));
     if (classements.length) url.searchParams.set("classement", classements.join(","));
+    url.searchParams.set("sort", sort); // 👈
 
     setLoading(true);
     fetch(url.toString())
-      .then((r) => r.json())
-      .then((d) => setItems(d.items || []))
+      .then(r => r.json())
+      .then(d => setItems(d.items || []))
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
-  }, [depts, tableaux, classements]);
+  }, [depts, tableaux, classements, sort]); // 👈 n’oublie pas "sort"
+
 
   /* ----- Tri client ----- */
   const sorted = useMemo(() => {
@@ -343,97 +378,82 @@ export default function PartenairesPage() {
               <header className="partners-card__head">
                 <h3 className="partners-card__title">{tournoi || "Annonce"}</h3>
 
-                <button
-                  type="button"
-                  className="btn btn--ghost is-soon partners-card__ext"
-                  aria-disabled="true"
-                  title="Bientôt disponible"
-                >
-                  Fiche BadNet
+                <button type="button" className="btn btn--ghost is-soon partners-card__ext" aria-disabled="true" title="Bientôt disponible">
+                  <span className="nowrap">Fiche BadNet</span>
                   <span className="tooltip">Bientôt disponible</span>
                 </button>
+
               </header>
 
               {/* Métadonnées : dates + lieu */}
               <ul className="partners-card__meta">
                 <li className="i-date">
                   {ad.dates?.start && ad.dates?.end ? (
-                    <>Du <span className="strong">{fmtDate(ad.dates.start)}</span> au <span className="strong">{fmtDate(ad.dates.end)}</span></>
+                    <>Du {NBSP}<span className="strong">{fmtDate(ad.dates.start)}</span>{NBSP}au{NBSP}<span className="strong">{fmtDate(ad.dates.end)}</span></>
                   ) : ad.dates?.start ? (
                     <><span className="strong">{fmtDate(ad.dates.start)}</span></>
                   ) : ad.dates?.text ? (
                     <>{ad.dates.text}</>
-                  ) : (
-                    <>Dates à préciser</>
-                  )}
+                  ) : <>Dates à préciser</>}
                 </li>
 
                 <li className="i-place">
                   <span className="strong">{(ad.ville || "").trim()}</span>
-                  {ad.dept ? <><span>,&nbsp;</span><span className="strong">{ad.dept}</span></> : null}
+                  {ad.dept ? <><span>,{NBSP}</span><span className="strong">{ad.dept}</span></> : null}
                 </li>
+
 
               </ul>
 
-              {/* 1) identité */}
+              {/* identité */}
               <div className="desc-line i-id">
                 {(() => {
-                  const s = (ad.sexe || "").toUpperCase();
-                  const isH = s === "H", isF = s === "F";
-                  const noun = isH ? "joueur" : isF ? "joueuse" : "joueur·se";
-                  const classWord = isH ? "classé" : isF ? "classée" : "classé·e";
-
+                  const { noun, classWord } = nounsForSex(ad.sexe);
+                  const cl  = (ad.classement || "").trim();
+                  const age = ad.age;
                   return (
                     <>
-                      Je suis <span className="strong">{noun}</span>
-                      {ad.classement ? <> {classWord} <span className="strong">{(ad.classement||"").trim()}</span></> : null}
-                      {ad.age_hidden ? <> qui ne souhaite pas préciser son âge</>
-                                    : (ad.age ? <> de <span className="strong">{ad.age}</span> ans</> : null)}
+                      Je suis {NBSP}<span className="strong">{noun}</span>
+                      {cl && <> {NBSP}{classWord}{NBSP}<span className="strong">{cl}</span></>}
+                      {ad.age_hidden
+                        ? <> {NBSP}qui ne souhaite pas préciser son âge</>
+                        : (typeof age === "number" && !Number.isNaN(age))
+                            ? <> {NBSP}de{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
+                            : null}
                     </>
                   );
                 })()}
               </div>
 
-              {/* 2) tableau souhaité */}
+              {/* tableau */}
               {ad.tableau && (
                 <div className="desc-line i-draw">
-                  Je souhaite jouer en <span className="strong">{(ad.tableau||"").replace(/^DD$/,"Double Dame").replace(/^DH$/,"Double Homme").replace(/^DM$/,"Double Mixte").replace(/^DI$/,"Double Intergenre")}</span>
+                  Je souhaite jouer en {NBSP}<span className="strong">{expandTableau(ad.tableau)}</span>
                 </div>
               )}
 
-              {/* 3) partenaire recherché (sexe + classements “R5 ou R6”) */}
+              {/* recherche */}
               {(ad.rechercheSexe || ad.rechercheClassement) && (
                 <div className="desc-line i-search">
                   {(() => {
-                    const sw = (ad.rechercheSexe || "").toUpperCase();
-                    const partnerNoun = sw === "H" ? "joueur" : sw === "F" ? "joueuse" : "joueur·se";
-                    const partnerClass = sw === "H" ? "classé" : sw === "F" ? "classée" : "classé·e";
+                    const wanted = nounsForSex(ad.rechercheSexe);
                     const raw = Array.isArray(ad.rechercheClassement)
                       ? ad.rechercheClassement
                       : (ad.rechercheClassement ? String(ad.rechercheClassement).split(/[,\s;/]+/) : []);
-                    const list = raw.filter(Boolean).map(s => s.trim());
-                    const txt = list.length === 0 ? ""
-                      : list.length === 1 ? list[0]
-                      : list.length === 2 ? `${list[0]} ou ${list[1]}`
-                      : `${list.slice(0, -1).join(", ")} ou ${list[list.length - 1]}`;
-
+                    const list = listWithOu(raw);
                     return (
                       <>
-                        Je souhaite jouer avec <span className="strong">{partnerNoun}</span>
-                        {txt ? <> {partnerClass} <span className="strong">{txt}</span></> : null}
+                        Je souhaite jouer avec {NBSP}<span className="strong">{wanted.noun}</span>
+                        {list && <> {NBSP}{wanted.classWord}{NBSP}<span className="strong">{list}</span></>}
                       </>
                     );
                   })()}
                 </div>
               )}
 
-
-
               {/* CTA (temporaire : lien externe) */}
               <div className="partners-card__cta">
-                <Link className="cta-primary" href={`/partenaires/contact/${ad.id}`}>
-                  Contacter
-                </Link>
+                <Link className="cta-primary" href={`/partenaires/contact/${ad.id}`}>Contacter</Link>
               </div>
 
             </article>
