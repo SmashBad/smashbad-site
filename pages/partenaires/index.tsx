@@ -25,7 +25,9 @@ const SORTS: { key: SortKey; label: string }[] = [
 /* -- esapce insécable -- */
 const NBSP = "\u00A0"; 
 
-/* ---------- Helpers ---------- */
+/* ---------- Helpers communs (unique) ---------- */
+const clean = (v: unknown) => (v ?? "").toString().trim();
+
 const fmtDate = (iso?: string) => {
   if (!iso) return "";
   const d = new Date(iso);
@@ -33,77 +35,29 @@ const fmtDate = (iso?: string) => {
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
 };
 
-// normalise beaucoup de variantes "sexe"
-const normalizeSex = (raw?: string) => {
-  const s = (raw || "").toLowerCase();
-  if (/^h|hom/i.test(s) || /masc/.test(s) || s === "m") return "H" as const;
-  if (/^f|fem/i.test(s) || /fém/.test(s))               return "F" as const;
-  return "AUTRE" as const;
+// Normalise beaucoup de variantes saisies pour le sexe
+type SexKind = "H" | "F" | "AUTRE";
+const normalizeSex = (raw?: string): SexKind => {
+  const s = clean(raw).toLowerCase();
+  if (["h", "homme", "m", "masculin", "male"].includes(s)) return "H";
+  if (["f", "femme", "w", "féminin", "feminin", "female"].includes(s)) return "F";
+  return "AUTRE";
 };
 
+// Un seul nounsForSex (renvoie aussi les mots pour la personne recherchée)
 const nounsForSex = (sexRaw?: string) => {
   const s = normalizeSex(sexRaw);
-  if (s === "H") return { noun:"joueur",  classWord:"classé"   };
-  if (s === "F") return { noun:"joueuse", classWord:"classée"  };
-  return            { noun:"joueur·se", classWord:"classé·e" };
-};
-
-const expandTableau = (t?: string) => {
-  const x = (t || "").toUpperCase().trim();
-  if (x === "DD" || x === "DOUBLE DAME")        return "Double Dame";
-  if (x === "DH" || x === "DOUBLE HOMME")       return "Double Homme";
-  if (x === "DM" || x === "DOUBLE MIXTE")       return "Double Mixte";
-  if (x === "DI" || x === "DOUBLE INTERGENRE")  return "Double Intergenre";
-  return (t || "").trim();
-};
-
-const listWithOu = (arr: string[]) => {
-  const clean = arr.map(s => s.trim()).filter(Boolean);
-  if (clean.length <= 1) return clean.join("");
-  if (clean.length === 2) return `${clean[0]}${NBSP}ou${NBSP}${clean[1]}`;
-  return `${clean.slice(0, -1).join(", ")}${NBSP}ou${NBSP}${clean[clean.length - 1]}`;
-};
-
-function sexeLabel(s?: string) {
-  if (s === "F") return { personne: "une femme", classe: "classée" };
-  if (s === "H") return { personne: "un homme", classe: "classé" };
-  return { personne: "un·e joueur·se", classe: "classé·e" };
-}
-
-// --- Helpers "propres" ---
-const clean = (v: unknown) => (v ?? "").toString().trim();
-
-type SexKind = "H" | "F" | "AUTRE";
-
-const fullTableau = (t?: string) => {
-  const x = clean(t).toUpperCase();
-  if (x === "DH" || x === "DOUBLE HOMME") return "Double Homme";
-  if (x === "DD" || x === "DOUBLE DAME")  return "Double Dame";
-  if (x === "DM" || x === "DOUBLE MIXTE") return "Double Mixte";
-  if (x === "DI" || x === "DOUBLE INTERGENRE") return "Double Intergenre";
-  // déjà en toutes lettres, on renvoie tel quel
-  return clean(t);
-};
-
-function nounsForSex(sexRaw?: string) {
-  const s = clean(sexRaw).toLowerCase();
-  const isH = ["h", "homme", "m", "male", "masculin"].includes(s);
-  const isF = ["f", "femme", "w", "female", "féminin", "feminin"].includes(s);
-  const sex: SexKind = isH ? "H" : isF ? "F" : "AUTRE";
-
-  if (sex === "H") {
+  if (s === "H") {
     return {
-      // pour la personne qui poste
       art: "un",
       noun: "joueur",
       classWord: "classé",
-      // pour la personne recherchée
       partnerArt: "un",
       partnerNoun: "joueur",
       partnerClass: "classé",
     };
   }
-  if (sex === "F") {
+  if (s === "F") {
     return {
       art: "une",
       noun: "joueuse",
@@ -121,42 +75,51 @@ function nounsForSex(sexRaw?: string) {
     partnerNoun: "joueur·se",
     partnerClass: "classé·e",
   };
-}
+};
 
-/** "Je suis une joueuse classée R5 de 25 ans" / "... qui ne souhaite pas préciser son âge" / "... âge non précisé" */
-function formatPlayer(sex?: string, classement?: string, age?: number | string) {
+// Tableau toujours en toutes lettres
+const expandTableau = (t?: string) => {
+  const x = clean(t).toUpperCase();
+  if (x === "DD" || x === "DOUBLE DAME")        return "Double Dame";
+  if (x === "DH" || x === "DOUBLE HOMME")       return "Double Homme";
+  if (x === "DM" || x === "DOUBLE MIXTE")       return "Double Mixte";
+  if (x === "DI" || x === "DOUBLE INTERGENRE")  return "Double Intergenre";
+  return clean(t);
+};
+
+// Liste naturelle "R5 ou R6" / "D9, D8, D7 ou R6"
+const listWithOu = (arr: string[]) => {
+  const a = arr.map(s => clean(s)).filter(Boolean);
+  if (a.length <= 1) return a.join("");
+  if (a.length === 2) return `${a[0]}${NBSP}ou${NBSP}${a[1]}`;
+  return `${a.slice(0, -1).join(", ")}${NBSP}ou${NBSP}${a[a.length - 1]}`;
+};
+
+/** "Je suis une joueuse classée R5 de 25 ans" / "... qui ne souhaite pas préciser son âge" */
+const formatPlayer = (sex?: string, classement?: string, age?: number | string) => {
   const { art, noun, classWord } = nounsForSex(sex);
   const cl = clean(classement);
   const ageStr = clean(age);
-  let agePart = "";
-
-  if (ageStr) {
-    // valeur présente et non vide
-    agePart = ` de ${ageStr} ans`;
-  } else {
-    // pas d’info / non précisé
-    agePart = ` qui ne souhaite pas préciser son âge`;
-  }
-
+  const agePart = ageStr ? ` de ${ageStr} ans` : ` qui ne souhaite pas préciser son âge`;
   return `Je suis ${art} ${noun} ${classWord} ${cl}${agePart}`.replace(/\s+/g, " ").trim();
-}
+};
 
-/** "Double Homme" (jamais d’abréviation) */
-function formatWishTableau(t?: string) {
-  const ft = fullTableau(t);
-  return `Je souhaite jouer en ${ft}`.trim();
-}
+/** "Je souhaite jouer en Double Homme" */
+const formatWishTableau = (t?: string) => `Je souhaite jouer en ${expandTableau(t)}`.trim();
 
-/** Classements de recherche : 
- * 1 -> "R6" ; 2 -> "R5 ou R6" ; 3+ -> "D9, D8, D7 ou R6"
- */
-function formatListWithOu(values: string[]) {
-  const arr = values.map(v => clean(v)).filter(Boolean);
-  if (arr.length <= 1) return arr.join(", ");
-  if (arr.length === 2) return `${arr[0]} ou ${arr[1]}`;
-  const last = arr[arr.length - 1];
-  return `${arr.slice(0, -1).join(", ")} ou ${last}`;
-}
+/** "Je souhaite jouer avec une joueuse classée R5 ou R6" (accord selon Recherche Sexe) */
+const formatSearch = (sexWanted?: string, classementsWanted?: string[] | string) => {
+  const { partnerArt, partnerNoun, partnerClass } = nounsForSex(sexWanted);
+  const list = Array.isArray(classementsWanted)
+    ? classementsWanted
+    : (clean(classementsWanted) ? clean(classementsWanted).split(/[,\s;/]+/) : []);
+  const txt = listWithOu(list);
+  return txt
+    ? `Je souhaite jouer avec ${partnerArt} ${partnerNoun} ${partnerClass} ${txt}`
+    : `Je souhaite jouer avec ${partnerArt} ${partnerNoun}`;
+};
+
+
 
 
 
