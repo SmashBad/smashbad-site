@@ -15,9 +15,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const tableaux    = toArr(q.tableau as any);
     const classements = toArr(q.classement as any);
     const search      = typeof q.search === "string" ? q.search : undefined;
-    const sort        = (q.sort === "date-desc" || q.sort === "recents") ? (q.sort as any) : "date-asc";
 
-    const items = await listAdsPublic({ depts, tableaux, classements, search, maxRecords: 200, sort });
+    const items = await listAdsPublic({
+      depts,
+      tableaux,
+      classements,
+      search,
+      maxRecords: 200,
+    });
+
     res.status(200).json({ items });
   } catch (e: any) {
     res.status(500).json({ error: e?.message || "Server error" });
