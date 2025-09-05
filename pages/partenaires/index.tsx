@@ -305,9 +305,12 @@ export default function PartenairesPage() {
 
         {/* FILTRES */}
         <div className="partners-filterbar" role="group" aria-label="Filtres d’annonces">
+          <span className="partners-filterbar__label">Filtrer par :</span>
           <MultiFilterPill label="Département" selected={depts} onChange={setDepts} options={DEPTS} width={260} placeholder="Département (ex: 92, 2A, 971)" normalize={normDept}/>
           <MultiFilterPill label="Tableau"     selected={tableaux} onChange={setTableaux} options={[...TABLEAUX]} width={260}/>
           <MultiFilterPill label="Classement"  selected={classements} onChange={setClassements} options={[...CLASSEMENTS]} width={260}/>
+          
+          <span className="partners-filterbar__label partners-filterbar__label--split">Trier par :</span>
           <SortPill sort={sort} setSort={setSort}/>
         </div>
       </header>
@@ -354,107 +357,85 @@ export default function PartenairesPage() {
               {/* Métadonnées : dates + lieu */}
               <ul className="partners-card__meta">
                 <li className="i-date">
-                  {ad.dates?.start || ad.dates?.end ? (
-                    <>Du {fmtDate(ad.dates?.start)} au {fmtDate(ad.dates?.end)}</>
+                  {ad.dates?.start && ad.dates?.end ? (
+                    <>Du <span className="strong">{fmtDate(ad.dates.start)}</span> au <span className="strong">{fmtDate(ad.dates.end)}</span></>
+                  ) : ad.dates?.start ? (
+                    <><span className="strong">{fmtDate(ad.dates.start)}</span></>
+                  ) : ad.dates?.text ? (
+                    <>{ad.dates.text}</>
                   ) : (
-                    <>{clean(ad.dates?.text) || "Dates à préciser"}</>
+                    <>Dates à préciser</>
                   )}
                 </li>
+
                 <li className="i-place">
-                  <Em>{clean(ad.ville)}</Em>
-                  {ad.dept && (
-                    <>
-                      {", "}<Em>{ad.dept}</Em>
-                    </>
-                  )}
+                  <span className="strong">{(ad.ville || "").trim()}</span>
+                  {ad.dept ? <><span>,&nbsp;</span><span className="strong">{ad.dept}</span></> : null}
                 </li>
+
               </ul>
 
-              {/* Description */}
-              <div className="partners-card__desc">
-                {/* Ligne identité */}
+              {/* 1) identité */}
+              <div className="desc-line i-id">
                 {(() => {
-                  const { art, noun, classWord } = nounsForSex(ad.sexe);
-                  const cl = clean(ad.classement);
-                  const ageNum = typeof ad.age === "number" ? ad.age : undefined;
+                  const s = (ad.sexe || "").toUpperCase();
+                  const isH = s === "H", isF = s === "F";
+                  const noun = isH ? "joueur" : isF ? "joueuse" : "joueur·se";
+                  const classWord = isH ? "classé" : isF ? "classée" : "classé·e";
 
                   return (
-                    <div className="desc-line i-id">
-                      {/* Je suis une / un / un·e  */}
-                      Je suis {art} {noun}
-                      {cl && (
-                        <>
-                          {" "} {classWord} <Em>{cl}</Em>
-                        </>
-                      )}
-                      {ad.age_hidden
-                        ? " qui ne souhaite pas préciser son âge"
-                        : ageNum
-                        ? (
-                            <>
-                              {" "}de <Em>{ageNum}</Em> ans
-                            </>
-                          )
-                        : ""}
-                    </div>
+                    <>
+                      Je suis <span className="strong">{noun}</span>
+                      {ad.classement ? <> {classWord} <span className="strong">{(ad.classement||"").trim()}</span></> : null}
+                      {ad.age_hidden ? <> qui ne souhaite pas préciser son âge</>
+                                    : (ad.age ? <> de <span className="strong">{ad.age}</span> ans</> : null)}
+                    </>
                   );
                 })()}
-
-                {/* Ligne tableau souhaité */}
-                {ad.tableau && (
-                  <div className="desc-line i-draw">
-                    Je souhaite jouer en <Em>{ad.tableau}</Em>
-                  </div>
-                )}
-
-                {/* Ligne recherche partenaire */}
-                {(ad.rechercheSexe || ad.rechercheClassement) && (
-                  <div className="desc-line i-search">
-                    {(() => {
-                      const { partnerArt, partnerNoun, partnerClass } = nounsForSex(ad.rechercheSexe);
-
-                      // accepte "R5,R6", "R5 R6", "R5;R6"…
-                      const list = Array.isArray(ad.rechercheClassement)
-                        ? ad.rechercheClassement
-                        : (clean(ad.rechercheClassement)
-                            ? clean(ad.rechercheClassement).split(/[,\s;/]+/).filter(Boolean)
-                            : []);
-
-                      const txt =
-                        list.length <= 1
-                          ? list.join("")
-                          : list.length === 2
-                            ? `${list[0]} ou ${list[1]}`
-                            : `${list.slice(0, -1).join(", ")} ou ${list[list.length - 1]}`;
-
-                      return (
-                        <>
-                          Je souhaite jouer avec {partnerArt} <Em>{partnerNoun}</Em>
-                          {txt && (
-                            <>
-                              {" "} {partnerClass} <Em>{txt}</Em>
-                            </>
-                          )}
-                        </>
-                      );
-                    })()}
-                  </div>
-                )}
-
               </div>
+
+              {/* 2) tableau souhaité */}
+              {ad.tableau && (
+                <div className="desc-line i-draw">
+                  Je souhaite jouer en <span className="strong">{(ad.tableau||"").replace(/^DD$/,"Double Dame").replace(/^DH$/,"Double Homme").replace(/^DM$/,"Double Mixte").replace(/^DI$/,"Double Intergenre")}</span>
+                </div>
+              )}
+
+              {/* 3) partenaire recherché (sexe + classements “R5 ou R6”) */}
+              {(ad.rechercheSexe || ad.rechercheClassement) && (
+                <div className="desc-line i-search">
+                  {(() => {
+                    const sw = (ad.rechercheSexe || "").toUpperCase();
+                    const partnerNoun = sw === "H" ? "joueur" : sw === "F" ? "joueuse" : "joueur·se";
+                    const partnerClass = sw === "H" ? "classé" : sw === "F" ? "classée" : "classé·e";
+                    const raw = Array.isArray(ad.rechercheClassement)
+                      ? ad.rechercheClassement
+                      : (ad.rechercheClassement ? String(ad.rechercheClassement).split(/[,\s;/]+/) : []);
+                    const list = raw.filter(Boolean).map(s => s.trim());
+                    const txt = list.length === 0 ? ""
+                      : list.length === 1 ? list[0]
+                      : list.length === 2 ? `${list[0]} ou ${list[1]}`
+                      : `${list.slice(0, -1).join(", ")} ou ${list[list.length - 1]}`;
+
+                    return (
+                      <>
+                        Je souhaite jouer avec <span className="strong">{partnerNoun}</span>
+                        {txt ? <> {partnerClass} <span className="strong">{txt}</span></> : null}
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
+
 
 
               {/* CTA (temporaire : lien externe) */}
               <div className="partners-card__cta">
-                <a
-                  className="cta-primary"
-                  href={ad.lienBadNet || "https://badnet.fr/"}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <Link className="cta-primary" href={`/partenaires/contact/${ad.id}`}>
                   Contacter
-                </a>
+                </Link>
               </div>
+
             </article>
           );
         })}

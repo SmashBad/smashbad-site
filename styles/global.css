@@ -756,6 +756,7 @@ input[type="range"]{ width:100%; }
 .partners-card__head{
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   margin-bottom: 10px;
+  min-height:48px;
 }
 .partners-card__title{
   font-family: "Outfit", system-ui, sans-serif;
@@ -775,7 +776,7 @@ input[type="range"]{ width:100%; }
 .desc-line::before {
   content: "";
   display: inline-block;
-  width: 20px; height: 20px; margin-right: 10px; flex: 0 0 20px;
+  width: 20px; height: 20px; margin-right: 8px; flex: 0 0 20px;
   background: center/contain no-repeat;
   filter: drop-shadow(0 0 0 rgba(0,0,0,0));
   align-self: center;
@@ -789,7 +790,16 @@ input[type="range"]{ width:100%; }
 .desc-line.i-draw::before   { background-image: url("/Trophy.svg"); }
 .desc-line.i-search::before { background-image: url("/LookFor.svg"); }
 
-.partners-card__cta{ display: flex; justify-content: center; margin-top: 18px; }
+.partners-card__cta{ display: flex; justify-content: center; margin-top: 14px; min-height: 52px;; }
+
 .partners-card__cta .cta-primary{ border-radius: 999px; padding: 12px 22px; }
 
 .partners-em { font-weight: 800; }
+
+.strong { font-weight: 800; }
+
+.partners-filterbar__label{
+  font-weight:700; opacity:.85; margin: 0 6px;
+}
+.partners-filterbar__label--split{ margin-left: 16px; }
+

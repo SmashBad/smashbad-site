@@ -134,51 +134,35 @@ export async function listAdsPublic(query: {
   const paramsBase: Record<string, string> = {
     pageSize: String(query.maxRecords || 50),
   };
-  // On ne met "view" que si elle est définie (ENV) et non vide
-  const useView = !!(VIEW_PUBLIC && VIEW_PUBLIC.trim());
-  if (useView) paramsBase.view = VIEW_PUBLIC.trim();
 
+  const esc = (s: string) => String(s).replace(/'/g, "\\'");
   const orsEq = (field: string, values: string[]) =>
-    values.length ? `OR(${values.map(v => `{${field}} = '${esc(v)}'`).join(",")})` : "";
+    values.length ? `OR(${values.map(v => `{${field}}='${esc(v)}'`).join(",")})` : "";
 
-  const formula: string[] = [];
+  // ⚠️ Clause de modération toujours active
+  const formula: string[] = [
+    `{Validée}=TRUE()`,
+    `{Statut}='actif'`,
+   ];
+
   if (query.depts?.length)       formula.push(orsEq("Département", query.depts));
   if (query.tableaux?.length)    formula.push(orsEq("Tableau", query.tableaux));
-  if (query.classements?.length) formula.push(`OR(${query.classements.map(c => `SEARCH('${esc(c)}', {Classement})`).join(",")})`);
-  if (query.search)              formula.push(
-    `OR(SEARCH(LOWER('${esc(query.search)}'), LOWER({Titre})),
-        SEARCH(LOWER('${esc(query.search)}'), LOWER({Ville})),
-        SEARCH(LOWER('${esc(query.search)}'), LOWER({Tournoi})))`
-  );
-  if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
-
-  // 2) Premier essai (avec view si fournie)
-  let json = (await airGet(encodeURIComponent(ADS), paramsBase)) as AirtableListResponse;
-  let records: AdRecord[] = json.records || [];
-
-  // 3) Auto-fallback : si 0 record ET qu’on avait mis une view → retenter sans view
-  if (records.length === 0 && useView) {
-    const { view, ...paramsNoView } = paramsBase;
-    try {
-      const json2 = (await airGet(encodeURIComponent(ADS), paramsNoView)) as AirtableListResponse;
-      const records2: AdRecord[] = json2.records || [];
-      if (records2.length > 0) {
-        console.warn(
-          `[partners] 0 record avec view="${VIEW_PUBLIC}", mais ${records2.length} sans view. Vérifie le nom de vue ou ses filtres.`
-        );
-        records = records2;
-      }
-    } catch (e) {
-      // on ignore, c’était juste un fallback de diagnostic
-    }
+  if (query.classements?.length) {
+    // Classement peut contenir plusieurs valeurs, on fait un SEARCH
+    const ors = query.classements.map(c => `SEARCH('${esc(c)}',{Classement})`).join(",");
+    formula.push(`OR(${ors})`);
+  }
+  if (query.search) {
+    const s = esc(query.search.toLowerCase());
+    formula.push(
+      `OR(SEARCH('${s}',LOWER({Titre})),SEARCH('${s}',LOWER({Ville})),SEARCH('${s}',LOWER({Tournoi})))`
+    );
   }
 
-  // 4) Logs utiles (sans secrets)
-  console.log(
-    `[partners] fetched=${records.length} table="${ADS}" base="${(BASE_ID||'').slice(0,6)}…" view="${useView?VIEW_PUBLIC:''}"`
-  );
+  if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
 
-  return records.map(mapAd);
+  const json = (await airGet(encodeURIComponent(ADS), paramsBase)) as AirtableListResponse;
+  return (json.records || []).map(mapAd);
 }
 
 /* ========= Détail + e-mail privé auteur pour /contact ========= */
