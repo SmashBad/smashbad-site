@@ -142,10 +142,11 @@ export async function listAdsPublic(query: {
   // --- Filtre de modération tolérant ---
   // - {Validée} peut être TRUE() ou 1
   // - {Statut} ne doit PAS être "Archivé" (on accepte vide ou "Actif")
-  const moderation = `AND(
-    OR({Validée}=1, {Validée}=TRUE()),
-    IF({Statut}='Archivé', FALSE(), TRUE())
-  )`;
+  const moderation = `TRUE()`;
+  //`AND(
+  //  OR({Validée}=1, {Validée}=TRUE()),
+  //  IF({Statut}='Archivé', FALSE(), TRUE())
+  //)`;
 
   // --- Filtres utilisateur ---
   const formula: string[] = [moderation];
