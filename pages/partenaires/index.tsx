@@ -125,16 +125,6 @@ function formatListWithOu(values: string[]) {
   return `${arr.slice(0, -1).join(", ")} ou ${last}`;
 }
 
-/** "Je souhaite jouer avec un joueur classé R5 ou R6" (accord selon Recherche Sexe) */
-function formatSearch(sexWanted?: string, classementsWanted?: string[] | string) {
-  const { partner, partnerClass } = nounsForSex(sexWanted);
-  const list = Array.isArray(classementsWanted)
-    ? classementsWanted
-    : (clean(classementsWanted) ? clean(classementsWanted).split(/[,\s;/]+/) : []);
-  const txt = formatListWithOu(list);
-  if (txt) return `Je souhaite jouer avec ${partner} ${partnerClass} ${txt}`;
-  return `Je souhaite jouer avec ${partner}`;
-}
 
 
 function useOutsideClose<T extends HTMLElement>(open: boolean, onClose: () => void) {
@@ -421,8 +411,9 @@ export default function PartenairesPage() {
                 {(ad.rechercheSexe || ad.rechercheClassement) && (
                   <div className="desc-line i-search">
                     {(() => {
-                      const { partner, partnerClass } = nounsForSex(ad.rechercheSexe);
-                      // accepte "R5,R6", "R5 R6", etc.
+                      const { partnerArt, partnerNoun, partnerClass } = nounsForSex(ad.rechercheSexe);
+
+                      // accepte "R5,R6", "R5 R6", "R5;R6"…
                       const list = Array.isArray(ad.rechercheClassement)
                         ? ad.rechercheClassement
                         : (clean(ad.rechercheClassement)
@@ -438,7 +429,7 @@ export default function PartenairesPage() {
 
                       return (
                         <>
-                          Je souhaite jouer avec {partner}
+                          Je souhaite jouer avec {partnerArt} <Em>{partnerNoun}</Em>
                           {txt && (
                             <>
                               {" "} {partnerClass} <Em>{txt}</Em>
@@ -449,6 +440,7 @@ export default function PartenairesPage() {
                     })()}
                   </div>
                 )}
+
               </div>
 
 
