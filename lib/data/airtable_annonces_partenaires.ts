@@ -142,7 +142,7 @@ export async function listAdsPublic(query: {
   // ⚠️ Clause de modération toujours active
   const formula: string[] = [
     `{Validée}=TRUE()`,
-    `{Statut}='actif'`,
+    `{Statut}='Actif'`,
    ];
 
   if (query.depts?.length)       formula.push(orsEq("Département", query.depts));
