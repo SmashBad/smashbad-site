@@ -166,7 +166,7 @@ export async function listAdsPublic(query: {
   }
 
   // Applique la formule si nécessaire
-  //if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
+  if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
 
   // 2) Appel unique (sans "view")
   const json = (await airGet(encodeURIComponent(ADS), paramsBase)) as AirtableListResponse;
