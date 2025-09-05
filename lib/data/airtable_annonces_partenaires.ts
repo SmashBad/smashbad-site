@@ -135,34 +135,46 @@ export async function listAdsPublic(query: {
     pageSize: String(query.maxRecords || 50),
   };
 
-  const esc = (s: string) => String(s).replace(/'/g, "\\'");
+  // Helpers pour formules
   const orsEq = (field: string, values: string[]) =>
     values.length ? `OR(${values.map(v => `{${field}}='${esc(v)}'`).join(",")})` : "";
 
-  // ⚠️ Clause de modération toujours active
-  const formula: string[] = [
-    `{Validée}=TRUE()`,
-    `{Statut}='Actif'`,
-   ];
+  // --- Filtre de modération tolérant ---
+  // - {Validée} peut être TRUE() ou 1
+  // - {Statut} ne doit PAS être "Archivé" (on accepte vide ou "Actif")
+  const moderation = `AND(
+    OR({Validée}=1, {Validée}=TRUE()),
+    IF({Statut}='Archivé', FALSE(), TRUE())
+  )`;
+
+  // --- Filtres utilisateur ---
+  const formula: string[] = [moderation];
 
   if (query.depts?.length)       formula.push(orsEq("Département", query.depts));
   if (query.tableaux?.length)    formula.push(orsEq("Tableau", query.tableaux));
   if (query.classements?.length) {
-    // Classement peut contenir plusieurs valeurs, on fait un SEARCH
-    const ors = query.classements.map(c => `SEARCH('${esc(c)}',{Classement})`).join(",");
-    formula.push(`OR(${ors})`);
+    formula.push(`OR(${query.classements.map(c => `SEARCH('${esc(c)}', {Classement})`).join(",")})`);
   }
   if (query.search) {
-    const s = esc(query.search.toLowerCase());
     formula.push(
-      `OR(SEARCH('${s}',LOWER({Titre})),SEARCH('${s}',LOWER({Ville})),SEARCH('${s}',LOWER({Tournoi})))`
+      `OR(
+        SEARCH(LOWER('${esc(query.search)}'), LOWER({Titre})),
+        SEARCH(LOWER('${esc(query.search)}'), LOWER({Ville})),
+        SEARCH(LOWER('${esc(query.search)}'), LOWER({Tournoi}))
+      )`
     );
   }
 
+  // Applique la formule si nécessaire
   if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
 
+  // 2) Appel unique (sans "view")
   const json = (await airGet(encodeURIComponent(ADS), paramsBase)) as AirtableListResponse;
-  return (json.records || []).map(mapAd);
+  const records: AdRecord[] = json.records || [];
+
+  // 3) Log utile
+  console.log(`[partners] fetched=${records.length} (sans view) table="${ADS}" base="${(BASE_ID||'').slice(0,6)}…"`);
+  return records.map(mapAd);
 }
 
 /* ========= Détail + e-mail privé auteur pour /contact ========= */
