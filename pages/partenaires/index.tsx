@@ -54,16 +54,40 @@ const fullTableau = (t?: string) => {
 
 function nounsForSex(sexRaw?: string) {
   const s = clean(sexRaw).toLowerCase();
-  const isH =
-    s === "h" || s === "homme" || s === "m" || s === "male" || s === "masculin";
-  const isF =
-    s === "f" || s === "femme" || s === "w" || s === "female" || s === "féminin" || s === "feminin";
+  const isH = ["h", "homme", "m", "male", "masculin"].includes(s);
+  const isF = ["f", "femme", "w", "female", "féminin", "feminin"].includes(s);
   const sex: SexKind = isH ? "H" : isF ? "F" : "AUTRE";
-  if (sex === "H")
-    return { art: "un", noun: "joueur", classWord: "classé", partner: "un homme", partnerClass: "classé" };
-  if (sex === "F")
-    return { art: "une", noun: "joueuse", classWord: "classée", partner: "une femme", partnerClass: "classée" };
-  return { art: "un·e", noun: "joueur·se", classWord: "classé·e", partner: "un·e joueur·se", partnerClass: "classé·e" };
+
+  if (sex === "H") {
+    return {
+      // pour la personne qui poste
+      art: "un",
+      noun: "joueur",
+      classWord: "classé",
+      // pour la personne recherchée
+      partnerArt: "un",
+      partnerNoun: "joueur",
+      partnerClass: "classé",
+    };
+  }
+  if (sex === "F") {
+    return {
+      art: "une",
+      noun: "joueuse",
+      classWord: "classée",
+      partnerArt: "une",
+      partnerNoun: "joueuse",
+      partnerClass: "classée",
+    };
+  }
+  return {
+    art: "un·e",
+    noun: "joueur·se",
+    classWord: "classé·e",
+    partnerArt: "un·e",
+    partnerNoun: "joueur·se",
+    partnerClass: "classé·e",
+  };
 }
 
 /** "Je suis une joueuse classée R5 de 25 ans" / "... qui ne souhaite pas préciser son âge" / "... âge non précisé" */
@@ -347,7 +371,12 @@ export default function PartenairesPage() {
                   )}
                 </li>
                 <li className="i-place">
-                  <strong>{ville || "Ville ?"}</strong>{dept ? `, ${dept}` : ""}
+                  <Em>{clean(ad.ville)}</Em>
+                  {ad.dept && (
+                    <>
+                      {", "}<Em>{ad.dept}</Em>
+                    </>
+                  )}
                 </li>
               </ul>
 

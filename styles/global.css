@@ -778,6 +778,7 @@ input[type="range"]{ width:100%; }
   width: 20px; height: 20px; margin-right: 10px; flex: 0 0 20px;
   background: center/contain no-repeat;
   filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+  align-self: center;
 }
 .partners-card__meta .i-date::before   { background-image: url("/Planning.svg"); }
 .partners-card__meta .i-place::before  { background-image: url("/Location.svg"); }
