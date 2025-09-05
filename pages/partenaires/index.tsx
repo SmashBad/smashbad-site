@@ -22,8 +22,9 @@ const SORTS: { key: SortKey; label: string }[] = [
   { key: "date-desc", label: "date : anti-chronologique" },
   { key: "recents",   label: "annonces récentes" },
 ];
-/* -- esapce insécable -- */
-const NBSP = "\u00A0"; 
+
+/* -- espace insécable (pour coller les mots) -- */
+const NBSP = "\u00A0";
 
 /* ---------- Helpers communs (unique) ---------- */
 const clean = (v: unknown) => (v ?? "").toString().trim();
@@ -44,7 +45,7 @@ const normalizeSex = (raw?: string): SexKind => {
   return "AUTRE";
 };
 
-// Un seul nounsForSex (renvoie aussi les mots pour la personne recherchée)
+// Un seul nounsForSex (sert aussi pour la personne recherchée)
 const nounsForSex = (sexRaw?: string) => {
   const s = normalizeSex(sexRaw);
   if (s === "H") {
@@ -119,10 +120,7 @@ const formatSearch = (sexWanted?: string, classementsWanted?: string[] | string)
     : `Je souhaite jouer avec ${partnerArt} ${partnerNoun}`;
 };
 
-
-
-
-
+/* ---------- Utils UI ---------- */
 function useOutsideClose<T extends HTMLElement>(open: boolean, onClose: () => void) {
   const ref = useRef<T | null>(null);
   useEffect(() => {
@@ -235,10 +233,6 @@ function SortPill({ sort, setSort }: { sort: SortKey; setSort: (s: SortKey)=>voi
   );
 }
 
-const Em = ({ children }: { children: React.ReactNode }) => (
-  <span className="partners-em">{children}</span>
-);
-
 /* ===================== Page ===================== */
 export default function PartenairesPage() {
   const [items, setItems] = useState<Ad[]>([]);
@@ -263,7 +257,7 @@ export default function PartenairesPage() {
     if (depts.length)       url.searchParams.set("dept", depts.join(","));
     if (tableaux.length)    url.searchParams.set("tableau", tableaux.join(","));
     if (classements.length) url.searchParams.set("classement", classements.join(","));
-    url.searchParams.set("sort", sort); // 👈
+    url.searchParams.set("sort", sort);
 
     setLoading(true);
     fetch(url.toString())
@@ -271,10 +265,9 @@ export default function PartenairesPage() {
       .then(d => setItems(d.items || []))
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
-  }, [depts, tableaux, classements, sort]); // 👈 n’oublie pas "sort"
+  }, [depts, tableaux, classements, sort]);
 
-
-  /* ----- Tri client ----- */
+  /* ----- Tri client (au cas où) ----- */
   const sorted = useMemo(() => {
     const clone = [...items];
     const parseStart = (ad: Ad) => ad.dates?.start ? Date.parse(ad.dates.start) : Number.POSITIVE_INFINITY;
@@ -321,19 +314,9 @@ export default function PartenairesPage() {
         )}
 
         {sorted.map((ad) => {
-          // --- nettoyage & normalisation ---
           const tournoi   = clean(ad.tournoi || ad.titre);
           const ville     = clean(ad.ville);
           const dept      = clean(ad.dept);
-          const sex       = clean(ad.sexe);
-          const classement= clean(ad.classement);
-          const age = ad.age_hidden ? "" : (ad.age ?? ""); 
-
-          const wishTab   = fullTableau(ad.tableau);
-          // recherche de classement : string "R5,R6" OU tableau
-          const searchCls = Array.isArray(ad.rechercheClassement)
-            ? ad.rechercheClassement.map(clean)
-            : (clean(ad.rechercheClassement) ? clean(ad.rechercheClassement).split(/[,\s;/]+/) : []);
 
           return (
             <article key={ad.id} className="partners-card">
@@ -345,7 +328,6 @@ export default function PartenairesPage() {
                   <span className="nowrap">Fiche BadNet</span>
                   <span className="tooltip">Bientôt disponible</span>
                 </button>
-
               </header>
 
               {/* Métadonnées : dates + lieu */}
@@ -361,18 +343,16 @@ export default function PartenairesPage() {
                 </li>
 
                 <li className="i-place">
-                  <span className="strong">{(ad.ville || "").trim()}</span>
-                  {ad.dept ? <><span>,{NBSP}</span><span className="strong">{ad.dept}</span></> : null}
+                  <span className="strong">{ville}</span>
+                  {dept ? <><span>,{NBSP}</span><span className="strong">{dept}</span></> : null}
                 </li>
-
-
               </ul>
 
               {/* identité */}
               <div className="desc-line i-id">
                 {(() => {
                   const { noun, classWord } = nounsForSex(ad.sexe);
-                  const cl  = (ad.classement || "").trim();
+                  const cl  = clean(ad.classement);
                   const age = ad.age;
                   return (
                     <>
@@ -414,11 +394,10 @@ export default function PartenairesPage() {
                 </div>
               )}
 
-              {/* CTA (temporaire : lien externe) */}
+              {/* CTA (vers page contact interne) */}
               <div className="partners-card__cta">
                 <Link className="cta-primary" href={`/partenaires/contact/${ad.id}`}>Contacter</Link>
               </div>
-
             </article>
           );
         })}
