@@ -142,11 +142,10 @@ export async function listAdsPublic(query: {
   // --- Filtre de modération tolérant ---
   // - {Validée} peut être TRUE() ou 1
   // - {Statut} ne doit PAS être "Archivé" (on accepte vide ou "Actif")
-  const moderation = `TRUE()`;
-  //`AND(
-  //  OR({Validée}=1, {Validée}=TRUE()),
-  //  IF({Statut}='Archivé', FALSE(), TRUE())
-  //)`;
+  const moderation = `AND(
+    OR({Validée}=1, {Validée}=TRUE()),
+    IF({Statut}='Archivé', FALSE(), TRUE())
+  )`;
 
   // --- Filtres utilisateur ---
   const formula: string[] = [moderation];
@@ -167,7 +166,7 @@ export async function listAdsPublic(query: {
   }
 
   // Applique la formule si nécessaire
-  if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
+  //if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
 
   // 2) Appel unique (sans "view")
   const json = (await airGet(encodeURIComponent(ADS), paramsBase)) as AirtableListResponse;
