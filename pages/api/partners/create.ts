@@ -1,46 +1,52 @@
-// pages/api/partners/create.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import { PartnerAdCreateSchema } from "../../../schemas/partners";
-import { createPartnerAd } from "../../../lib/data/airtable_annonces_partenaires";
+import { AdCreateSchema, AdCreate } from "../../../schemas/partners";
+import { airPost } from "../../../lib/data/airtable_annonces_partenaires"; // ou ta fonction existante
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
+  const parsed = AdCreateSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Validation failed", details: parsed.error.flatten() });
+  }
+  const data: AdCreate = parsed.data;
+
+  // protection honeypot
+  if (data.hp) return res.status(200).json({ ok: true }); // on fait comme si c’était OK
+
+  // mapping vers Airtable (champ -> colonne)
+  const fields: Record<string, any> = {
+    "Titre": data.titre || data.tournoi,
+    "Tournoi": data.tournoi,
+    "Ville": data.ville,
+    "Département": data.dept,
+    "Date": data.dateText || "",
+
+    "Sexe": data.sexe || "",
+    "Classement": data.classement || "",
+    "Tableau": data.tableau || "",
+
+    "Recherche Sexe": data.rechercheSexe || "",
+    "Recherche Classement": Array.isArray(data.rechercheClassement)
+      ? data.rechercheClassement
+      : (data.rechercheClassement ? data.rechercheClassement.split(/[,\s;/]+/) : []),
+
+    "Contact (e-mail)": data.email,
+
+    "Âge": data.age ?? null,
+    "Âge_Ok": !!data.age_ok,
+
+    "Statut": data.statut || "Actif",
+    "Validée": !!data.valider,  // tu valideras manuellement plus tard, ici par défaut false
+    "Créé le": new Date().toISOString(),
+  };
+
   try {
-    const parsed = PartnerAdCreateSchema.safeParse(req.body);
-    if (!parsed.success) {
-      return res.status(400).json({ error: "Validation error", details: parsed.error.flatten() });
-    }
-
-    const data = parsed.data;
-
-    // Anti-spam (champ caché)
-    if (data.hp && data.hp.trim() !== "") {
-      return res.status(200).json({ ok: true }); // on fait mine d’accepter sans rien faire
-    }
-
-    // Normalise recherche_classement en tableau (schema le fait déjà, mais on force la forme)
-    const searchCls = Array.isArray(data.recherche_classement) ? data.recherche_classement : [];
-
-    await createPartnerAd({
-      tournoi: data.tournoi,
-      ville: data.ville,
-      dept: data.dept,
-      date_text: data.date_text,
-      tableau: data.tableau,
-      sexe: data.sexe,
-      classement: data.classement,
-      age: data.age_ok ? data.age : undefined,       // si age_ok=false on n’envoie pas l’âge
-      age_ok: data.age_ok,
-      recherche_sexe: data.recherche_sexe,
-      recherche_classement: searchCls,
-      email: data.email,
-      message: data.message,
+    await airPost(encodeURIComponent(process.env.AIRTABLE_PARTNERS_ADS || "Partenaires_Annonces"), {
+      records: [{ fields }],
     });
-
-    return res.status(201).json({ ok: true });
+    return res.status(200).json({ ok: true });
   } catch (e: any) {
-    console.error("partners/create error:", e);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: e?.message || "Airtable error" });
   }
 }
