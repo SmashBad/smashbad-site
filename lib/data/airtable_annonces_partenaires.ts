@@ -1,13 +1,12 @@
 // lib/data/airtable_annonces_partenaires.ts
-
 /* ========= Config ========= */
 const API_URL = "https://api.airtable.com/v0";
-const BASE_ID = process.env.AIRTABLE_BASE_ID ;
+const BASE_ID = process.env.AIRTABLE_BASE_ID || "appkxlroj23rDP2Ep";
 const API_TOKEN = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN || "";
 
-const ADS = process.env.AIRTABLE_PARTNERS_ADS || "Partenaires_Annonces";           // table des annonces
-const CONTACTS = process.env.AIRTABLE_PARTNERS_RESPONSES || "Partenaires_Reponses"; // table des prises de contact
-const VIEW_PUBLIC = process.env.AIRTABLE_PARTNERS_VIEW || "public_list";    // vue filtrée des annonces publiques
+const ADS = process.env.AIRTABLE_PARTNERS_ADS || "Partenaires_Annonces";
+const CONTACTS = process.env.AIRTABLE_PARTNERS_RESPONSES || "Partenaires_Reponses";
+const VIEW_PUBLIC = process.env.AIRTABLE_PARTNERS_VIEW || ""; // optionnel
 
 /* ========= Types ========= */
 export type AdPublic = {
@@ -15,7 +14,7 @@ export type AdPublic = {
   titre?: string;
   tournoi?: string;
   ville?: string;
-  dept?: string;                 // ✅ département
+  dept?: string;
   sexe?: string;
   classement?: string;
   tableau?: string;
@@ -23,62 +22,42 @@ export type AdPublic = {
   rechercheClassement?: string[] | string;
   lienBadNet?: string;
   dates?: { start?: string; end?: string; text?: string };
-  age?: number | null;           // ✅ âge (peut être null)
-  age_hidden?: boolean;          // ✅ "Âge non public" (checkbox)
+  age?: number | null;
+  age_hidden?: boolean; // true = ne pas afficher
   created_at?: string;
 };
 
-type AdRecord = {
-  id: string;
-  createdTime?: string;
-  fields: Record<string, any>;
-};
-
-type AirtableListResponse = {
-  records: AdRecord[];
-};
+type AdRecord = { id: string; fields: Record<string, any> };
+type AirtableListResponse = { records: AdRecord[] };
 
 /* ========= Utils ========= */
 const esc = (s: string) => String(s).replace(/'/g, "\\'");
 
-/** GET générique Airtable */
 async function airGet(path: string, params?: Record<string, string>) {
-  if (!BASE_ID || !API_TOKEN) {
-    throw new Error("Airtable: BASE_ID ou API_TOKEN manquant dans les variables d'environnement.");
-  }
+  if (!BASE_ID || !API_TOKEN) throw new Error("Airtable: BASE_ID ou API_TOKEN manquant.");
   const url = new URL(`${API_URL}/${BASE_ID}/${path}`);
-  if (params) for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
-
-  const res = await fetch(url.toString(), {
-    headers: { Authorization: `Bearer ${API_TOKEN}` },
-    cache: "no-store",
-  });
+  if (params) Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
+  const res = await fetch(url.toString(), { headers: { Authorization: `Bearer ${API_TOKEN}` }, cache: "no-store" });
   if (!res.ok) throw new Error(`Airtable GET ${path} → ${res.status} ${res.statusText}`);
   return res.json();
 }
-
-/** POST générique Airtable */
 async function airPost(path: string, body: unknown) {
-  if (!BASE_ID || !API_TOKEN) {
-    throw new Error("Airtable: BASE_ID ou API_TOKEN manquant dans les variables d'environnement.");
-  }
+  if (!BASE_ID || !API_TOKEN) throw new Error("Airtable: BASE_ID ou API_TOKEN manquant.");
   const res = await fetch(`${API_URL}/${BASE_ID}/${path}`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_TOKEN}`,
-      "Content-Type": "application/json",
-    },
+    headers: { Authorization: `Bearer ${API_TOKEN}`, "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!res.ok) throw new Error(`Airtable POST ${path} → ${res.status} ${res.statusText}`);
+  if (!res.ok) {
+    const t = await res.text().catch(()=> "");
+    throw new Error(`Airtable POST ${path} → ${res.status} ${res.statusText} ${t}`);
+  }
   return res.json();
 }
 
-/** Mapping brut Airtable -> objet public côté site */
+/* ========= Mapping lecture ========= */
 function mapAd(rec: AdRecord): AdPublic {
-  const f = (rec.fields || {}) as Record<string, any>;
-
-  // "Date" peut être un champ texte, un date-range ({start,end}) ou deux dates, selon ta config.
+  const f = rec.fields || {};
   let dates: AdPublic["dates"] = undefined;
   const rawDate = f["Date"];
   if (rawDate && typeof rawDate === "object" && ("start" in rawDate || "end" in rawDate)) {
@@ -87,13 +66,10 @@ function mapAd(rec: AdRecord): AdPublic {
     dates = { text: rawDate };
   }
 
-  // Âge (nombre) + logique d’affichage
   const rawAge = f["Âge"];
   const age = typeof rawAge === "number" ? rawAge : (rawAge ? Number(rawAge) : null);
-
-  // Case à cocher "Âge_Ok" : si coché => on peut afficher l’âge
-  const ageOk = !!f["Âge_Ok"];
-  const age_hidden = !ageOk; // true = ne pas afficher
+  const ageOk = !!f["Âge_Ok"]; // coché = affichable
+  const age_hidden = !ageOk;
 
   return {
     id: rec.id,
@@ -108,157 +84,55 @@ function mapAd(rec: AdRecord): AdPublic {
     tableau: f["Tableau"],
     rechercheSexe: f["Recherche Sexe"],
     rechercheClassement: f["Recherche Classement"],
-    created_at: f["Créé le"] || rec.createdTime || undefined, // garde ta colonne, sinon fallback sur createdTime
+    created_at: f["Créé le"] || (rec as any).createdTime,
     age,
     age_hidden,
   };
 }
 
-
-/* ========= Lecture liste publique avec filtres multi ========= */
+/* ========= Lecture publique ========= */
 export async function listAdsPublic(query: {
   id?: string;
   depts?: string[];
   classements?: string[];
   tableaux?: string[];
   search?: string;
+  sort?: string;     // pris en charge côté API page
   maxRecords?: number;
 }) {
-  // Détail par ID
   if (query.id) {
     const json = (await airGet(`${encodeURIComponent(ADS)}/${query.id}`)) as AdRecord;
     return [mapAd(json)];
   }
 
-  // 1) Construire params
-  const paramsBase: Record<string, string> = {
-    pageSize: String(query.maxRecords || 50),
-  };
+  const params: Record<string, string> = { pageSize: String(query.maxRecords || 50) };
+  if (VIEW_PUBLIC.trim()) params.view = VIEW_PUBLIC.trim();
 
-  // Helpers pour formules
   const orsEq = (field: string, values: string[]) =>
-    values.length ? `OR(${values.map(v => `{${field}}='${esc(v)}'`).join(",")})` : "";
+    values.length ? `OR(${values.map(v => `{${field}} = '${esc(v)}'`).join(",")})` : "";
 
-  // --- Filtre de modération tolérant ---
-  // - {Validée} peut être TRUE() ou 1
-  // - {Statut} ne doit PAS être "Archivé" (on accepte vide ou "Actif")
-  const moderation = `AND(
-    OR({Validée}=1, {Validée}=TRUE()),
-    IF({Statut}='Archivé', FALSE(), TRUE())
-  )`;
+  // Modération : Validée = TRUE ET Statut = "Actif"
+  const moderation = `AND({Validée} = TRUE(), {Statut} = 'Actif')`;
 
-  // --- Filtres utilisateur ---
   const formula: string[] = [moderation];
-
   if (query.depts?.length)       formula.push(orsEq("Département", query.depts));
   if (query.tableaux?.length)    formula.push(orsEq("Tableau", query.tableaux));
-  if (query.classements?.length) {
-    formula.push(`OR(${query.classements.map(c => `SEARCH('${esc(c)}', {Classement})`).join(",")})`);
-  }
-  if (query.search) {
-    formula.push(
-      `OR(
-        SEARCH(LOWER('${esc(query.search)}'), LOWER({Titre})),
+  if (query.classements?.length) formula.push(`OR(${query.classements.map(c => `SEARCH('${esc(c)}', {Classement})`).join(",")})`);
+  if (query.search)              formula.push(
+    `OR(SEARCH(LOWER('${esc(query.search)}'), LOWER({Titre})),
         SEARCH(LOWER('${esc(query.search)}'), LOWER({Ville})),
-        SEARCH(LOWER('${esc(query.search)}'), LOWER({Tournoi}))
-      )`
-    );
-  }
+        SEARCH(LOWER('${esc(query.search)}'), LOWER({Tournoi})))`
+  );
+  if (formula.length) params.filterByFormula = `AND(${formula.join(",")})`;
 
-  // Applique la formule si nécessaire
-  if (formula.length) paramsBase.filterByFormula = `AND(${formula.join(",")})`;
-
-  // 2) Appel unique (sans "view")
-  const json = (await airGet(encodeURIComponent(ADS), paramsBase)) as AirtableListResponse;
-  const records: AdRecord[] = json.records || [];
-
-  // 3) Log utile
-  console.log(`[partners] fetched=${records.length} (sans view) table="${ADS}" base="${(BASE_ID||'').slice(0,6)}…"`);
-  return records.map(mapAd);
+  const json = (await airGet(encodeURIComponent(ADS), params)) as AirtableListResponse;
+  return (json.records || []).map(mapAd);
 }
 
-/* ========= Détail + e-mail privé auteur pour /contact ========= */
-export async function getAdForContact(id: string) {
-  const rec = (await airGet(`${encodeURIComponent(ADS)}/${id}`)) as AdRecord;
-  const authorEmail = rec.fields?.["Contact (e-mail)"] as string | undefined;
-  return { record: rec, authorEmail };
-}
-
-/* ========= Log d'une prise de contact =========
-   NB: la table CONTACTS doit contenir un champ "Annonce" (Link to Annonces)
-*/
-export async function createContactRequest(payload: {
-  adId: string;
-  first_name: string;
-  last_name: string;
-  ranking?: string;
-  message?: string;
-  email: string;
-  phone?: string;
-}) {
-  const body = {
-    records: [
-      {
-        fields: {
-          Annonce: [payload.adId],     // champ "Link to Annonces" dans ContactRequests
-          first_name: payload.first_name,
-          last_name: payload.last_name,
-          ranking: payload.ranking || "",
-          message: payload.message || "",
-          email: payload.email,
-          phone: payload.phone || "",
-          created_at: new Date().toISOString(),
-        },
-      },
-    ],
-  };
-  return airPost(encodeURIComponent(CONTACTS), body);
-}
-
-/** Création d’une annonce dans Airtable (table Partenaires_Annonces) */
-export async function createPartnerAd(payload: {
-  tournoi: string;
-  ville: string;
-  dept: string;
-  date_text?: string;
-  tableau: string;
-  sexe: string;
-  classement: string;
-  age?: number;
-  age_ok: boolean;
-  recherche_sexe?: string;
-  recherche_classement?: string[];   // déjà normalisé en tableau
-  email: string;
-  message?: string;
-}) {
-  // Colonnes Airtable (exactes) :
-  // "Tournoi", "Ville", "Département", "Date", "Tableau",
-  // "Sexe", "Classement", "Âge", "Âge_Ok",
-  // "Recherche Sexe", "Recherche Classement",
-  // "Contact (e-mail)", "Notes", "Statut", "Validée"
-  const body = {
-    records: [
-      {
-        fields: {
-          "Tournoi": payload.tournoi,
-          "Ville": payload.ville,
-          "Département": payload.dept,
-          "Date": payload.date_text || "",
-          "Tableau": payload.tableau,
-          "Sexe": payload.sexe,
-          "Classement": payload.classement,
-          "Âge": payload.age ?? null,
-          "Âge_Ok": payload.age_ok ? true : false,
-          "Recherche Sexe": payload.recherche_sexe || "",
-          "Recherche Classement": (payload.recherche_classement || []).join(", "),
-          "Contact (e-mail)": payload.email,
-          "Notes": payload.message || "",
-          "Statut": "Actif",
-          "Validée": false
-        }
-      }
-    ]
-  };
-
-  return airPost(encodeURIComponent(ADS), body);
+/* ========= Création d’annonce ========= */
+export async function createAd(fields: Record<string, any>) {
+  // `fields` DOIT utiliser les NOMS RÉELS DES COLONNES Airtable.
+  const body = { records: [{ fields }] };
+  const json = await airPost(encodeURIComponent(ADS), body);
+  return json;
 }
