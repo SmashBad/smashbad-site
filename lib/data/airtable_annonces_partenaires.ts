@@ -136,3 +136,47 @@ export async function createAd(fields: Record<string, any>) {
   const json = await airPost(encodeURIComponent(ADS), body);
   return json;
 }
+
+// --- à coller en bas de: lib/data/airtable_annonces_partenaires.ts ---
+
+/** Récupère l'annonce + l'email privé de l'auteur pour la page de contact */
+export async function getAdForContact(id: string) {
+  const rec = (await airGet(`${encodeURIComponent(ADS)}/${id}`)) as { id: string; fields: Record<string, any> };
+  const authorEmail = (rec.fields?.["Contact (e-mail)"] as string | undefined) || undefined;
+  return { record: rec, authorEmail };
+}
+
+/**
+ * Crée une "prise de contact" dans la table Partenaires_Reponses
+ * NB: la table doit avoir un champ "Annonce" (Link to Partenaires_Annonces)
+ */
+export async function createContactRequest(payload: {
+  adId: string;
+  first_name: string;
+  last_name: string;
+  ranking?: string;
+  message?: string;
+  email: string;
+  phone?: string;
+}) {
+  const body = {
+    records: [
+      {
+        fields: {
+          // ⚠️ ce champ doit exister et être un "Link to another record" vers Partenaires_Annonces
+          Annonce: [payload.adId],
+
+          // Les colonnes suivantes peuvent être adaptées à tes intitulés Airtable si besoin
+          first_name: payload.first_name,
+          last_name: payload.last_name,
+          ranking: payload.ranking || "",
+          message: payload.message || "",
+          email: payload.email,
+          phone: payload.phone || "",
+          created_at: new Date().toISOString(),
+        },
+      },
+    ],
+  };
+  return airPost(encodeURIComponent(CONTACTS), body);
+}
