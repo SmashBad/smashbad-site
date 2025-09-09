@@ -808,3 +808,56 @@ input[type="range"]{ width:100%; }
   font-weight:700; opacity:.85; margin: 0 6px;
 }
 .partners-filterbar__label--split{ margin-left: 16px; }
+
+
+.pdepot-form .pdepot-section { margin: 28px 0; }
+.pdepot-form .pdepot-title {
+  display:flex; align-items:center; gap:10px;
+  font-family: Audiowide, system-ui; font-size: 18px; margin: 0 0 12px;
+}
+.pdepot-form .pdepot-title img { width:18px; height:18px; opacity:.9; }
+
+/* Grille */
+.pdepot-form .pdepot-grid {
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+@media (max-width: 780px) {
+  .pdepot-form .pdepot-grid { grid-template-columns: 1fr; }
+}
+
+/* Champs */
+.pdepot-form .pdepot-field > span { display:block; font-weight:500; margin-bottom:6px; }
+.pdepot-form .pdepot-field small { opacity:.7; font-weight:400; }
+
+/* Radios pastilles */
+.pdepot-form .pdepot-radios { display:flex; gap:10px; flex-wrap:wrap; }
+.pdepot-form .pdepot-radio {
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid rgba(255,255,255,.15);
+  padding:8px 12px; border-radius:999px; cursor:pointer; user-select:none;
+  background: rgba(255,255,255,.04);
+}
+.pdepot-form .pdepot-radio input { display:none; }
+.pdepot-form .pdepot-radio.is-on { border-color: rgba(0, 204, 255, .5); background: rgba(0, 204, 255, .08); }
+
+/* Chips classements (pas de collision avec .chip existant) */
+.pdepot-form .pdepot-chips { display:flex; flex-wrap:wrap; gap:10px; }
+.pdepot-form .pdepot-chip {
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:999px; padding:8px 14px; line-height:1;
+  background: rgba(255,255,255,.04);
+}
+.pdepot-form .pdepot-chip.is-active {
+  border-color:#00D1FF; background:#00D1FF22;
+}
+
+/* Checkbox en ligne */
+.pdepot-form .pdepot-check { display:flex; align-items:center; gap:8px; margin-top:6px; }
+
+/* Actions + messages */
+.pdepot-form .pdepot-actions { margin-top: 12px; display:flex; align-items:center; gap:12px; }
+.pdepot-form .pdepot-ok { color:#25d39e; }
+.pdepot-form .pdepot-err { color:#ff6b6b; }
+.pdepot-form .pdepot-legal { opacity:.75; margin-top:12px; font-size:.95em; }

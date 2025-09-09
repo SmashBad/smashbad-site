@@ -73,142 +73,203 @@ export default function DepotAnnoncePage() {
         </p>
       </header>
 
-      <form className="sb-form" onSubmit={onSubmit}>
-
-        {/* Anti-spam – champ caché */}
+      <form className="pdepot-form" onSubmit={onSubmit}>
+        {/* Anti-spam */}
         <div className="hp" aria-hidden>
           <label>Ne pas remplir <input value={form.hp} onChange={e=>setField("hp", e.target.value)} /></label>
         </div>
 
-        <div className="sb-grid">
-          <div className="sb-field">
-            <span>Tournoi *</span>
-            <input value={form.tournoi} onChange={e=>setField("tournoi", e.target.value)} required />
-          </div>
+        {/* ===== Section 1 : Profil ===== */}
+        <section className="pdepot-section">
+          <h2 className="pdepot-title">
+            <img src="/Trophy.svg" alt="" aria-hidden />
+            <span>Ton profil de badiste</span>
+          </h2>
 
-          <div className="sb-field">
-            <span>Ville *</span>
-            <input value={form.ville} onChange={e=>setField("ville", e.target.value)} required />
-          </div>
+          <div className="pdepot-grid">
+            {/* Sexe */}
+            <div className="pdepot-field">
+              <span>Tu es…* (donnée publique)</span>
+              <div className="pdepot-radios">
+                <label className={`pdepot-radio ${form.sexe==="H"?"is-on":""}`}>
+                  <input type="radio" name="sexe" value="H"
+                    checked={form.sexe==="H"} onChange={()=>setField("sexe","H")} />
+                  un joueur
+                </label>
+                <label className={`pdepot-radio ${form.sexe==="F"?"is-on":""}`}>
+                  <input type="radio" name="sexe" value="F"
+                    checked={form.sexe==="F"} onChange={()=>setField("sexe","F")} />
+                  une joueuse
+                </label>
+                <label className={`pdepot-radio ${form.sexe==="AUTRE"?"is-on":""}`}>
+                  <input type="radio" name="sexe" value="AUTRE"
+                    checked={form.sexe==="AUTRE"} onChange={()=>setField("sexe","AUTRE")} />
+                  autre / ne pas dire
+                </label>
+              </div>
+            </div>
 
-          <div className="sb-field">
-            <span>Département *</span>
-            <select value={form.dept} onChange={e=>setField("dept", e.target.value)} required>
-              <option value="">— Sélectionner —</option>
-              {DEPARTEMENTS.map(d => <option key={d} value={d}>{d}</option>)}
-            </select>
-          </div>
+            {/* Classement */}
+            <div className="pdepot-field">
+              <span>Ton classement dans ce tableau *</span>
+              <select value={form.classement} onChange={e=>setField("classement", e.target.value)} required>
+                <option value="">— Sélectionner —</option>
+                {CLASSEMENTS.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
 
-          <div className="sb-field">
-            <span>Dates (texte simple)</span>
-            <input placeholder="ex : 12–13 octobre 2025" value={form.date_text} onChange={e=>setField("date_text", e.target.value)} />
-          </div>
-
-          <div className="sb-field">
-            <span>Tableau *</span>
-            <select value={form.tableau} onChange={e=>setField("tableau", e.target.value)} required>
-              <option value="">— Sélectionner —</option>
-              {TABLEAUX.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-
-          <div className="sb-field">
-            <span>Sexe *</span>
-            <select value={form.sexe} onChange={e=>setField("sexe", e.target.value)}>
-              <option value="H">Homme</option>
-              <option value="F">Femme</option>
-              <option value="AUTRE">Autre / Ne pas dire</option>
-            </select>
-          </div>
-
-          <div className="sb-field">
-            <span>Classement *</span>
-            <select value={form.classement} onChange={e=>setField("classement", e.target.value)} required>
-              <option value="">— Sélectionner —</option>
-              {CLASSEMENTS.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-
-          <div className="sb-field">
-            <span>Âge</span>
-            <input
-              type="number" min={8} max={90} placeholder="ex : 26"
-              value={form.age}
-              onChange={e=>setField("age", e.target.value)}
-              disabled={!form.age_ok}
-            />
-            <label style={{ display:"flex", alignItems:"center", gap:8, marginTop:6 }}>
+            {/* Âge + confidentialité */}
+            <div className="pdepot-field">
+              <span>Ton âge</span>
               <input
-                type="checkbox"
-                checked={form.age_ok}
-                onChange={e=>{
-                  const v = e.target.checked;
-                  setField("age_ok", v);
-                  if (!v) setField("age", ""); // si non, on vide le champ âge
-                }}
+                type="number" min={8} max={90} placeholder="27"
+                value={form.age} onChange={e=>setField("age", e.target.value)}
+                disabled={!form.age_ok}
               />
-              Afficher mon âge (décocher pour ne pas le préciser)
-            </label>
-          </div>
-
-          <div className="sb-field">
-            <span>Je cherche (sexe)</span>
-            <select value={form.recherche_sexe} onChange={e=>setField("recherche_sexe", e.target.value)}>
-              <option value="H">Un joueur</option>
-              <option value="F">Une joueuse</option>
-              <option value="AUTRE">Sans préférence</option>
-            </select>
-          </div>
-
-          <div className="sb-field">
-            <span>Classement recherché (multi)</span>
-            <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
-              {CLASSEMENTS.map(c => {
-                const active = form.recherche_classement.includes(c);
-                return (
-                  <button
-                    key={c}
-                    type="button"
-                    className={`partners-chip ${active ? "chip--active" : ""}`}
-                    onClick={()=>{
-                      setForm(s=>{
-                        const set = new Set(s.recherche_classement);
-                        active ? set.delete(c) : set.add(c);
-                        return { ...s, recherche_classement: Array.from(set) };
-                      });
-                    }}
-                  >
-                    {c}
-                  </button>
-                );
-              })}
+              <label className="pdepot-check">
+                <input
+                  type="checkbox"
+                  checked={!form.age_ok}
+                  onChange={e=>{
+                    const hide = e.target.checked;
+                    setField("age_ok", !hide);
+                    if (hide) setField("age", "");
+                  }}
+                />
+                Ne pas afficher mon âge publiquement
+              </label>
             </div>
           </div>
+        </section>
 
-          <div className="sb-field">
-            <span>E-mail (contact) *</span>
-            <input type="email" value={form.email} onChange={e=>setField("email", e.target.value)} required />
+        {/* ===== Section 2 : Tournoi ===== */}
+        <section className="pdepot-section">
+          <h2 className="pdepot-title">
+            <img src="/Planning.svg" alt="" aria-hidden />
+            <span>Le tournoi auquel tu participes</span>
+          </h2>
+
+          <div className="pdepot-grid">
+            <div className="pdepot-field" style={{ gridColumn: "1 / -1" }}>
+              <span>Nom du tournoi *</span>
+              <input placeholder="Tournoi de rentrée des badistes de l’Ouest"
+                    value={form.tournoi} onChange={e=>setField("tournoi", e.target.value)} required />
+            </div>
+
+            <div className="pdepot-field">
+              <span>Ville *</span>
+              <input value={form.ville} onChange={e=>setField("ville", e.target.value)} required />
+            </div>
+
+            <div className="pdepot-field">
+              <span>Département *</span>
+              <select value={form.dept} onChange={e=>setField("dept", e.target.value)} required>
+                <option value="">— Sélectionner —</option>
+                {DEPARTEMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+            </div>
+
+            <div className="pdepot-field">
+              <span>Date du tournoi *</span>
+              <input placeholder="Sélectionner date"
+                    value={form.date_text} onChange={e=>setField("date_text", e.target.value)} />
+            </div>
+
+            <div className="pdepot-field">
+              <span>Tableau pour lequel tu cherches un(e) partenaire *</span>
+              <select value={form.tableau} onChange={e=>setField("tableau", e.target.value)} required>
+                <option value="">— Sélectionner —</option>
+                {TABLEAUX.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
           </div>
+        </section>
 
-          <div className="sb-field" style={{ gridColumn: "1 / -1" }}>
-            <span>Message libre (optionnel)</span>
-            <textarea rows={4} value={form.message} onChange={e=>setField("message", e.target.value)} />
+        {/* ===== Section 3 : Profil recherché ===== */}
+        <section className="pdepot-section">
+          <h2 className="pdepot-title">
+            <img src="/LookFor.svg" alt="" aria-hidden />
+            <span>Profil recherché</span>
+          </h2>
+
+          <div className="pdepot-grid">
+            {/* Sexe recherché */}
+            <div className="pdepot-field">
+              <span>Tu cherches…* </span>
+              <div className="pdepot-radios">
+                <label className={`pdepot-radio ${form.recherche_sexe==="H"?"is-on":""}`}>
+                  <input type="radio" name="recherche_sexe" value="H"
+                    checked={form.recherche_sexe==="H"} onChange={()=>setField("recherche_sexe","H")} />
+                  un joueur
+                </label>
+                <label className={`pdepot-radio ${form.recherche_sexe==="F"?"is-on":""}`}>
+                  <input type="radio" name="recherche_sexe" value="F"
+                    checked={form.recherche_sexe==="F"} onChange={()=>setField("recherche_sexe","F")} />
+                  une joueuse
+                </label>
+                <label className={`pdepot-radio ${form.recherche_sexe==="AUTRE"?"is-on":""}`}>
+                  <input type="radio" name="recherche_sexe" value="AUTRE"
+                    checked={form.recherche_sexe==="AUTRE"} onChange={()=>setField("recherche_sexe","AUTRE")} />
+                  peu importe
+                </label>
+              </div>
+            </div>
+
+            {/* Classement recherché */}
+            <div className="pdepot-field" style={{ gridColumn: "1 / -1" }}>
+              <span>Son classement* <small>(plusieurs choix possibles)</small></span>
+              <div className="pdepot-chips">
+                {CLASSEMENTS.map(c => {
+                  const active = form.recherche_classement.includes(c);
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      className={`pdepot-chip ${active ? "is-active" : ""}`}
+                      onClick={()=>{
+                        setForm(s=>{
+                          const set = new Set(s.recherche_classement);
+                          active ? set.delete(c) : set.add(c);
+                          return { ...s, recherche_classement: Array.from(set) };
+                        });
+                      }}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="pdepot-field" style={{ gridColumn: "1 / -1" }}>
+              <span>Ton email* <small>(donnée privée)</small></span>
+              <input type="email" placeholder="smash@exemple.fr"
+                    value={form.email} onChange={e=>setField("email", e.target.value)} required />
+            </div>
+
+            {/* Message */}
+            <div className="pdepot-field" style={{ gridColumn: "1 / -1" }}>
+              <span>Message libre (optionnel)</span>
+              <textarea rows={4} value={form.message} onChange={e=>setField("message", e.target.value)} />
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div className="sb-actions">
+        <div className="pdepot-actions">
           <button className="cta-primary" disabled={submitting} type="submit">
             {submitting ? "Envoi…" : "Déposer mon annonce"}
           </button>
-          {ok && <div className="sb-ok">{ok}</div>}
-          {err && <div className="sb-err">{err}</div>}
+          {ok && <div className="pdepot-ok">{ok}</div>}
+          {err && <div className="pdepot-err">{err}</div>}
         </div>
 
-        <p className="sb-legal">
-          En déposant une annonce, vous acceptez que votre e-mail soit utilisé uniquement pour permettre aux autres
-          membres de vous contacter via le bouton “Contacter”. Il n’est jamais affiché publiquement.
+        <p className="pdepot-legal">
+          En déposant une annonce, tes coordonnées ne seront jamais affichées publiquement.
+          Elles servent uniquement à permettre à smash.bad de te mettre en relation.
         </p>
       </form>
+
     </main>
   );
 }
