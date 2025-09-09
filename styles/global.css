@@ -861,3 +861,71 @@ input[type="range"]{ width:100%; }
 .pdepot-form .pdepot-ok { color:#25d39e; }
 .pdepot-form .pdepot-err { color:#ff6b6b; }
 .pdepot-form .pdepot-legal { opacity:.75; margin-top:12px; font-size:.95em; }
+
+/* ----- container & sections ----- */
+.pdepot-form .pdepot-section { margin: 28px 0; }
+.pdepot-form .pdepot-title {
+  display:flex; align-items:center; gap:10px;
+  font-family: Audiowide, system-ui; font-size:18px; margin:0 0 12px;
+}
+.pdepot-form .pdepot-title img { width:18px; height:18px; opacity:.9; }
+
+/* ----- grids ----- */
+.pdepot-form .pdepot-grid2 {
+  display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px 18px;
+}
+.pdepot-form .pdepot-grid3 {
+  display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px 18px;
+}
+@media (max-width: 900px) {
+  .pdepot-form .pdepot-grid2,
+  .pdepot-form .pdepot-grid3 { grid-template-columns: 1fr; }
+}
+
+/* ----- fields & inputs (dark look) ----- */
+.pdepot-form .pdepot-field > span { display:block; font-weight:500; margin-bottom:6px; }
+.pdepot-form .pdepot-field small { opacity:.7; font-weight:400; }
+.pdepot-form input,
+.pdepot-form select,
+.pdepot-form textarea {
+  width:100%;
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:12px;
+  padding:10px 12px;
+  outline:none;
+}
+.pdepot-form input::placeholder,
+.pdepot-form textarea::placeholder { color: rgba(255,255,255,.55); }
+.pdepot-form select { appearance:none; }
+
+/* ----- radios pastilles ----- */
+.pdepot-form .pdepot-radios { display:flex; gap:10px; flex-wrap:wrap; }
+.pdepot-form .pdepot-radio {
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid rgba(255,255,255,.15);
+  padding:8px 12px; border-radius:999px; cursor:pointer; user-select:none;
+  background: rgba(255,255,255,.04);
+}
+.pdepot-form .pdepot-radio input { display:none; }
+.pdepot-form .pdepot-radio.is-on { border-color:#00D1FF; background:#00D1FF22; }
+
+/* ----- chips classements ----- */
+.pdepot-form .pdepot-chips { display:flex; flex-wrap:wrap; gap:10px; }
+.pdepot-form .pdepot-chip {
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:999px; padding:8px 14px; line-height:1;
+  background: rgba(255,255,255,.04); color:#fff;
+}
+.pdepot-form .pdepot-chip.is-active { border-color:#00D1FF; background:#00D1FF22; }
+
+/* ----- check inline ----- */
+.pdepot-form .pdepot-check { display:flex; align-items:center; gap:8px; margin-top:6px; }
+
+/* ----- actions & footnotes ----- */
+.pdepot-form .pdepot-actions { margin-top:12px; display:flex; align-items:center; gap:12px; }
+.pdepot-form .pdepot-ok { color:#25d39e; }
+.pdepot-form .pdepot-err { color:#ff6b6b; }
+.pdepot-form .pdepot-legal { opacity:.75; margin-top:12px; font-size:.95em; }
+
