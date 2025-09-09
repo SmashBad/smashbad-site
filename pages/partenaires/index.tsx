@@ -405,20 +405,30 @@ export default function PartenairesPage() {
               {(ad.search_sex || ad.search_ranking) && (
                 <div className="desc-line i-search">
                   {(() => {
-                    const wanted = nounsForSex(ad.search_sex);
+                    const sSex = ad.search_sex as string | undefined;
                     const raw = Array.isArray(ad.search_ranking)
                       ? ad.search_ranking
                       : (ad.search_ranking ? String(ad.search_ranking).split(/[,\s;/]+/) : []);
                     const list = listWithOu(raw);
+
+                    const classWord = "classé(e)"; // toujours neutre
+
+                    // libellé personne recherchée
+                    const person =
+                      sSex === "F" ? "une joueuse"
+                    : sSex === "H" ? "un joueur"
+                    : "un joueur ou une joueuse";
+
                     return (
                       <>
-                        Je souhaite jouer avec {NBSP}<span className="strong">{wanted.noun}</span>
-                        {list && <> {NBSP}{wanted.classWord}{NBSP}<span className="strong">{list}</span></>}
+                        Je souhaite jouer avec {NBSP}<span className="strong">{person}</span>
+                        {list && <> {NBSP}{classWord}{NBSP}<span className="strong">{list}</span></>}
                       </>
                     );
                   })()}
                 </div>
               )}
+
 
               {/* CTA (vers page contact interne) */}
               <div className="partners-card__cta">
