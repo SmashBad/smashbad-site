@@ -334,8 +334,8 @@ export default function PartenairesPage() {
               {/* Métadonnées : dates + lieu */}
               <ul className="partners-card__meta">
                 <li className="i-date">
-                  {ad.date
-                    ? <>Le {NBSP}<span className="strong">{fmtDate(ad.date)}</span></>
+                  {ad.date 
+                    ? <span className="strong">{fmtDate(ad.date)}</span> 
                     : <>Date à préciser</>}
                 </li>
 
