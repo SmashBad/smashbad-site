@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       sexe: s(parsed.sexe),
       classement: s(parsed.classement),
       age: parsed.age ?? undefined,
-      age_masque: !!age_masque,
+      age_masque: Boolean(age_masque),
 
       search_sex: s(parsed.search_sex),
       search_ranking: parsed.search_ranking,
