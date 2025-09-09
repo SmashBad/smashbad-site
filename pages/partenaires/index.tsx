@@ -403,12 +403,10 @@ export default function PartenairesPage() {
                       )}
 
                       {/* âge */}
-                      {ad.age_public ? (
-                        label ? (
-                          <> qui ne souhaite pas préciser son âge</>
-                        ) : (
-                          <> et je ne souhaite pas préciser mon âge</>
-                        )
+                      {ad.age_masque ? (
+                        label
+                        ? (<> qui ne souhaite pas préciser son âge</>)
+                        : (<> et je ne souhaite pas préciser mon âge</>)
                       ) : typeof age === "number" && !Number.isNaN(age) ? (
                         label ? (
                           <> de <span className="strong">{age}</span> ans</>

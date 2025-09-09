@@ -13,7 +13,7 @@ const CreateAdSchema = z.object({
   sexe: z.string().min(1),
   classement: z.string().min(1),
   age: z.coerce.number().int().positive().max(120).optional(),
-  age_public: z.boolean().optional(),
+  age_masque: z.boolean().optional().default(false), // false = empeche l’affichage
   search_sex: z.string().min(1),
   search_ranking: z.array(z.string()).optional().default([]),
   contact_email: z.string().email(),
@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       sexe: s(parsed.sexe),
       classement: s(parsed.classement),
       age: parsed.age ?? undefined,
-      age_public: !!parsed.age_public,
+      age_masque: !!age_masque,
 
       search_sex: s(parsed.search_sex),
       search_ranking: parsed.search_ranking,

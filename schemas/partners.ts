@@ -48,7 +48,7 @@ export const CreateAdSchema = z.object({
     (v) => (v === "" || v === undefined || v === null ? undefined : Number(v)),
     z.number().int().min(8).max(90).optional()
   ),
-  age_ok: z.boolean().default(true), // true = autorise l’affichage
+  age_masque: z.boolean().optional().default(false), // false = empeche l’affichage
 
   recherche_sexe: z.enum(sexValues).default("AUTRE"),
   recherche_classement: z.array(z.enum(CLASSEMENTS)).default([]),

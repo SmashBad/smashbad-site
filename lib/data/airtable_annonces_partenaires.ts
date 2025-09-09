@@ -20,7 +20,7 @@ export type AdPublic = {
   name?: string;             // prénom (privé)
   sexe?: string;
   age?: number | null;
-  age_public?: boolean;
+  age_masque?: boolean;
   tableau?: string;
   classement?: string;
   contact_email?: string;    // privé
@@ -78,7 +78,7 @@ function mapAd(rec: AdRecord): AdPublic {
     name: f["name"],
     sexe: f["sexe"],
     age: typeof f["age"] === "number" ? f["age"] : null,
-    age_public: !!f["age_public"],
+    age_masque: !!f["age_masque"],
     tableau: f["tableau"],
     classement: f["classement"],
     contact_email: f["contact_email"],

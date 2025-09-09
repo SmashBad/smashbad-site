@@ -16,7 +16,7 @@ export default function DepotAnnoncePage() {
     sexe: "",
     classement: "",
     age: "",
-    age_ok: true, // "je préfère ne pas le dire" => false (donc par défaut true = affichable)
+    age_masque: false,
     recherche_sexe: "AUTRE",
     recherche_classement: [] as string[],
     name :"",
@@ -44,7 +44,7 @@ export default function DepotAnnoncePage() {
         // identité
         sexe: sexOut(form.sexe as "H"|"F"),    // "Homme" | "Femme"
         age: form.age ? Number(form.age) : undefined,
-        age_public: !form.age_ok,              // coché = ne pas afficher → true
+        age_public: !form.age_masque,              // coché = ne pas afficher → true
         name: form.name,
         contact_email: form.email,
 
@@ -73,7 +73,7 @@ export default function DepotAnnoncePage() {
         setOk("Merci ! Ton annonce a été déposée. Elle sera vérifiée et publiée rapidement.");
         setForm({
           tournoi:"", ville:"", dept:"", date_text:"", tableau:"",
-          sexe:"", classement:"", age:"", age_ok:true,
+          sexe:"", classement:"", age:"", age_masque:false,
           recherche_sexe:"AUTRE", recherche_classement:[],
           name:"", email:"", message:"", hp:""
         });
@@ -148,13 +148,13 @@ export default function DepotAnnoncePage() {
               <span>Ton âge</span>
               <input type="number" min={8} max={90} placeholder="27"
                     value={form.age} onChange={e=>setField("age", e.target.value)}
-                    disabled={!form.age_ok} />
+                    disabled={!form.age_masque} />
               <label className="pdepot-check">
                 <input type="checkbox"
-                      checked={!form.age_ok}
+                      checked={form.age_masque}
                       onChange={e=>{
-                        const hide = e.target.checked;     // coché = ne pas afficher
-                        setField("age_ok", !hide);
+                        const hide = e.target.checked;
+                        setField("age_masque", hide);
                         if (hide) setField("age", "");
                       }} />
                 Ne pas afficher mon âge publiquement
