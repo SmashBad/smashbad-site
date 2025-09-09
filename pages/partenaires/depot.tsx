@@ -141,15 +141,7 @@ export default function DepotAnnoncePage() {
                     onChange={e=>setField("name", e.target.value)} required />
             </div>
           </div>
-
-
-            <div className="pdepot-field">
-              <span>Ton prénom* <small>(donnée privée)</small></span>
-              <input placeholder="Adrien" value={form.name}
-                    onChange={e=>setField("name", e.target.value)} required />
-            </div>
-          
-
+        
           {/* Ligne 2 : Âge (+ case dessous) + Email */}
           <div className="pdepot-grid2">
             <div className="pdepot-field">
