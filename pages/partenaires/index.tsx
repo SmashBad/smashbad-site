@@ -46,8 +46,8 @@ const normalizeSex = (raw?: string): SexKind => {
 };
 
 const articleForSex = (sex?: string) => {
-  if (sex === "F") return "une";
-  if (sex === "H") return "un";
+  if (sex === "Femme") return "une";
+  if (sex === "Homme") return "un";
   return "un·e"; // neutre / inconnu
 };
 
