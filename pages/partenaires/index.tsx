@@ -367,10 +367,9 @@ export default function PartenairesPage() {
                     : <>Date à préciser</>}
                 </li>
 
-
                 <li className="i-place">
                   <span className="strong">{ville}</span>
-                  {dept ? <><span>,{NBSP}</span><span className="strong">{dept}</span></> : null}
+                  {dept ? <><span>,{" "}</span><span className="strong">{dept}</span></> : null}
                 </li>
               </ul>
 
@@ -381,38 +380,51 @@ export default function PartenairesPage() {
                   const cl    = clean(ad.classement);
                   const age   = ad.age;
 
-                  // Choix de l'accord pour "classé"
-                  const classWord = classWordFor(ad.sexe, !label /* neutre si pas de joueur/joueuse */);
+                  const classWord = classWordFor(ad.sexe, !label);
 
                   return (
                     <>
-                      Je suis{NBSP}
-                      {label ? <><span className="strong">{label}</span>{NBSP}</> : null}
+                      Je suis{" "}
+                      {label ? (
+                        <>
+                          {/* article + nom séparés */}
+                          <span className="strong">{label.split(" ")[0]}</span>{" "}
+                          <span className="strong">{label.split(" ")[1]}</span>{" "}
+                        </>
+                      ) : null}
 
-                      {/* classement (si présent) */}
-                      {cl ? <>{classWord}{NBSP}<span className="strong">{cl}</span></> : <>classé(e)</>}
+                      {/* classement */}
+                      {cl ? (
+                        <>
+                          {classWord} <span className="strong">{cl}</span>
+                        </>
+                      ) : (
+                        <>classé(e)</>
+                      )}
 
-                      {/* âge : "de … ans" si on a un label (joueur/joueuse), sinon "et j'ai … ans" */}
+                      {/* âge */}
                       {ad.age_public ? (
-                        label
-                          ? <> {NBSP}qui ne souhaite pas préciser son âge</>
-                          : <> {NBSP}et je ne souhaite pas préciser mon âge</>
-                      ) : (typeof age === "number" && !Number.isNaN(age)) ? (
-                        label
-                          ? <> {NBSP}de{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
-                          : <> {NBSP}et j'ai{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
+                        label ? (
+                          <> qui ne souhaite pas préciser son âge</>
+                        ) : (
+                          <> et je ne souhaite pas préciser mon âge</>
+                        )
+                      ) : typeof age === "number" && !Number.isNaN(age) ? (
+                        label ? (
+                          <> de <span className="strong">{age}</span> ans</>
+                        ) : (
+                          <> et j'ai <span className="strong">{age}</span> ans</>
+                        )
                       ) : null}
                     </>
                   );
                 })()}
               </div>
 
-
-
               {/* tableau */}
               {ad.tableau && (
                 <div className="desc-line i-draw">
-                  Je souhaite jouer en {NBSP}<span className="strong">{expandTableau(ad.tableau)}</span>
+                  Je souhaite jouer en <span className="strong">{expandTableau(ad.tableau)}</span>
                 </div>
               )}
 
@@ -420,23 +432,37 @@ export default function PartenairesPage() {
               {(ad.search_sex || ad.search_ranking) && (
                 <div className="desc-line i-search">
                   {(() => {
-                    const person = personLabel(ad.search_sex, "search"); // "un joueur", "une joueuse", ou "un joueur ou une joueuse"
+                    const person = personLabel(ad.search_sex, "search");
                     const raw = Array.isArray(ad.search_ranking)
                       ? ad.search_ranking
                       : (ad.search_ranking ? String(ad.search_ranking).split(/[,\s;/]+/) : []);
-                    const list = listWithOu(raw); // ex. "D9 ou R6"
-                    const classWord = classWordFor(ad.search_sex); // AUTRE → "classé(e)"
+                    const list = listWithOu(raw);
+                    const classWord = classWordFor(ad.search_sex);
 
                     return (
                       <>
-                        Je souhaite jouer avec {NBSP}
-                        <span className="strong">{person}</span>
-                        {list && <> {NBSP}{classWord}{NBSP}<span className="strong">{list}</span></>}
+                        Je souhaite jouer avec{" "}
+                        {person.includes("ou") ? (
+                          // cas neutre : "un joueur ou une joueuse"
+                          <span className="strong">{person}</span>
+                        ) : (
+                          <>
+                            {/* article + nom séparés */}
+                            <span className="strong">{person.split(" ")[0]}</span>{" "}
+                            <span className="strong">{person.split(" ")[1]}</span>
+                          </>
+                        )}
+                        {list && (
+                          <>
+                            {" "}{classWord} <span className="strong">{list}</span>
+                          </>
+                        )}
                       </>
                     );
                   })()}
                 </div>
               )}
+
 
 
 
