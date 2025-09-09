@@ -268,11 +268,12 @@ export default function PartenairesPage() {
   }, [depts, tableaux, classements, sort]);
 
   /* ----- Tri client (au cas où) ----- */
+  const parseDate = (ad: Ad) => ad.date ? Date.parse(ad.date) : Number.POSITIVE_INFINITY;
+
   const sorted = useMemo(() => {
     const clone = [...items];
-    const parseStart = (ad: Ad) => ad.dates?.start ? Date.parse(ad.dates.start) : Number.POSITIVE_INFINITY;
-    if (sort === "date-asc") clone.sort((a,b)=>parseStart(a)-parseStart(b));
-    if (sort === "date-desc") clone.sort((a,b)=>parseStart(b)-parseStart(a));
+    if (sort === "date-asc") clone.sort((a,b)=>parseDate(a)-parseDate(b));
+    if (sort === "date-desc") clone.sort((a,b)=>parseDate(b)-parseDate(a));
     if (sort === "recents")   clone.sort((a,b)=> (Date.parse(b.created_at||"")||0) - (Date.parse(a.created_at||"")||0));
     return clone;
   }, [items, sort]);
