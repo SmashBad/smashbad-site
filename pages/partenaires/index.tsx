@@ -314,9 +314,9 @@ export default function PartenairesPage() {
         )}
 
         {sorted.map((ad) => {
-          const tournoi   = clean(ad.tournoi || ad.titre);
+          const tournoi   = clean(ad.tournoi || ad.tournoi);
           const ville     = clean(ad.ville);
-          const dept      = clean(ad.dept);
+          const dept      = clean(ad.dept_code);
 
           return (
             <article key={ad.id} className="partners-card">
@@ -333,14 +333,11 @@ export default function PartenairesPage() {
               {/* Métadonnées : dates + lieu */}
               <ul className="partners-card__meta">
                 <li className="i-date">
-                  {ad.dates?.start && ad.dates?.end ? (
-                    <>Du {NBSP}<span className="strong">{fmtDate(ad.dates.start)}</span>{NBSP}au{NBSP}<span className="strong">{fmtDate(ad.dates.end)}</span></>
-                  ) : ad.dates?.start ? (
-                    <><span className="strong">{fmtDate(ad.dates.start)}</span></>
-                  ) : ad.dates?.text ? (
-                    <>{ad.dates.text}</>
-                  ) : <>Dates à préciser</>}
+                  {ad.date
+                    ? <>Le {NBSP}<span className="strong">{fmtDate(ad.date)}</span></>
+                    : <>Date à préciser</>}
                 </li>
+
 
                 <li className="i-place">
                   <span className="strong">{ville}</span>
@@ -358,7 +355,7 @@ export default function PartenairesPage() {
                     <>
                       Je suis {NBSP}<span className="strong">{noun}</span>
                       {cl && <> {NBSP}{classWord}{NBSP}<span className="strong">{cl}</span></>}
-                      {ad.age_hidden
+                      {ad.age_public
                         ? <> {NBSP}qui ne souhaite pas préciser son âge</>
                         : (typeof age === "number" && !Number.isNaN(age))
                             ? <> {NBSP}de{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
@@ -376,13 +373,13 @@ export default function PartenairesPage() {
               )}
 
               {/* recherche */}
-              {(ad.rechercheSexe || ad.rechercheClassement) && (
+              {(ad.search_sex || ad.search_ranking) && (
                 <div className="desc-line i-search">
                   {(() => {
-                    const wanted = nounsForSex(ad.rechercheSexe);
-                    const raw = Array.isArray(ad.rechercheClassement)
-                      ? ad.rechercheClassement
-                      : (ad.rechercheClassement ? String(ad.rechercheClassement).split(/[,\s;/]+/) : []);
+                    const wanted = nounsForSex(ad.search_sex);
+                    const raw = Array.isArray(ad.search_ranking)
+                      ? ad.search_ranking
+                      : (ad.search_ranking ? String(ad.search_ranking).split(/[,\s;/]+/) : []);
                     const list = listWithOu(raw);
                     return (
                       <>
