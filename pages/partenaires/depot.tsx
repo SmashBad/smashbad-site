@@ -33,9 +33,30 @@ export default function DepotAnnoncePage() {
     setSubmitting(true);
     try {
       const body = {
-        ...form,
-        sexe: form.sexe || "AUTRE",                    // (ne se produit pas si radio requis)
-        age: form.age ? Number(form.age) : undefined,  // number ou undefined
+        // tournoi
+        tournoi: form.tournoi,
+        ville: form.ville,
+        dept_code: form.dept,
+        date: form.date_text,                  // string "YYYY-MM-DD"
+        tableau: form.tableau,
+        classement: form.classement,
+
+        // identité
+        sexe: sexOut(form.sexe as "H"|"F"),    // "Homme" | "Femme"
+        age: form.age ? Number(form.age) : undefined,
+        age_public: !form.age_ok,              // coché = ne pas afficher → true
+        name: form.name,
+        contact_email: form.email,
+
+        // recherche
+        search_sex: searchSexOut(form.recherche_sexe as "H"|"F"|"AUTRE"),
+        search_ranking: form.recherche_classement,
+
+        // divers
+        notes: form.message,
+
+        // honeypot (on l’envoie VIDE pour passer les contrôles serveur)
+        hp: form.hp || ""
       };
 
       const res = await fetch("/api/partners/create", {
@@ -44,15 +65,17 @@ export default function DepotAnnoncePage() {
         body: JSON.stringify(body),
       });
       const json = await res.json();
+
       if (!res.ok) {
         console.warn(json);
-        setErr("Une erreur est survenue. Merci de vérifier les champs et réessayer.");
+        setErr("Impossible d’enregistrer l’annonce. Vérifie les champs puis réessaie.");
       } else {
-        setOk("Merci ! Ton annonce a été déposée. Elle sera vérifiée et publiée sous 24h.");
+        setOk("Merci ! Ton annonce a été déposée. Elle sera vérifiée et publiée rapidement.");
         setForm({
-          tournoi: "", ville: "", dept: "", date_text: "", tableau: "",
-          sexe: "", classement: "", age: "", age_ok: true,
-          recherche_sexe: "AUTRE", recherche_classement: [], name: "", email: "", message: "", hp: ""
+          tournoi:"", ville:"", dept:"", date_text:"", tableau:"",
+          sexe:"", classement:"", age:"", age_ok:true,
+          recherche_sexe:"AUTRE", recherche_classement:[],
+          name:"", email:"", message:"", hp:""
         });
       }
     } catch {
@@ -60,7 +83,14 @@ export default function DepotAnnoncePage() {
     } finally {
       setSubmitting(false);
     }
+
   };
+
+  // mapping pour l’API / Airtable
+  const sexOut = (v: "H" | "F") => (v === "H" ? "Homme" : "Femme");
+  const searchSexOut = (v: "H" | "F" | "AUTRE") =>
+    v === "H" ? "Homme" : v === "F" ? "Femme" : "Peu importe";
+
 
   return (
     <main className="sb-container sb-section">
@@ -75,7 +105,9 @@ export default function DepotAnnoncePage() {
       <form className="pdepot-form" onSubmit={onSubmit}>
         {/* Anti-spam */}
         <div className="hp" aria-hidden>
-          <label>Ne pas remplir <input value={form.hp} onChange={e=>setField("hp", e.target.value)} /></label>
+          <label>Ne pas remplir
+            <input value={form.hp} onChange={e=>setField("hp", e.target.value)} />
+          </label>
         </div>
 
         {/* ===== Id.svg Ton profil de badiste ===== */}
@@ -85,7 +117,7 @@ export default function DepotAnnoncePage() {
             <span>Ton profil de badiste</span>
           </h2>
 
-          {/* Ligne 1 : Tu es (radios) + Prénom */}
+          {/* Ligne 1 : Tu es (radios H/F) + Prénom */}
           <div className="pdepot-grid2">
             <div className="pdepot-field">
               <span>Tu es…* <small>(donnée publique)</small></span>
@@ -102,6 +134,14 @@ export default function DepotAnnoncePage() {
                 </label>
               </div>
             </div>
+
+            <div className="pdepot-field">
+              <span>Ton prénom* <small>(donnée privée)</small></span>
+              <input placeholder="Adrien" value={form.name}
+                    onChange={e=>setField("name", e.target.value)} required />
+            </div>
+          </div>
+
 
             <div className="pdepot-field">
               <span>Ton prénom* <small>(donnée privée)</small></span>
@@ -168,8 +208,9 @@ export default function DepotAnnoncePage() {
 
             <div className="pdepot-field">
               <span>Date du tournoi *</span>
-              <input placeholder="Sélectionner date"
-                    value={form.date_text} onChange={e=>setField("date_text", e.target.value)} />
+              <input type="date"
+                value={form.date_text}
+                onChange={e=>setField("date_text", e.target.value)} />
             </div>
           </div>
 
