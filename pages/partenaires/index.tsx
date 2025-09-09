@@ -51,6 +51,28 @@ const articleForSex = (sex?: string) => {
   return "un·e"; // neutre / inconnu
 };
 
+// Libellé personne selon le contexte (identité vs recherche)
+const personLabel = (sexRaw?: string, context: "id" | "search" = "id") => {
+  const s = normalizeSex(sexRaw);
+  if (context === "id") {
+    if (s === "H") return "un joueur";
+    if (s === "F") return "une joueuse";
+    return ""; // sexe non défini -> on ne montre PAS "joueur/joueuse"
+  } else {
+    if (s === "H") return "un joueur";
+    if (s === "F") return "une joueuse";
+    return "un joueur ou une joueuse"; // recherche neutre
+  }
+};
+
+// Accord de "classé" : H → classé, F → classée, AUTRE → classé(e)
+const classWordFor = (sexRaw?: string, forceNeutral = false) => {
+  const s = normalizeSex(sexRaw);
+  if (forceNeutral || s === "AUTRE") return "classé(e)";
+  return s === "F" ? "classée" : "classé";
+};
+
+
 // Un seul nounsForSex (sert aussi pour la personne recherchée)
 const nounsForSex = (sexRaw?: string) => {
   const s = normalizeSex(sexRaw);
@@ -355,43 +377,36 @@ export default function PartenairesPage() {
               {/* identité */}
               <div className="desc-line i-id">
                 {(() => {
-                  const cl  = clean(ad.classement);
-                  const age = ad.age;
-                  const sex = ad.sexe as string | undefined;
+                  const label = personLabel(ad.sexe, "id"); // "" si sexe non défini
+                  const cl    = clean(ad.classement);
+                  const age   = ad.age;
 
-                  const classWord = "classé(e)"; // toujours neutre, quelle que soit la personne
-
-                  if (!sex) {
-                    // Sexe non défini -> ne pas afficher "joueur/joueuse"
-                    return (
-                      <>
-                        Je suis {cl ? <>{classWord}{NBSP}<span className="strong">{cl}</span></> : "classé(e)"}
-                        {ad.age_public
-                          ? <> {NBSP}et je ne souhaite pas préciser mon âge</>
-                          : (typeof age === "number" && !Number.isNaN(age))
-                              ? <> {NBSP}et j'ai{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
-                              : null}
-                      </>
-                    );
-                  }
-
-                  // Sexe défini -> garder l’article + le nom, mais "classé(e)" reste neutre
-                  const { noun } = nounsForSex(sex);
-                  const article = sex === "F" ? "une" : sex === "H" ? "un" : "un·e";
+                  // Choix de l'accord pour "classé"
+                  const classWord = classWordFor(ad.sexe, !label /* neutre si pas de joueur/joueuse */);
 
                   return (
                     <>
-                      Je suis {NBSP}<span className="strong">{article}{NBSP}{noun}</span>
-                      {cl && <> {NBSP}{classWord}{NBSP}<span className="strong">{cl}</span></>}
-                      {ad.age_public
-                        ? <> {NBSP}qui ne souhaite pas préciser son âge</>
-                        : (typeof age === "number" && !Number.isNaN(age))
-                            ? <> {NBSP}de{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
-                            : null}
+                      Je suis{NBSP}
+                      {label ? <><span className="strong">{label}</span>{NBSP}</> : null}
+
+                      {/* classement (si présent) */}
+                      {cl ? <>{classWord}{NBSP}<span className="strong">{cl}</span></> : <>classé(e)</>}
+
+                      {/* âge : "de … ans" si on a un label (joueur/joueuse), sinon "et j'ai … ans" */}
+                      {ad.age_public ? (
+                        label
+                          ? <> {NBSP}qui ne souhaite pas préciser son âge</>
+                          : <> {NBSP}et je ne souhaite pas préciser mon âge</>
+                      ) : (typeof age === "number" && !Number.isNaN(age)) ? (
+                        label
+                          ? <> {NBSP}de{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
+                          : <> {NBSP}et j'ai{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
+                      ) : null}
                     </>
                   );
                 })()}
               </div>
+
 
 
               {/* tableau */}
@@ -405,29 +420,24 @@ export default function PartenairesPage() {
               {(ad.search_sex || ad.search_ranking) && (
                 <div className="desc-line i-search">
                   {(() => {
-                    const sSex = ad.search_sex as string | undefined;
+                    const person = personLabel(ad.search_sex, "search"); // "un joueur", "une joueuse", ou "un joueur ou une joueuse"
                     const raw = Array.isArray(ad.search_ranking)
                       ? ad.search_ranking
                       : (ad.search_ranking ? String(ad.search_ranking).split(/[,\s;/]+/) : []);
-                    const list = listWithOu(raw);
-
-                    const classWord = "classé(e)"; // toujours neutre
-
-                    // libellé personne recherchée
-                    const person =
-                      sSex === "F" ? "une joueuse"
-                    : sSex === "H" ? "un joueur"
-                    : "un joueur ou une joueuse";
+                    const list = listWithOu(raw); // ex. "D9 ou R6"
+                    const classWord = classWordFor(ad.search_sex); // AUTRE → "classé(e)"
 
                     return (
                       <>
-                        Je souhaite jouer avec {NBSP}<span className="strong">{person}</span>
+                        Je souhaite jouer avec {NBSP}
+                        <span className="strong">{person}</span>
                         {list && <> {NBSP}{classWord}{NBSP}<span className="strong">{list}</span></>}
                       </>
                     );
                   })()}
                 </div>
               )}
+
 
 
               {/* CTA (vers page contact interne) */}
