@@ -10,120 +10,131 @@ const VIEW_PUBLIC = process.env.AIRTABLE_PARTNERS_VIEW || ""; // optionnel
 
 /* ========= Types ========= */
 export type AdPublic = {
-  id: string;
-  titre?: string;
+  id: string;                // Airtable recordId
+  public_id?: number;        // autonumber éventuel
   tournoi?: string;
   ville?: string;
-  dept?: string;
+  dept_code?: string;
+  date?: string | null;
+  badnet_url?: string;
+  name?: string;             // prénom (privé)
   sexe?: string;
-  classement?: string;
-  tableau?: string;
-  rechercheSexe?: string;
-  rechercheClassement?: string[] | string;
-  lienBadNet?: string;
-  dates?: { start?: string; end?: string; text?: string };
   age?: number | null;
-  age_hidden?: boolean; // true = ne pas afficher
-  created_at?: string;
+  age_public?: boolean;
+  tableau?: string;
+  classement?: string;
+  contact_email?: string;    // privé
+  search_sex?: string;
+  search_ranking?: string[] | string;
+  notes?: string;
+  status?: string;           // Actif | Archivé
+  created_at?: string;       // Created time
+  is_validated?: boolean;
 };
 
-type AdRecord = { id: string; fields: Record<string, any> };
-type AirtableListResponse = { records: AdRecord[] };
+type AdRecord = {
+  id: string;
+  fields: Record<string, any>;
+};
+
+type AirtableListResponse = {
+  records: AdRecord[];
+};
 
 /* ========= Utils ========= */
 const esc = (s: string) => String(s).replace(/'/g, "\\'");
 
 async function airGet(path: string, params?: Record<string, string>) {
-  if (!BASE_ID || !API_TOKEN) throw new Error("Airtable: BASE_ID ou API_TOKEN manquant.");
+  if (!BASE_ID || !API_TOKEN) throw new Error("Airtable env vars manquantes");
   const url = new URL(`${API_URL}/${BASE_ID}/${path}`);
-  if (params) Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
-  const res = await fetch(url.toString(), { headers: { Authorization: `Bearer ${API_TOKEN}` }, cache: "no-store" });
+  if (params) for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
+  const res = await fetch(url.toString(), { headers: { Authorization: `Bearer ${API_TOKEN}` } });
   if (!res.ok) throw new Error(`Airtable GET ${path} → ${res.status} ${res.statusText}`);
   return res.json();
 }
+
 async function airPost(path: string, body: unknown) {
-  if (!BASE_ID || !API_TOKEN) throw new Error("Airtable: BASE_ID ou API_TOKEN manquant.");
+  if (!BASE_ID || !API_TOKEN) throw new Error("Airtable env vars manquantes");
   const res = await fetch(`${API_URL}/${BASE_ID}/${path}`, {
     method: "POST",
     headers: { Authorization: `Bearer ${API_TOKEN}`, "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!res.ok) {
-    const t = await res.text().catch(()=> "");
-    throw new Error(`Airtable POST ${path} → ${res.status} ${res.statusText} ${t}`);
-  }
+  if (!res.ok) throw new Error(`Airtable POST ${path} → ${res.status} ${res.statusText}`);
   return res.json();
 }
 
-/* ========= Mapping lecture ========= */
+/* ========= Mapping ========= */
 function mapAd(rec: AdRecord): AdPublic {
   const f = rec.fields || {};
-  let dates: AdPublic["dates"] = undefined;
-  const rawDate = f["Date"];
-  if (rawDate && typeof rawDate === "object" && ("start" in rawDate || "end" in rawDate)) {
-    dates = { start: rawDate.start, end: rawDate.end };
-  } else if (typeof rawDate === "string") {
-    dates = { text: rawDate };
-  }
-
-  const rawAge = f["Âge"];
-  const age = typeof rawAge === "number" ? rawAge : (rawAge ? Number(rawAge) : null);
-  const ageOk = !!f["Âge_Ok"]; // coché = affichable
-  const age_hidden = !ageOk;
-
   return {
     id: rec.id,
-    titre: f["Titre"],
-    dept: f["Département"] != null ? String(f["Département"]) : undefined,
-    ville: f["Ville"],
-    dates,
-    lienBadNet: f["Lien BadNet"],
-    tournoi: f["Tournoi"],
-    sexe: f["Sexe"],
-    classement: f["Classement"],
-    tableau: f["Tableau"],
-    rechercheSexe: f["Recherche Sexe"],
-    rechercheClassement: f["Recherche Classement"],
-    created_at: f["Créé le"] || (rec as any).createdTime,
-    age,
-    age_hidden,
+    public_id: f["public_id"],
+    tournoi: f["tournoi"],
+    ville: f["ville"],
+    dept_code: f["dept_code"],
+    date: f["date"] ||null,
+    badnet_url: f["badnet_url"],
+    name: f["name"],
+    sexe: f["sexe"],
+    age: typeof f["age"] === "number" ? f["age"] : null,
+    age_public: !!f["age_public"],
+    tableau: f["tableau"],
+    classement: f["classement"],
+    contact_email: f["contact_email"],
+    search_sex: f["search_sex"],
+    search_ranking: f["search_ranking"],
+    notes: f["notes"],
+    status: f["status"],
+    created_at: f["created_at"],
+    is_validated: !!f["is_validated"],
   };
 }
 
-/* ========= Lecture publique ========= */
+/* ========= Lecture (liste publique + filtres) ========= */
 export async function listAdsPublic(query: {
   id?: string;
   depts?: string[];
   classements?: string[];
   tableaux?: string[];
   search?: string;
-  sort?: string;     // pris en charge côté API page
   maxRecords?: number;
+  sort?: "date-asc" | "date-desc" | "recents";
 }) {
   if (query.id) {
-    const json = (await airGet(`${encodeURIComponent(ADS)}/${query.id}`)) as AdRecord;
-    return [mapAd(json)];
+    const rec = (await airGet(`${encodeURIComponent(ADS)}/${query.id}`)) as AdRecord;
+    return [mapAd(rec)];
   }
 
-  const params: Record<string, string> = { pageSize: String(query.maxRecords || 50) };
-  if (VIEW_PUBLIC.trim()) params.view = VIEW_PUBLIC.trim();
+  const params: Record<string, string> = {
+    pageSize: String(query.maxRecords || 50),
+  };
+
+  // Modération : n’afficher que Actif + Validé
+  const filters: string[] = [
+    `{status} = 'Actif'`,
+    `OR({is_validated} = 1, {is_validated} = TRUE())`,
+  ];
 
   const orsEq = (field: string, values: string[]) =>
-    values.length ? `OR(${values.map(v => `{${field}} = '${esc(v)}'`).join(",")})` : "";
+    values.length ? `OR(${values.map(v => `{${field}}='${esc(v)}'`).join(",")})` : "";
 
-  // Modération : Validée = TRUE ET Statut = "Actif"
-  const moderation = `AND({Validée} = TRUE(), {Statut} = 'Actif')`;
+  if (query.depts?.length)       filters.push(orsEq("dept_code", query.depts));
+  if (query.tableaux?.length)    filters.push(orsEq("tableau", query.tableaux));
+  if (query.classements?.length) {
+    // classement contient exactement la valeur
+    filters.push(orsEq("classement", query.classements));
+  }
+  if (query.search) {
+    const s = esc(query.search);
+    filters.push(`OR(SEARCH(LOWER('${s}'), LOWER({tournoi})), SEARCH(LOWER('${s}'), LOWER({ville})))`);
+  }
 
-  const formula: string[] = [moderation];
-  if (query.depts?.length)       formula.push(orsEq("Département", query.depts));
-  if (query.tableaux?.length)    formula.push(orsEq("Tableau", query.tableaux));
-  if (query.classements?.length) formula.push(`OR(${query.classements.map(c => `SEARCH('${esc(c)}', {Classement})`).join(",")})`);
-  if (query.search)              formula.push(
-    `OR(SEARCH(LOWER('${esc(query.search)}'), LOWER({Titre})),
-        SEARCH(LOWER('${esc(query.search)}'), LOWER({Ville})),
-        SEARCH(LOWER('${esc(query.search)}'), LOWER({Tournoi})))`
-  );
-  if (formula.length) params.filterByFormula = `AND(${formula.join(",")})`;
+  if (filters.length) params.filterByFormula = `AND(${filters.join(",")})`;
+
+  // Tri côté Airtable (facultatif). On laisse le tri côté client si tu veux.
+  // Exemple: par created_at (desc) si "recents".
+  if (query.sort === "recents") params.sort = JSON.stringify([{ field: "created_at", direction: "desc" }]);
 
   const json = (await airGet(encodeURIComponent(ADS), params)) as AirtableListResponse;
   return (json.records || []).map(mapAd);
@@ -131,52 +142,41 @@ export async function listAdsPublic(query: {
 
 /* ========= Création d’annonce ========= */
 export async function createAd(fields: Record<string, any>) {
-  // `fields` DOIT utiliser les NOMS RÉELS DES COLONNES Airtable.
+  // champs déjà aux bons noms snake_case
   const body = { records: [{ fields }] };
-  const json = await airPost(encodeURIComponent(ADS), body);
-  return json;
+  return airPost(encodeURIComponent(ADS), body);
 }
 
-// --- à coller en bas de: lib/data/airtable_annonces_partenaires.ts ---
-
-/** Récupère l'annonce + l'email privé de l'auteur pour la page de contact */
+/* ========= Détail pour contact + e-mail privé ========= */
 export async function getAdForContact(id: string) {
-  const rec = (await airGet(`${encodeURIComponent(ADS)}/${id}`)) as { id: string; fields: Record<string, any> };
-  const authorEmail = (rec.fields?.["Contact (e-mail)"] as string | undefined) || undefined;
-  return { record: rec, authorEmail };
+  const rec = (await airGet(`${encodeURIComponent(ADS)}/${id}`)) as AdRecord;
+  const email = rec.fields?.["contact_email"] as string | undefined;
+  const name = rec.fields?.["name"] as string | undefined;
+  return { record: rec, authorEmail: email, authorName: name };
 }
 
-/**
- * Crée une "prise de contact" dans la table Partenaires_Reponses
- * NB: la table doit avoir un champ "Annonce" (Link to Partenaires_Annonces)
- */
+/* ========= Enregistrer une réponse (contact) ========= */
 export async function createContactRequest(payload: {
-  adId: string;
+  adRecordId: string;       // on stocke le recordId dans `ad` (texte)
   first_name: string;
   last_name: string;
+  sex?: string;
   ranking?: string;
-  message?: string;
   email: string;
   phone?: string;
+  message?: string;
 }) {
-  const body = {
-    records: [
-      {
-        fields: {
-          // ⚠️ ce champ doit exister et être un "Link to another record" vers Partenaires_Annonces
-          Annonce: [payload.adId],
-
-          // Les colonnes suivantes peuvent être adaptées à tes intitulés Airtable si besoin
-          first_name: payload.first_name,
-          last_name: payload.last_name,
-          ranking: payload.ranking || "",
-          message: payload.message || "",
-          email: payload.email,
-          phone: payload.phone || "",
-          created_at: new Date().toISOString(),
-        },
-      },
-    ],
+  const fields = {
+    ad: payload.adRecordId,        // champ texte (pas Link), on met le recordId
+    first_name: payload.first_name,
+    last_name: payload.last_name,
+    sex: payload.sex || "",
+    ranking: payload.ranking || "",
+    email: payload.email,
+    phone: payload.phone || "",
+    message: payload.message || "",
+    status: "Nouveau",
   };
-  return airPost(encodeURIComponent(CONTACTS), body);
+  const body = { records: [{ fields }] };
+  return airPost(encodeURIComponent(RESPONSES), body);
 }

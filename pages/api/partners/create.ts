@@ -1,52 +1,63 @@
 // pages/api/partners/create.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
-import { CreateAdSchema } from "../../../schemas/partners";
 import { createAd } from "../../../lib/data/airtable_annonces_partenaires";
 
-// util simple pour forcer string
+const CreateAdSchema = z.object({
+  // champs du formulaire
+  tournoi: z.string().min(2),
+  ville: z.string().min(1),
+  dept_code: z.string().min(1),
+  date: z.string().min(2),                 // texte pour l’instant
+  tableau: z.string().min(1),
+  sexe: z.string().min(1),
+  classement: z.string().min(1),
+  age: z.coerce.number().int().positive().max(120).optional(),
+  age_public: z.boolean().optional(),
+  search_sex: z.string().min(1),
+  search_ranking: z.array(z.string()).optional().default([]),
+  contact_email: z.string().email(),
+  name: z.string().min(1).optional(),      // prénom (privé)
+  notes: z.string().optional(),
+  // honeypot
+  hp: z.string().optional(),
+});
+
 const s = (v: unknown) => (v ?? "").toString().trim();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
 
   try {
-    const data = req.body;
-    // 1) anti-spam (honeypot)
-    if (data?.hp) return res.status(200).json({ ok: true, spam: true });
+    const data = req.body || {};
+    if (data.hp) return res.status(200).json({ ok: true, spam: true }); // honeypot
 
-    // 2) validation
     const parsed = CreateAdSchema.parse(data);
 
-    // 3) mapping -> noms des colonnes Airtable
     const fields: Record<string, any> = {
-      // Affichage public côté listing
-      "Tournoi":               s(parsed.tournoi),
-      "Ville":                 s(parsed.ville),
-      "Département":           s(parsed.dept),
-      "Date":                  s(parsed.date_text),           // texte simple pour l’instant
-      "Tableau":               s(parsed.tableau),
+      tournoi: s(parsed.tournoi),
+      ville: s(parsed.ville),
+      dept_code: s(parsed.dept_code),
+      date: s(parsed.date),
+      tableau: s(parsed.tableau),
 
-      "Sexe":                  s(parsed.sexe),
-      "Classement":            s(parsed.classement),
-      "Âge":                   parsed.age ?? undefined,
-      "Âge_Ok":                !!parsed.age_ok,               // checkbox : true -> affichable
+      sexe: s(parsed.sexe),
+      classement: s(parsed.classement),
+      age: parsed.age ?? undefined,
+      age_public: !!parsed.age_public,
 
-      "Recherche Sexe":        s(parsed.recherche_sexe),
-      "Recherche Classement":  parsed.recherche_classement,   // multi-select (ou texte multiple)
+      search_sex: s(parsed.search_sex),
+      search_ranking: parsed.search_ranking,
 
-      "Contact (e-mail)":      s(parsed.email),
-      "Notes":                 s(parsed.message),
+      contact_email: s(parsed.contact_email),
+      name: s(parsed.name || ""),
+      notes: s(parsed.notes || ""),
 
-      // modération par défaut
-      "Statut":                "Actif",
-      "Validée":               false,                         // tu coches manuellement ensuite
+      status: "Actif",
+      is_validated: false, // tu coches ensuite manuellement
     };
 
-    // 4) écriture Airtable
     const created = await createAd(fields);
-
-    // 5) réponse
     return res.status(200).json({ ok: true, created });
   } catch (err: any) {
     if (err?.name === "ZodError") {
