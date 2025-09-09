@@ -45,6 +45,12 @@ const normalizeSex = (raw?: string): SexKind => {
   return "AUTRE";
 };
 
+const articleForSex = (sex?: string) => {
+  if (sex === "F") return "une";
+  if (sex === "H") return "un";
+  return "un·e"; // neutre / inconnu
+};
+
 // Un seul nounsForSex (sert aussi pour la personne recherchée)
 const nounsForSex = (sexRaw?: string) => {
   const s = normalizeSex(sexRaw);
@@ -349,12 +355,33 @@ export default function PartenairesPage() {
               {/* identité */}
               <div className="desc-line i-id">
                 {(() => {
-                  const { noun, classWord } = nounsForSex(ad.sexe);
                   const cl  = clean(ad.classement);
                   const age = ad.age;
+                  const sex = ad.sexe as string | undefined;
+
+                  const classWord = "classé(e)"; // toujours neutre, quelle que soit la personne
+
+                  if (!sex) {
+                    // Sexe non défini -> ne pas afficher "joueur/joueuse"
+                    return (
+                      <>
+                        Je suis {cl ? <>{classWord}{NBSP}<span className="strong">{cl}</span></> : "classé(e)"}
+                        {ad.age_public
+                          ? <> {NBSP}et je ne souhaite pas préciser mon âge</>
+                          : (typeof age === "number" && !Number.isNaN(age))
+                              ? <> {NBSP}et j'ai{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
+                              : null}
+                      </>
+                    );
+                  }
+
+                  // Sexe défini -> garder l’article + le nom, mais "classé(e)" reste neutre
+                  const { noun } = nounsForSex(sex);
+                  const article = sex === "F" ? "une" : sex === "H" ? "un" : "un·e";
+
                   return (
                     <>
-                      Je suis {NBSP}<span className="strong">{noun}</span>
+                      Je suis {NBSP}<span className="strong">{article}{NBSP}{noun}</span>
                       {cl && <> {NBSP}{classWord}{NBSP}<span className="strong">{cl}</span></>}
                       {ad.age_public
                         ? <> {NBSP}qui ne souhaite pas préciser son âge</>
@@ -365,6 +392,7 @@ export default function PartenairesPage() {
                   );
                 })()}
               </div>
+
 
               {/* tableau */}
               {ad.tableau && (
