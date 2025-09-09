@@ -5,7 +5,7 @@ const BASE_ID = process.env.AIRTABLE_BASE_ID || "appkxlroj23rDP2Ep";
 const API_TOKEN = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN || "";
 
 const ADS = process.env.AIRTABLE_PARTNERS_ADS || "Partenaires_Annonces";
-const CONTACTS = process.env.AIRTABLE_PARTNERS_RESPONSES || "Partenaires_Reponses";
+const RESPONSES = process.env.AIRTABLE_PARTNERS_RESPONSES || "Partenaires_Reponses";
 const VIEW_PUBLIC = process.env.AIRTABLE_PARTNERS_VIEW || ""; // optionnel
 
 /* ========= Types ========= */
