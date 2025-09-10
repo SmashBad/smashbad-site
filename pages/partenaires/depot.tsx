@@ -95,14 +95,8 @@ export default function DepotAnnoncePage() {
     e: React.MouseEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>
   ) => {
     const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void };
-    if (typeof el.showPicker === "function") {
-      // petite ruse pour éviter un bug de focus/blur sur certains navigateurs
-      requestAnimationFrame(() => el.showPicker!());
-    }
+    if (typeof el.showPicker === "function") requestAnimationFrame(() => el.showPicker!());
   };
-
-
-
 
   return (
     <main className="sb-container sb-section">
@@ -219,27 +213,52 @@ export default function DepotAnnoncePage() {
                 onClick={openDatePicker}
                 onFocus={openDatePicker}
               />
+
             </div>
           </div>
 
-          {/* 9-10) Tableau + Classement (même ligne) */}
-          <div className="pdepot-grid2">
-            <div className="pdepot-field">
-              <span>Tableau pour lequel tu cherches un(e) partenaire *</span>
-              <select value={form.tableau} onChange={e=>setField("tableau", e.target.value)} required>
-                <option value="">— Sélectionner —</option>
-                {TABLEAUX.map(t => <option key={t} value={t}>{t}</option>)}
-              </select>
+          {/* Tableau */}
+          <div className="pdepot-field">
+            <span>Tableau pour lequel tu cherches un(e) partenaire *</span>
+            <div className="pdepot-chips">
+              {TABLEAUX.map(t => {
+                const on = form.tableau === t;
+                return (
+                  <button
+                    key={t}
+                    type="button"
+                    className={`pdepot-chip ${on ? "is-active" : ""}`}
+                    aria-pressed={on}
+                    onClick={() => setField("tableau", t)}
+                  >
+                    {t}
+                  </button>
+                );
+              })}
             </div>
+          </div>
 
+          {/* Classement */}
             <div className="pdepot-field">
               <span>Ton classement dans ce tableau *</span>
-              <select value={form.classement} onChange={e=>setField("classement", e.target.value)} required>
-                <option value="">— Sélectionner —</option>
-                {CLASSEMENTS.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
+              <div className="pdepot-chips">
+                {CLASSEMENTS.map(c => {
+                  const on = form.classement === c;
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      className={`pdepot-chip ${on ? "is-active" : ""}`}
+                      aria-pressed={on}
+                      onClick={() => setField("classement", c)}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+
         </section>
 
         {/* ===== LookFor.svg Profil recherché ===== */}
@@ -297,6 +316,19 @@ export default function DepotAnnoncePage() {
             </div>
           </div>
         </section>
+
+        <section className="pdepot-section">
+          <h2 className="pdepot-title">
+            <img src="/Note.svg" alt="" aria-hidden />
+            <span>Notes</span>
+          </h2>
+          <div className="pdepot-field">
+            <span>Ajoute des précisions (optionnel)</span>
+            <textarea rows={4} value={form.message ?? form.message}
+                      onChange={e=>setField("notes", e.target.value)} />
+          </div>
+        </section>
+
 
         {/* Bouton + messages */}
         <div className="pdepot-actions">

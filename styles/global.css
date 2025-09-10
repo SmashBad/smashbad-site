@@ -812,187 +812,145 @@ input[type="range"]{ width:100%; }
 .partners-filterbar__label--split{ margin-left: 16px; }
 
 
+/* ============================================================
+   Dépôt d'annonce — styles isolés
+   (tout est scopé .pdepot-form pour éviter les conflits)
+   ============================================================ */
 
+:root { color-scheme: dark; }
+
+/* Palette locale (peux changer les valeurs si besoin) */
+.pdepot-form {
+  --bg-chip: rgba(255,255,255,.06);
+  --bd-chip: rgba(255,255,255,.18);
+  --bg-chip-hover: #00D1FF14;
+  --bd-chip-hover: #00D1FF88;
+  --bg-chip-active: #00D1FF;              /* turquoise actif */
+  --tx-chip-active: #081827;              /* texte sombre actif */
+  --glow-active: 0 8px 20px rgba(0,209,255,.35);
+  --bd-focus: #00D1FF;
+  --tx-muted: rgba(255,255,255,.55);
+  --tx-placeholder: rgba(255,255,255,.45);
+}
+
+/* Sections & titres */
+.pdepot-form .pdepot-section { margin: 56px 0; }
 .pdepot-form .pdepot-title {
   display:flex; align-items:center; gap:10px;
-  font-family: Audiowide, system-ui; font-size: 18px; margin: 0 0 12px;
+  font-family: Audiowide, system-ui; font-size:18px; margin:0 0 14px;
 }
 .pdepot-form .pdepot-title img { width:18px; height:18px; opacity:.9; }
 
-/* Grille */
-.pdepot-form .pdepot-grid {
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px 18px;
-}
-@media (max-width: 780px) {
-  .pdepot-form .pdepot-grid { grid-template-columns: 1fr; }
-}
-
-/* Champs */
-.pdepot-form .pdepot-field > span { display:block; font-weight:500; margin-bottom:6px; }
-.pdepot-form .pdepot-field small { opacity:.7; font-weight:400; }
-.pdepot-form .pdepot-field { margin-bottom: 6px; }
-
-/* Radios pastilles */
-.pdepot-form .pdepot-radios { display:flex; gap:10px; flex-wrap:wrap; }
-.pdepot-form .pdepot-radio {
-  display:inline-flex; align-items:center; gap:8px;
-  border:1px solid rgba(255,255,255,.15);
-  padding:8px 12px; border-radius:999px; cursor:pointer; user-select:none;
-  background: rgba(255,255,255,.04);
-}
-.pdepot-form .pdepot-radio input { display:none; }
-.pdepot-form .pdepot-radio.is-on { border-color: rgba(0, 204, 255, .5); background: rgba(0, 204, 255, .08); }
-
-/* Chips classements (pas de collision avec .chip existant) */
-.pdepot-form .pdepot-chips { display:flex; flex-wrap:wrap; gap:10px; }
-.pdepot-form .pdepot-chip {
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:999px; padding:8px 14px; line-height:1;
-  background: rgba(255,255,255,.04);
-}
-.pdepot-form .pdepot-chip.is-active {
-  border-color:#00D1FF; background:#00D1FF22;
-}
-
-/* Actions + messages */
-.pdepot-form .pdepot-actions { margin-top: 12px; display:flex; align-items:center; gap:12px; }
-.pdepot-form .pdepot-ok { color:#25d39e; }
-.pdepot-form .pdepot-err { color:#ff6b6b; }
-.pdepot-form .pdepot-legal { opacity:.75; margin-top:12px; font-size:.95em; }
-
-/* ----- container & sections ----- */
-
-.pdepot-form .pdepot-title {
-  display:flex; align-items:center; gap:10px;
-  font-family: Audiowide, system-ui; font-size:18px; margin:0 0 12px;
-}
-.pdepot-form .pdepot-title img { width:18px; height:18px; opacity:.9; }
-
-/* ----- grids ----- */
-.pdepot-form .pdepot-grid2 {
-  display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px 18px;
-}
-.pdepot-form .pdepot-grid3 {
-  display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px 18px;
-}
+/* Grilles */
+.pdepot-form .pdepot-grid2 { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); row-gap:32px; column-gap:28px; }
+.pdepot-form .pdepot-grid3 { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); row-gap:32px; column-gap:28px; }
 @media (max-width: 900px) {
   .pdepot-form .pdepot-grid2,
   .pdepot-form .pdepot-grid3 { grid-template-columns: 1fr; }
 }
 
-/* ----- fields & inputs (dark look) ----- */
-.pdepot-form .pdepot-field > span { display:block; font-weight:500; margin-bottom:6px; }
-.pdepot-form .pdepot-field small { opacity:.7; font-weight:400; }
+/* Champs */
+.pdepot-form .pdepot-field { margin-bottom: 12px; }
+.pdepot-form .pdepot-field > span { display:block; font-weight:500; margin-bottom:12px; }
+
+/* Input/select/textarea (dark) */
 .pdepot-form input,
 .pdepot-form select,
 .pdepot-form textarea {
   width:100%;
-  background: rgba(255,255,255,.06);
+  background: var(--bg-chip);
   color:#fff;
-  border:1px solid rgba(255,255,255,.15);
+  border:1px solid var(--bd-chip);
   border-radius:12px;
-  padding:10px 12px;
+  padding:12px 14px;
   outline:none;
 }
 .pdepot-form input::placeholder,
-.pdepot-form textarea::placeholder { color: rgba(255,255,255,.55); }
-.pdepot-form select { appearance:none; }
+.pdepot-form textarea::placeholder { color: var(--tx-placeholder); }
 
-/* ----- radios pastilles ----- */
-.pdepot-form .pdepot-radios { display:flex; gap:10px; flex-wrap:wrap; }
-.pdepot-form .pdepot-radio {
-  display:inline-flex; align-items:center; gap:8px;
-  border:1px solid rgba(255,255,255,.15);
-  padding:8px 12px; border-radius:999px; cursor:pointer; user-select:none;
-  background: rgba(255,255,255,.04);
-}
-.pdepot-form .pdepot-radio input { display:none; }
-.pdepot-form .pdepot-radio.is-on { border-color:#00D1FF; background:#00D1FF22; }
+.pdepot-form input:focus,
+.pdepot-form select:focus,
+.pdepot-form textarea:focus { border-color: var(--bd-focus); }
 
-/* ----- chips classements ----- */
-.pdepot-form .pdepot-chips { display:flex; flex-wrap:wrap; gap:10px; }
-.pdepot-form .pdepot-chip {
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:999px; padding:8px 14px; line-height:1;
-  background: rgba(255,255,255,.04); color:#fff;
-}
-.pdepot-form .pdepot-chip.is-active { border-color:#00D1FF; background:#00D1FF22; }
-
-/* ----- actions & footnotes ----- */
-.pdepot-form .pdepot-actions { margin-top:12px; display:flex; align-items:center; gap:12px; }
-.pdepot-form .pdepot-ok { color:#25d39e; }
-.pdepot-form .pdepot-err { color:#ff6b6b; }
-.pdepot-form .pdepot-legal { opacity:.75; margin-top:12px; font-size:.95em; }
-
-/* Respiration ↑ */
-.pdepot-form .pdepot-section { margin: 48px 0; }
-.pdepot-form .pdepot-grid2,
-.pdepot-form .pdepot-grid3 { gap: 22px 26px; row-gap: 28px; column-gap: 26px; }
-.pdepot-form .pdepot-field > span { margin-bottom: 12px; }
-
-/* Honeypot invisible mais dans le DOM */
-.pdepot-form .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
-
-/* Inputs dark (évite champs blancs) */
-.pdepot-form input,
-.pdepot-form select,
-.pdepot-form textarea {
-  width:100%;
-  background: rgba(255, 255, 255, 0.06);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:12px;
-  padding:10px 12px;
-  outline:none;
-}
-
-/* Retirer flèches number */
-.pdepot-form input[type=number]{ -moz-appearance:textfield; }
-.pdepot-form input[type=number]::-webkit-outer-spin-button,
-.pdepot-form input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
-
-/* Checkbox alignée sur une ligne */
-.pdepot-form .pdepot-check {
-  display:inline-flex; align-items:center; gap:10px; margin-top:10px;
-  white-space:nowrap;
-}
-.pdepot-form .pdepot-check input { accent-color:#00D1FF; }
-
-/* Selects : chevron + lisibilité */
+/* Selects : chevron custom + pointeur */
 .pdepot-form select {
   appearance:none;
-  background-image: url("/Select.svg");
-  background-repeat:no-repeat; background-position:right 12px center; background-size:18px 18px;
-  padding-right:36px;
+  cursor: pointer;
+  background-image: url("/select.svg");
+  background-repeat:no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  padding-right: 38px;
 }
-.pdepot-form select option { color:#111; }  /* menu natif souvent clair */
+.pdepot-form select option { color:#0b1623; } /* lisible si le menu natif reste clair */
+.pdepot-form select:disabled { opacity:.6; }
 
-/* Radios & Chips = vrais boutons cliquables */
-.pdepot-form .pdepot-radio,
-.pdepot-form .pdepot-chip { cursor:pointer; transition:background .15s,border-color .15s; }
-.pdepot-form .pdepot-radio:hover,
-.pdepot-form .pdepot-chip:hover { border-color:#00D1FF88; background:#00D1FF14; }
+/* Scrollbars (Chrome/Edge) pour les menus et listes — plus sombres */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 10px; }
+*::-webkit-scrollbar-track { background: rgba(255,255,255,.06); }
 
+/* Radios pastilles (sexe + recherche_sexe) */
+.pdepot-form .pdepot-radios { display:flex; gap:12px; flex-wrap:wrap; }
+.pdepot-form .pdepot-radio {
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid var(--bd-chip); background: var(--bg-chip);
+  padding:10px 14px; border-radius:999px; cursor:pointer; user-select:none;
+  transition: background .15s, border-color .15s, transform .08s;
+}
+.pdepot-form .pdepot-radio:hover { border-color: var(--bd-chip-hover); background: var(--bg-chip-hover); }
+.pdepot-form .pdepot-radio.is-on { 
+  background: var(--bg-chip-active); border-color: var(--bg-chip-active);
+  color: var(--tx-chip-active); font-weight: 700; box-shadow: var(--glow-active);
+}
+.pdepot-form .pdepot-radio input { display:none; }
 
-/* Le champ entier se comporte comme un bouton (et pas seulement l’icône) */
+/* Chips (classements & tableau) */
+.pdepot-form .pdepot-chips { display:flex; flex-wrap:wrap; gap:12px; }
+.pdepot-form .pdepot-chip {
+  border:1px solid var(--bd-chip);
+  background: var(--bg-chip);
+  color:#fff;
+  border-radius:999px;
+  padding:10px 16px;
+  line-height:1;
+  cursor:pointer;
+  transition: background .15s, border-color .15s, box-shadow .15s, transform .08s;
+}
+.pdepot-form .pdepot-chip:hover { border-color: var(--bd-chip-hover); background: var(--bg-chip-hover); }
+.pdepot-form .pdepot-chip.is-active {
+  background: var(--bg-chip-active);
+  border-color: var(--bg-chip-active);
+  color: var(--tx-chip-active);
+  font-weight: 700;
+  box-shadow: var(--glow-active);
+}
+
+/* Checkbox alignée + une seule ligne */
+.pdepot-form .pdepot-check { display:inline-flex; align-items:center; gap:10px; margin-top:10px; white-space:nowrap; }
+.pdepot-form .pdepot-check input { accent-color: var(--bg-chip-active); }
+
+/* Inputs number : retirer les flèches */
+.pdepot-form input[type="number"] { -moz-appearance:textfield; }
+.pdepot-form input[type="number"]::-webkit-outer-spin-button,
+.pdepot-form input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+
+/* Date picker : champ entier cliquable + icône calendrier blanche */
 .pdepot-form input[type="date"] { cursor: pointer; }
-
-/* Améliore l’icône calendrier sur WebKit */
 .pdepot-form input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);           /* icône claire sur fond sombre */
-  opacity: .8;
+  filter: invert(1) brightness(1.8);
+  opacity:.9;
 }
 
+/* Honeypot totalement invisible mais présent dans le DOM */
+.pdepot-form .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
 
-/* Indique que c’est cliquable */
-.pdepot-form select { cursor: pointer; }
+/* Actions & messages */
+.pdepot-form .pdepot-actions { margin-top:18px; display:flex; align-items:center; gap:12px; }
+.pdepot-form .pdepot-ok { color:#25d39e; }
+.pdepot-form .pdepot-err { color:#ff6b6b; }
+.pdepot-form .pdepot-legal { opacity:.75; margin-top:14px; font-size:.95em; }
 
-/* L’option survolée dans la liste (quand le navigateur le supporte) */
-.pdepot-form select option:checked,
-.pdepot-form select option:focus,
-.pdepot-form select option:hover {
-  background: #0e2030;
-  color: #fff;
-}
+/* Placeholders / texte atténué */
+.pdepot-form small { color: var(--tx-muted); }
+
