@@ -19,6 +19,8 @@
   --shadow-btn-height: 42px;
   --shadow-btn-hpad:  18px;
   --shadow-btn-gap:   36px;
+
+  color-scheme:dark;
 }
 
 *{ box-sizing:border-box }
