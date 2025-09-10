@@ -59,6 +59,13 @@ export default function DepotAnnoncePage() {
         hp: form.hp || ""
       };
 
+      if (!form.sexe) {
+        setErr("Merci de choisir « Tu es » : un joueur ou une joueuse.");
+        setSubmitting(false);
+        return;
+      }
+
+
       const res = await fetch("/api/partners/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -123,30 +130,31 @@ export default function DepotAnnoncePage() {
             <span>Ton profil de badiste</span>
           </h2>
 
-          {/* Ligne 1 : Tu es (radios H/F) + Prénom */}
-          <div className="pdepot-grid2">
-            <div className="pdepot-field">
-              <span>Tu es…* <small>(donnée publique)</small></span>
-              <div className="pdepot-radios">
-                <label className={`pdepot-radio ${form.sexe==="H"?"is-on":""}`}>
-                  <input type="radio" name="sexe" value="H" required
-                        checked={form.sexe==="H"} onChange={()=>setField("sexe","H")} />
-                  un joueur
-                </label>
-                <label className={`pdepot-radio ${form.sexe==="F"?"is-on":""}`}>
-                  <input type="radio" name="sexe" value="F" required
-                        checked={form.sexe==="F"} onChange={()=>setField("sexe","F")} />
-                  une joueuse
-                </label>
-              </div>
-            </div>
-
-            <div className="pdepot-field">
-              <span>Ton prénom* <small>(donnée privée)</small></span>
-              <input placeholder="Adrien" value={form.name}
-                    onChange={e=>setField("name", e.target.value)} required />
+          {/* Tu es… (H/F, toggle off si on re-clique) */}
+          <div className="pdepot-field">
+            <span>Tu es…* <small>(donnée publique)</small></span>
+            <div className="pdepot-radios" role="radiogroup" aria-label="Tu es…">
+              <button
+                type="button"
+                className={`pdepot-radio ${form.sexe==="H" ? "is-on" : ""}`}
+                role="radio"
+                aria-checked={form.sexe==="H"}
+                onClick={() => setField("sexe", form.sexe==="H" ? "" : "H")}
+              >
+                un joueur
+              </button>
+              <button
+                type="button"
+                className={`pdepot-radio ${form.sexe==="F" ? "is-on" : ""}`}
+                role="radio"
+                aria-checked={form.sexe==="F"}
+                onClick={() => setField("sexe", form.sexe==="F" ? "" : "F")}
+              >
+                une joueuse
+              </button>
             </div>
           </div>
+
         
           {/* Ligne 2 : Âge (+ case dessous) + Email */}
           <div className="pdepot-grid2">
@@ -268,27 +276,40 @@ export default function DepotAnnoncePage() {
             <span>Profil recherché</span>
           </h2>
 
-          {/* 11) Tu cherches… */}
+          {/* Tu cherches… (H/F/AUTRE, toggle off) */}
           <div className="pdepot-field">
             <span>Tu cherches…* </span>
-            <div className="pdepot-radios">
-              <label className={`pdepot-radio ${form.recherche_sexe==="H"?"is-on":""}`}>
-                <input type="radio" name="recherche_sexe" value="H"
-                      checked={form.recherche_sexe==="H"} onChange={()=>setField("recherche_sexe","H")} />
+            <div className="pdepot-radios" role="radiogroup" aria-label="Tu cherches…">
+              <button
+                type="button"
+                className={`pdepot-radio ${form.recherche_sexe==="H" ? "is-on" : ""}`}
+                role="radio"
+                aria-checked={form.recherche_sexe==="H"}
+                onClick={() => setField("recherche_sexe", form.recherche_sexe==="H" ? "" : "H")}
+              >
                 un joueur
-              </label>
-              <label className={`pdepot-radio ${form.recherche_sexe==="F"?"is-on":""}`}>
-                <input type="radio" name="recherche_sexe" value="F"
-                      checked={form.recherche_sexe==="F"} onChange={()=>setField("recherche_sexe","F")} />
+              </button>
+              <button
+                type="button"
+                className={`pdepot-radio ${form.recherche_sexe==="F" ? "is-on" : ""}`}
+                role="radio"
+                aria-checked={form.recherche_sexe==="F"}
+                onClick={() => setField("recherche_sexe", form.recherche_sexe==="F" ? "" : "F")}
+              >
                 une joueuse
-              </label>
-              <label className={`pdepot-radio ${form.recherche_sexe==="AUTRE"?"is-on":""}`}>
-                <input type="radio" name="recherche_sexe" value="AUTRE"
-                      checked={form.recherche_sexe==="AUTRE"} onChange={()=>setField("recherche_sexe","AUTRE")} />
+              </button>
+              <button
+                type="button"
+                className={`pdepot-radio ${form.recherche_sexe==="AUTRE" ? "is-on" : ""}`}
+                role="radio"
+                aria-checked={form.recherche_sexe==="AUTRE"}
+                onClick={() => setField("recherche_sexe", form.recherche_sexe==="AUTRE" ? "" : "AUTRE")}
+              >
                 peu importe
-              </label>
+              </button>
             </div>
           </div>
+
 
           {/* 12) Son classement (multi) */}
           <div className="pdepot-field">
