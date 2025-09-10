@@ -155,8 +155,7 @@ export default function DepotAnnoncePage() {
                 </button>
               </div>
             </div>
-          </div>
-
+          
             <div className="pdepot-field">
               <span>Ton prénom* <small>(donnée privée)</small></span>
               <input
