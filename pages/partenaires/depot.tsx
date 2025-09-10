@@ -130,29 +130,32 @@ export default function DepotAnnoncePage() {
             <span>Ton profil de badiste</span>
           </h2>
 
-          {/* Tu es… (H/F, toggle off si on re-clique) */}
-          <div className="pdepot-field">
-            <span>Tu es…* <small>(donnée publique)</small></span>
-            <div className="pdepot-radios" role="radiogroup" aria-label="Tu es…">
-              <button
-                type="button"
-                className={`pdepot-radio ${form.sexe==="H" ? "is-on" : ""}`}
-                role="radio"
-                aria-checked={form.sexe==="H"}
-                onClick={() => setField("sexe", form.sexe==="H" ? "" : "H")}
-              >
-                un joueur
-              </button>
-              <button
-                type="button"
-                className={`pdepot-radio ${form.sexe==="F" ? "is-on" : ""}`}
-                role="radio"
-                aria-checked={form.sexe==="F"}
-                onClick={() => setField("sexe", form.sexe==="F" ? "" : "F")}
-              >
-                une joueuse
-              </button>
+          <div className="pdepot-grid2">
+            {/* Tu es… (H/F, toggle off si on re-clique) */}
+            <div className="pdepot-field">
+              <span>Tu es…* <small>(donnée publique)</small></span>
+              <div className="pdepot-radios" role="radiogroup" aria-label="Tu es…">
+                <button
+                  type="button"
+                  className={`pdepot-radio ${form.sexe==="H" ? "is-on" : ""}`}
+                  role="radio"
+                  aria-checked={form.sexe==="H"}
+                  onClick={() => setField("sexe", form.sexe==="H" ? "" : "H")}
+                >
+                  un joueur
+                </button>
+                <button
+                  type="button"
+                  className={`pdepot-radio ${form.sexe==="F" ? "is-on" : ""}`}
+                  role="radio"
+                  aria-checked={form.sexe==="F"}
+                  onClick={() => setField("sexe", form.sexe==="F" ? "" : "F")}
+                >
+                  une joueuse
+                </button>
+              </div>
             </div>
+          </div>
 
             <div className="pdepot-field">
               <span>Ton prénom* <small>(donnée privée)</small></span>
