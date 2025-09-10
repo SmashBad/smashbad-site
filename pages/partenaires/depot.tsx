@@ -91,11 +91,13 @@ export default function DepotAnnoncePage() {
   const searchSexOut = (v: "H" | "F" | "AUTRE") =>
     v === "H" ? "Homme" : v === "F" ? "Femme" : "Peu importe";
 
-  const openDatePicker = (e: React.MouseEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>) => {
-    
+  const openDatePicker = (
+    e: React.MouseEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>
+  ) => {
+    const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void };
     if (typeof el.showPicker === "function") {
-      // éviter les comportements bizarres sur focus
-      requestAnimationFrame(() => el.showPicker());
+      // petite ruse pour éviter un bug de focus/blur sur certains navigateurs
+      requestAnimationFrame(() => el.showPicker!());
     }
   };
 
