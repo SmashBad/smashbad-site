@@ -810,7 +810,7 @@ input[type="range"]{ width:100%; }
 .partners-filterbar__label--split{ margin-left: 16px; }
 
 
-.pdepot-form .pdepot-section { margin: 28px 0; }
+
 .pdepot-form .pdepot-title {
   display:flex; align-items:center; gap:10px;
   font-family: Audiowide, system-ui; font-size: 18px; margin: 0 0 12px;
@@ -830,6 +830,7 @@ input[type="range"]{ width:100%; }
 /* Champs */
 .pdepot-form .pdepot-field > span { display:block; font-weight:500; margin-bottom:6px; }
 .pdepot-form .pdepot-field small { opacity:.7; font-weight:400; }
+.pdepot-form .pdepot-field { margin-bottom: 6px; }
 
 /* Radios pastilles */
 .pdepot-form .pdepot-radios { display:flex; gap:10px; flex-wrap:wrap; }
@@ -853,9 +854,6 @@ input[type="range"]{ width:100%; }
   border-color:#00D1FF; background:#00D1FF22;
 }
 
-/* Checkbox en ligne */
-.pdepot-form .pdepot-check { display:flex; align-items:center; gap:8px; margin-top:6px; }
-
 /* Actions + messages */
 .pdepot-form .pdepot-actions { margin-top: 12px; display:flex; align-items:center; gap:12px; }
 .pdepot-form .pdepot-ok { color:#25d39e; }
@@ -863,7 +861,7 @@ input[type="range"]{ width:100%; }
 .pdepot-form .pdepot-legal { opacity:.75; margin-top:12px; font-size:.95em; }
 
 /* ----- container & sections ----- */
-.pdepot-form .pdepot-section { margin: 28px 0; }
+
 .pdepot-form .pdepot-title {
   display:flex; align-items:center; gap:10px;
   font-family: Audiowide, system-ui; font-size:18px; margin:0 0 12px;
@@ -920,9 +918,6 @@ input[type="range"]{ width:100%; }
 }
 .pdepot-form .pdepot-chip.is-active { border-color:#00D1FF; background:#00D1FF22; }
 
-/* ----- check inline ----- */
-.pdepot-form .pdepot-check { display:flex; align-items:center; gap:8px; margin-top:6px; }
-
 /* ----- actions & footnotes ----- */
 .pdepot-form .pdepot-actions { margin-top:12px; display:flex; align-items:center; gap:12px; }
 .pdepot-form .pdepot-ok { color:#25d39e; }
@@ -932,8 +927,8 @@ input[type="range"]{ width:100%; }
 /* Respiration ↑ */
 .pdepot-form .pdepot-section { margin: 48px 0; }
 .pdepot-form .pdepot-grid2,
-.pdepot-form .pdepot-grid3 { gap: 22px 26px; }
-.pdepot-form .pdepot-field > span { margin-bottom: 10px; }
+.pdepot-form .pdepot-grid3 { gap: 22px 26px; row-gap: 28px; column-gap: 26px; }
+.pdepot-form .pdepot-field > span { margin-bottom: 12px; }
 
 /* Honeypot invisible mais dans le DOM */
 .pdepot-form .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
@@ -958,7 +953,7 @@ input[type="range"]{ width:100%; }
 
 /* Checkbox alignée sur une ligne */
 .pdepot-form .pdepot-check {
-  display:inline-flex; align-items:center; gap:8px; margin-top:8px;
+  display:inline-flex; align-items:center; gap:10px; margin-top:10px;
   white-space:nowrap;
 }
 .pdepot-form .pdepot-check input { accent-color:#00D1FF; }
@@ -977,3 +972,25 @@ input[type="range"]{ width:100%; }
 .pdepot-form .pdepot-chip { cursor:pointer; transition:background .15s,border-color .15s; }
 .pdepot-form .pdepot-radio:hover,
 .pdepot-form .pdepot-chip:hover { border-color:#00D1FF88; background:#00D1FF14; }
+
+
+/* Le champ entier se comporte comme un bouton (et pas seulement l’icône) */
+.pdepot-form input[type="date"] { cursor: pointer; }
+
+/* Améliore l’icône calendrier sur WebKit */
+.pdepot-form input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);           /* icône claire sur fond sombre */
+  opacity: .8;
+}
+
+
+/* Indique que c’est cliquable */
+.pdepot-form select { cursor: pointer; }
+
+/* L’option survolée dans la liste (quand le navigateur le supporte) */
+.pdepot-form select option:checked,
+.pdepot-form select option:focus,
+.pdepot-form select option:hover {
+  background: #0e2030;
+  color: #fff;
+}

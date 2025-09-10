@@ -91,6 +91,16 @@ export default function DepotAnnoncePage() {
   const searchSexOut = (v: "H" | "F" | "AUTRE") =>
     v === "H" ? "Homme" : v === "F" ? "Femme" : "Peu importe";
 
+  const openDatePicker = (e: React.MouseEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>) => {
+    
+    if (typeof el.showPicker === "function") {
+      // éviter les comportements bizarres sur focus
+      requestAnimationFrame(() => el.showPicker());
+    }
+  };
+
+
+
 
   return (
     <main className="sb-container sb-section">
@@ -200,9 +210,13 @@ export default function DepotAnnoncePage() {
 
             <div className="pdepot-field">
               <span>Date du tournoi *</span>
-              <input type="date"
+              <input
+                type="date"
                 value={form.date_text}
-                onChange={e=>setField("date_text", e.target.value)} />
+                onChange={e=>setField("date_text", e.target.value)}
+                onClick={openDatePicker}
+                onFocus={openDatePicker}
+              />
             </div>
           </div>
 
