@@ -831,6 +831,7 @@ input[type="range"]{ width:100%; }
   --bd-focus: #00D1FF;
   --tx-muted: rgba(255,255,255,.55);
   --tx-placeholder: rgba(255,255,255,.45);
+  font-family: Outfit;
 }
 
 /* Sections & titres */
