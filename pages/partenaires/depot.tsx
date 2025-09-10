@@ -53,7 +53,7 @@ export default function DepotAnnoncePage() {
         search_ranking: form.recherche_classement,
 
         // divers
-        notes: form.message,
+        notes: form.notes,
 
         // honeypot (on l’envoie VIDE pour passer les contrôles serveur)
         hp: form.hp || ""
@@ -75,7 +75,7 @@ export default function DepotAnnoncePage() {
           tournoi:"", ville:"", dept:"", date_text:"", tableau:"",
           sexe:"", classement:"", age:"", age_masque:false,
           recherche_sexe:"AUTRE", recherche_classement:[],
-          name:"", email:"", message:"", hp:""
+          name:"", email:"", notes:"", hp:""
         });
       }
     } catch {
