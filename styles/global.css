@@ -813,48 +813,48 @@ input[type="range"]{ width:100%; }
 
 
 /* ============================================================
-   Dépôt d'annonce — styles isolés
-   (tout est scopé .pdepot-form pour éviter les conflits)
+   Dépôt d'annonce — styles isolés (scopés .pdepot-form)
    ============================================================ */
 
 :root { color-scheme: dark; }
 
-/* Palette locale (peux changer les valeurs si besoin) */
 .pdepot-form {
+  /* Palette locale */
   --bg-chip: rgba(255,255,255,.06);
   --bd-chip: rgba(255,255,255,.18);
   --bg-chip-hover: #00D1FF14;
   --bd-chip-hover: #00D1FF88;
-  --bg-chip-active: #00D1FF;              /* turquoise actif */
-  --tx-chip-active: #081827;              /* texte sombre actif */
+  --bg-chip-active: #00D1FF;
+  --tx-chip-active: #081827;
   --glow-active: 0 8px 20px rgba(0,209,255,.35);
   --bd-focus: #00D1FF;
   --tx-muted: rgba(255,255,255,.55);
   --tx-placeholder: rgba(255,255,255,.45);
-  font-family: Outfit;
+
+  /* Police par défaut pour TOUT le formulaire */
+  font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* Sections & titres */
 .pdepot-form .pdepot-section { margin: 56px 0; }
 .pdepot-form .pdepot-title {
   display:flex; align-items:center; gap:10px;
-  font-family: Audiowide, system-ui; font-size:18px; margin:0 0 14px;
+  font-family: Audiowide, system-ui; /* <-- uniquement les titres */
+  font-size:18px; margin:0 0 14px;
 }
 .pdepot-form .pdepot-title img { width:18px; height:18px; opacity:.9; }
 
-/* Grilles */
+/* Grilles & respiration entre questions */
 .pdepot-form .pdepot-grid2 { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); row-gap:32px; column-gap:28px; }
 .pdepot-form .pdepot-grid3 { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); row-gap:32px; column-gap:28px; }
 @media (max-width: 900px) {
   .pdepot-form .pdepot-grid2,
   .pdepot-form .pdepot-grid3 { grid-template-columns: 1fr; }
 }
-
-/* Champs */
-.pdepot-form .pdepot-field { margin-bottom: 12px; }
+.pdepot-form .pdepot-field { margin-bottom: 16px; }
 .pdepot-form .pdepot-field > span { display:block; font-weight:500; margin-bottom:12px; }
 
-/* Input/select/textarea (dark) */
+/* Inputs/Selects/Textareas — dark */
 .pdepot-form input,
 .pdepot-form select,
 .pdepot-form textarea {
@@ -865,10 +865,10 @@ input[type="range"]{ width:100%; }
   border-radius:12px;
   padding:12px 14px;
   outline:none;
+  font: inherit; /* <-- hérite Outfit */
 }
 .pdepot-form input::placeholder,
 .pdepot-form textarea::placeholder { color: var(--tx-placeholder); }
-
 .pdepot-form input:focus,
 .pdepot-form select:focus,
 .pdepot-form textarea:focus { border-color: var(--bd-focus); }
@@ -883,21 +883,21 @@ input[type="range"]{ width:100%; }
   background-size: 16px 16px;
   padding-right: 38px;
 }
-.pdepot-form select option { color:#0b1623; } /* lisible si le menu natif reste clair */
-.pdepot-form select:disabled { opacity:.6; }
+.pdepot-form select option { color:#0b1623; }
 
-/* Scrollbars (Chrome/Edge) pour les menus et listes — plus sombres */
+/* Scrollbars sombres (Chrome/Edge) */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 10px; }
 *::-webkit-scrollbar-track { background: rgba(255,255,255,.06); }
 
-/* Radios pastilles (sexe + recherche_sexe) */
+/* Radios pastilles (Outfit partout) */
 .pdepot-form .pdepot-radios { display:flex; gap:12px; flex-wrap:wrap; }
 .pdepot-form .pdepot-radio {
   display:inline-flex; align-items:center; gap:8px;
   border:1px solid var(--bd-chip); background: var(--bg-chip);
   padding:10px 14px; border-radius:999px; cursor:pointer; user-select:none;
   transition: background .15s, border-color .15s, transform .08s;
+  font: inherit;
 }
 .pdepot-form .pdepot-radio:hover { border-color: var(--bd-chip-hover); background: var(--bg-chip-hover); }
 .pdepot-form .pdepot-radio.is-on { 
@@ -917,6 +917,7 @@ input[type="range"]{ width:100%; }
   line-height:1;
   cursor:pointer;
   transition: background .15s, border-color .15s, box-shadow .15s, transform .08s;
+  font: inherit;
 }
 .pdepot-form .pdepot-chip:hover { border-color: var(--bd-chip-hover); background: var(--bg-chip-hover); }
 .pdepot-form .pdepot-chip.is-active {
@@ -936,14 +937,25 @@ input[type="range"]{ width:100%; }
 .pdepot-form input[type="number"]::-webkit-outer-spin-button,
 .pdepot-form input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
 
-/* Date picker : champ entier cliquable + icône calendrier blanche */
-.pdepot-form input[type="date"] { cursor: pointer; }
+/* Date picker : icône calendrier BLANCHE (on masque l’indicateur natif et on met notre SVG) */
+.pdepot-form input[type="date"] {
+  cursor: pointer;
+  background-image: url("/Planning.svg"); /* ton SVG blanc */
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px 18px;
+  padding-right: 42px; /* place pour l'icône */
+}
+/* masquer l’icône native (mais elle reste cliquable) */
 .pdepot-form input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1) brightness(1.8);
-  opacity:.9;
+  opacity: 0; /* l’aire reste active -> clics OK */
+}
+/* Firefox : on ne peut pas masquer l’icône, mais on garde notre fond + assez de contraste */
+@-moz-document url-prefix() {
+  .pdepot-form input[type="date"] { background-position: right 10px center; }
 }
 
-/* Honeypot totalement invisible mais présent dans le DOM */
+/* Honeypot */
 .pdepot-form .hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
 
 /* Actions & messages */
@@ -952,6 +964,5 @@ input[type="range"]{ width:100%; }
 .pdepot-form .pdepot-err { color:#ff6b6b; }
 .pdepot-form .pdepot-legal { opacity:.75; margin-top:14px; font-size:.95em; }
 
-/* Placeholders / texte atténué */
+/* Texte d’aide atténué */
 .pdepot-form small { color: var(--tx-muted); }
-

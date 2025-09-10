@@ -21,7 +21,7 @@ export default function DepotAnnoncePage() {
     recherche_classement: [] as string[],
     name :"",
     email: "",
-    message: "",
+    notes: "",
     hp: "" // honeypot
   });
 
@@ -152,17 +152,17 @@ export default function DepotAnnoncePage() {
           <div className="pdepot-grid2">
             <div className="pdepot-field">
               <span>Ton âge</span>
-              <input type="number" min={8} max={90} placeholder="27"
-                    value={form.age} onChange={e=>setField("age", e.target.value)}
-                    disabled={!form.age_masque} />
+              <input
+                type="number" min={8} max={90} placeholder="27"
+                value={form.age}
+                onChange={e=>setField("age", e.target.value)}
+              />
               <label className="pdepot-check">
-                <input type="checkbox"
-                      checked={form.age_masque}
-                      onChange={e=>{
-                        const hide = e.target.checked;
-                        setField("age_masque", hide);
-                        if (hide) setField("age", "");
-                      }} />
+                <input
+                  type="checkbox"
+                  checked={form.age_masque}
+                  onChange={e=>setField("age_masque", e.target.checked)}
+                />
                 Ne pas afficher mon âge publiquement
               </label>
             </div>
@@ -319,16 +319,14 @@ export default function DepotAnnoncePage() {
 
         <section className="pdepot-section">
           <h2 className="pdepot-title">
-            <img src="/Note.svg" alt="" aria-hidden />
+            <img src="/Comment.svg" alt="" aria-hidden />
             <span>Notes</span>
           </h2>
           <div className="pdepot-field">
             <span>Ajoute des précisions (optionnel)</span>
-            <textarea rows={4} value={form.message ?? form.message}
-                      onChange={e=>setField("notes", e.target.value)} />
+            <textarea rows={4} value={form.notes} onChange={e=>setField("notes", e.target.value)} />
           </div>
         </section>
-
 
         {/* Bouton + messages */}
         <div className="pdepot-actions">
