@@ -229,7 +229,7 @@ export default function DepotAnnoncePage() {
                     type="button"
                     className={`pdepot-chip ${on ? "is-active" : ""}`}
                     aria-pressed={on}
-                    onClick={() => setField("tableau", t)}
+                    onClick={() => setField("tableau", on ? "" : t)}
                   >
                     {t}
                   </button>
@@ -250,7 +250,7 @@ export default function DepotAnnoncePage() {
                       type="button"
                       className={`pdepot-chip ${on ? "is-active" : ""}`}
                       aria-pressed={on}
-                      onClick={() => setField("classement", c)}
+                      onClick={() => setField("classement", on ? "" : c}
                     >
                       {c}
                     </button>
