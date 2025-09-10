@@ -153,6 +153,19 @@ export default function DepotAnnoncePage() {
                 une joueuse
               </button>
             </div>
+
+            <div className="pdepot-field">
+              <span>Ton prénom* <small>(donnée privée)</small></span>
+              <input
+                type="text"
+                placeholder="Adrien"
+                value={form.name}
+                onChange={(e) => setField("name", e.target.value)}
+                autoComplete="given-name"
+                required
+              />
+            </div>
+
           </div>
 
         
