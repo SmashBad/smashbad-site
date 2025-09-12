@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CLASSEMENTS, TABLEAUX, DEPARTEMENTS } from "../../schemas/partners";
+import { PDepotSelect } from "../../components/PDepotSelect";
 
 export default function DepotAnnoncePage() {
   const [submitting, setSubmitting] = useState(false);
