@@ -221,10 +221,13 @@ export default function DepotAnnoncePage() {
 
             <div className="pdepot-field">
               <span>Département *</span>
-              <select value={form.dept} onChange={e=>setField("dept", e.target.value)} required>
-                <option value="">— Sélectionner —</option>
-                {DEPARTEMENTS.map(d => <option key={d} value={d}>{d}</option>)}
-              </select>
+              <PDepotSelect
+                ariaLabel="Choisir un département"
+                value={form.dept}
+                onChange={(v)=>setField("dept", v)}
+                options={DEPARTEMENTS.map(d => ({ value: d, label: d }))}
+                placeholder="— Sélectionner —"
+              />
             </div>
 
             <div className="pdepot-field">
