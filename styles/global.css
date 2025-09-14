@@ -1016,7 +1016,7 @@ input[type="range"]{ width:100%; }
 /* bouton fermé du select custom */
 .pdepot-form .pdepot-select__button{
   /* … */
-  background-image: url("/select.svg"); /* ← ton chevron dans /public/select.svg */
+  background-image: url("/Select.svg"); /* ← ton chevron dans /public/select.svg */
   background-repeat:no-repeat;
   background-position: right 12px center;
   background-size: 16px 16px;
