@@ -1021,3 +1021,44 @@ input[type="range"]{ width:100%; }
   background-position: right 12px center;
   background-size: 16px 16px;
 }
+
+/* CTA boosté, uniquement sur la page dépôt */
+.pdepot-form .cta-primary{
+  --cta-bg1: #18e0ff;
+  --cta-bg2: #00b8ff;
+  --cta-tx: #081827;
+  --cta-shadow: 0 10px 28px rgba(0,209,255,.40), 0 4px 12px rgba(0,209,255,.25);
+
+  background: linear-gradient(180deg, var(--cta-bg1), var(--cta-bg2));
+  color: var(--cta-tx);
+  border: 1px solid #00d1ff;
+  border-radius: 14px;
+  padding: 14px 18px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: .2px;
+  box-shadow: var(--cta-shadow);
+  transition: transform .08s ease, box-shadow .15s ease, filter .15s ease;
+}
+
+.pdepot-form .cta-primary:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(0,209,255,.48), 0 6px 14px rgba(0,209,255,.28);
+  filter: saturate(1.05);
+}
+
+.pdepot-form .cta-primary:active{
+  transform: translateY(0);
+  filter: saturate(1.1);
+}
+
+.pdepot-form .cta-primary:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,209,255,.25), var(--cta-shadow);
+}
+
+.pdepot-form .cta-primary[disabled]{
+  opacity: .7;
+  filter: grayscale(.1);
+  cursor: not-allowed;
+}
