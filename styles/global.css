@@ -811,45 +811,42 @@ input[type="range"]{ width:100%; }
 }
 .partners-filterbar__label--split{ margin-left: 16px; }
 
-/* CTA "Contacter" dans les cartes partenaires */
+/* Pied de carte : espace + CTA à droite */
+.partners-card__foot{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-top:16px; /* espace entre la dernière ligne et le pied */
+}
+
+/* Date d'annonce en italique, discrète */
+.partners-card__created{
+  font-style: italic;
+  opacity:.8;
+}
+
+/* Garde le CTA "Contacter" bien stylé (déjà posé précédemment) */
 .partners-card__foot .btn{
-  --cta-bg1: #18e0ff;
-  --cta-bg2: #00b8ff;
-  --cta-tx: #081827;
+  --cta-bg1:#18e0ff; --cta-bg2:#00b8ff; --cta-tx:#081827;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:linear-gradient(180deg,var(--cta-bg1),var(--cta-bg2));
+  color:var(--cta-tx);
+  border:1px solid #00d1ff; border-radius:12px;
+  padding:10px 14px; font-weight:800; line-height:1; text-decoration:none;
+  box-shadow:0 10px 24px rgba(0,209,255,.35),0 4px 12px rgba(0,209,255,.22);
+  transition:transform .08s, box-shadow .15s, filter .15s;
+}
+.partners-card__foot .btn:hover{ transform:translateY(-1px); box-shadow:0 12px 28px rgba(0,209,255,.45),0 6px 14px rgba(0,209,255,.28); filter:saturate(1.05); }
+.partners-card__foot .btn:active{ transform:translateY(0); filter:saturate(1.1); }
+.partners-card__foot .btn:focus-visible{ outline:none; box-shadow:0 0 0 3px rgba(0,209,255,.25), 0 10px 24px rgba(0,209,255,.35), 0 4px 12px rgba(0,209,255,.22); }
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  background: linear-gradient(180deg, var(--cta-bg1), var(--cta-bg2));
-  color: var(--cta-tx);
-  border: 1px solid #00d1ff;
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-weight: 800;
-  line-height: 1;
-  text-decoration: none;
-  box-shadow: 0 10px 24px rgba(0,209,255,.35), 0 4px 12px rgba(0,209,255,.22);
-  transition: transform .08s ease, box-shadow .15s ease, filter .15s ease, opacity .15s ease;
+/* Empile proprement sur petits écrans */
+@media (max-width: 520px){
+  .partners-card__foot{ flex-direction:column; align-items:flex-start; }
+  .partners-card__foot .btn{ align-self:flex-end; }
 }
 
-.partners-card__foot .btn:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(0,209,255,.45), 0 6px 14px rgba(0,209,255,.28);
-  filter: saturate(1.05);
-}
-
-.partners-card__foot .btn:active{
-  transform: translateY(0);
-  filter: saturate(1.1);
-}
-
-.partners-card__foot .btn:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0,209,255,.25),
-              0 10px 24px rgba(0,209,255,.35),
-              0 4px 12px rgba(0,209,255,.22);
-}
 
 /* On conserve l’apparence discrète du bouton "Fiche BadNet" en tête de carte */
 .partners-card__head .btn.btn--ghost{

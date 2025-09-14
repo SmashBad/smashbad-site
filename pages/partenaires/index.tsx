@@ -330,6 +330,11 @@ export default function PartenairesIndexPage() {
           const tournoi = toStr(ad.tournoi);
           const ville   = toStr(ad.ville);
           const dept    = toStr(ad.dept_code);
+          const createdTs =
+            parseDateSafe((ad as any).created_at || (ad as any).createdAt || (ad as any)._createdTime || (ad as any).created || (ad as any).createdTime);
+          const createdLabel = Number.isNaN(createdTs)
+            ? null
+            : new Date(createdTs).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
 
           return (
             <article key={ad.id} className="partners-card">
@@ -423,6 +428,9 @@ export default function PartenairesIndexPage() {
 
               {/* Actions */}
               <footer className="partners-card__foot">
+                <em className="partners-card__created">
+                  {createdLabel ? `date de l'annonce : ${createdLabel}` : ""}
+                </em>
                 <Link href={`/partenaires/${ad.id}`} className="btn">
                   Contacter
                 </Link>
