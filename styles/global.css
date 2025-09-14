@@ -742,7 +742,7 @@ input[type="range"]{ width:100%; }
 .partners-cards{
   max-width: 1200px; margin: 18px auto 0;
   display: grid; gap: 18px;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
 }
 @media (min-width: 980px){
   .partners-cards{ grid-template-columns: repeat(2, minmax(0, 1fr)); }

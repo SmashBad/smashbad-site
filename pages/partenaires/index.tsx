@@ -234,13 +234,7 @@ export default function PartenairesPage() {
     if (depts.length)       url.searchParams.set("dept", depts.join(","));
     if (tableaux.length)    url.searchParams.set("tableau", tableaux.join(","));
     if (classements.length) url.searchParams.set("classement", classements.join(","));
-    // mapper vers l'API (qui comprend seulement certains flags)
-    const apiSort =
-      sort === "date_asc" ? "date-asc" :
-      sort === "date_desc" ? "date-desc" :
-      sort === "recent_desc" ? "recents" :
-      null;
-    if (apiSort) url.searchParams.set("sort", apiSort);
+    // ← ne PAS passer "sort" à l'API
 
     setLoading(true);
     fetch(url.toString())
@@ -248,7 +242,9 @@ export default function PartenairesPage() {
       .then(d => setItems(d.items || []))
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
-  }, [depts, tableaux, classements, sort]);
+    // dépend des filtres, pas du "sort" (tri client uniquement)
+  }, [depts, tableaux, classements]);
+
 
   /* ----- Tri + filtres client ----- */
   // Helpers robustes de dates/tri (alpha)
@@ -272,24 +268,32 @@ export default function PartenairesPage() {
     return Number.isNaN(t) ? parseDateStr(ad.date) : t;
   };
 
+  // parse "YYYY-MM-DD" ou "DD/MM/YYYY" ou Date/ISO
+  const parseDateStr = (v?: unknown): number => {
+    if (!v) return Number.NaN;
+    if (v instanceof Date && !Number.isNaN(v.getTime())) return v.getTime();
+    const s = (v ?? "").toString().trim();
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return new Date(s + "T12:00:00Z").getTime();
+    const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (m) return new Date(`${m[3]}-${m[2]}-${m[1]}T12:00:00Z`).getTime();
+    const t = Date.parse(s);
+    return Number.isNaN(t) ? Number.NaN : t;
+  };
+  // priorité au created_at (date d’annonce), sinon date du tournoi
+  const getWhen = (ad: Ad): number => {
+    const created = (ad as any).created_at || (ad as any).createdAt || (ad as any)._createdTime;
+    const t = parseDateStr(created);
+    return Number.isNaN(t) ? parseDateStr(ad.date) : t;
+  };
+
   const sorted = useMemo(() => {
     const clone = [...items];
-    switch (sort) {
-      case "recent_desc":
-        clone.sort((a,b) => (getWhen(b) - getWhen(a))); break;
-      case "recent_asc":
-        clone.sort((a,b) => (getWhen(a) - getWhen(b))); break;
-      case "date_desc":
-        clone.sort((a,b) => (parseDateStr(b.date) - parseDateStr(a.date))); break;
-      case "date_asc":
-        clone.sort((a,b) => (parseDateStr(a.date) - parseDateStr(b.date))); break;
-      case "alpha":
-        clone.sort((a,b) => toStr(a.tournoi).localeCompare(toStr(b.tournoi), "fr", { sensitivity: "base" })); break;
-      default:
-        break;
-    }
+    if (sort === "date-asc")  clone.sort((a,b) => parseDateStr(a.date) - parseDateStr(b.date));
+    if (sort === "date-desc") clone.sort((a,b) => parseDateStr(b.date) - parseDateStr(a.date));
+    if (sort === "recents")   clone.sort((a,b) => getWhen(b) - getWhen(a)); // plus récentes en haut
     return clone;
   }, [items, sort]);
+
 
   return (
     <main className="partners-page">
