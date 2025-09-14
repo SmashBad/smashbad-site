@@ -1020,3 +1020,12 @@ input[type="range"]{ width:100%; }
 .pdepot-form .pdepot-select__list::-webkit-scrollbar { width:10px; }
 .pdepot-form .pdepot-select__list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 10px; }
 .pdepot-form .pdepot-select__list::-webkit-scrollbar-track { background: rgba(255,255,255,.06); }
+
+/* bouton fermé du select custom */
+.pdepot-form .pdepot-select__button{
+  /* … */
+  background-image: url("/select.svg"); /* ← ton chevron dans /public/select.svg */
+  background-repeat:no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
