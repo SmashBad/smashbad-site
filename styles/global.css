@@ -766,7 +766,7 @@ input[type="range"]{ width:100%; }
   margin: 0;
   line-height: 1.15;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-  overflow: hidden;
+  overflow: hidden; line-clamp: 2;
 }
 .partners-card__ext{ border-radius: 12px; padding: 8px 12px; white-space:nowrap; flex-shrink:0; }
 
@@ -929,9 +929,15 @@ input[type="range"]{ width:100%; }
 .pdepot-form .pdepot-check input { accent-color: var(--bg-chip-active); }
 
 /* Inputs number : retirer les flèches */
-.pdepot-form input[type="number"] { -moz-appearance:textfield; }
+.pdepot-form input[type="number"] { appearance: textfield; }
+@-moz-document url-prefix() {
+  .pdepot-form input[type="number"] { -moz-appearance: textfield; } /* stylelint-disable-line property-no-vendor-prefix */
+}
 .pdepot-form input[type="number"]::-webkit-outer-spin-button,
-.pdepot-form input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+.pdepot-form input[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 /* Date picker : icône calendrier BLANCHE (on masque l’indicateur natif et on met notre SVG) */
 .pdepot-form input[type="date"] {
