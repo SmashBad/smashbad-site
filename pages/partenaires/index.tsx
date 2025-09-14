@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
-// Type depuis lib/data/airtable_annonces_partenaires
+// ---------- Types ----------
 type Ad = import("../../lib/data/airtable_annonces_partenaires").AdPublic;
 
-/* ---------- Listes ---------- */
+// ---------- Constantes ----------
+const NBSP = "\u00A0";
+const TABLEAUX = ["Double Dame", "Double Homme", "Double Mixte", "Double Intergenre"] as const;
+const CLASSEMENTS = ["N1","N2","N3","R4","R5","R6","D7","D8","D9","P10","P11","P12","NC"] as const;
+
 // Départements : 01..19, 2A/2B, 21..95, 971..976
 const DEPTS = [
   ...Array.from({ length: 19 }, (_, i) => String(i + 1).padStart(2, "0")),
@@ -13,23 +17,8 @@ const DEPTS = [
   ...Array.from({ length: 6 }, (_, i) => String(971 + i)),
 ];
 
-const TABLEAUX = ["Double Dame", "Double Homme", "Double Mixte", "Double Intergenre"] as const;
-const CLASSEMENTS = ["N1","N2","N3","R4","R5","R6","D7","D8","D9","P10","P11","P12","NC"] as const;
-
-type SortKey = "recent_desc" | "recent_asc" | "date_desc" | "date_asc" | "alpha";
-const SORTS: { key: SortKey; label: string }[] = [
-  { key: "recent_desc", label: "Plus récentes" },
-  { key: "recent_asc",  label: "Moins récentes" },
-  { key: "date_desc",   label: "Date du tournoi ↓" },
-  { key: "date_asc",    label: "Date du tournoi ↑" },
-  { key: "alpha",       label: "A → Z (tournoi)" },
-];
-
-/* -- espace insécable (pour coller les mots) -- */
-const NBSP = "\u00A0";
-
-/* ---------- Helpers communs (unique) ---------- */
-const clean = (v: unknown) => (v ?? "").toString().trim();
+// ---------- Helpers génériques ----------
+const toStr = (v: unknown) => (v ?? "").toString().trim();
 
 const fmtDate = (iso?: string) => {
   if (!iso) return "";
@@ -38,62 +27,75 @@ const fmtDate = (iso?: string) => {
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
 };
 
-// Normalise beaucoup de variantes saisies pour le sexe
+// parse "YYYY-MM-DD", "DD/MM/YYYY", ISO ou Date → timestamp ou NaN
+const parseDateSafe = (v?: unknown): number => {
+  if (!v) return Number.NaN;
+  if (v instanceof Date && !Number.isNaN(v.getTime())) return v.getTime();
+  const s = toStr(v);
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return new Date(s + "T12:00:00Z").getTime(); // ISO court
+  const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);                                // FR
+  if (m) return new Date(`${m[3]}-${m[2]}-${m[1]}T12:00:00Z`).getTime();
+  const t = Date.parse(s);
+  return Number.isNaN(t) ? Number.NaN : t;
+};
+
+// priorité à la date de création de l’annonce (si dispo), sinon date de tournoi
+const getEffectiveDate = (ad: any): number => {
+  const created = ad?.created_at || ad?.createdAt || ad?._createdTime || ad?.created || ad?.createdTime;
+  const t = parseDateSafe(created);
+  return Number.isNaN(t) ? parseDateSafe(ad?.date) : t;
+};
+
+// sexe → "H" | "F" | "AUTRE"
 type SexKind = "H" | "F" | "AUTRE";
 const normalizeSex = (raw?: string): SexKind => {
-  const s = clean(raw).toLowerCase();
+  const s = toStr(raw).toLowerCase();
   if (["h", "homme", "m", "masculin", "male"].includes(s)) return "H";
   if (["f", "femme", "w", "féminin", "feminin", "female"].includes(s)) return "F";
   return "AUTRE";
 };
 
-const articleForSex = (sex?: string) => {
-  if (sex === "Femme") return "une";
-  if (sex === "Homme") return "un";
-  return "un·e"; // neutre / inconnu
-};
-
-// Libellé personne selon le contexte (identité vs recherche)
+// "un joueur" / "une joueuse" / "" (identité) / "un joueur ou une joueuse" (recherche)
 const personLabel = (sexRaw?: string, context: "id" | "search" = "id") => {
   const s = normalizeSex(sexRaw);
   if (context === "id") {
     if (s === "H") return "un joueur";
     if (s === "F") return "une joueuse";
-    return ""; // sexe non défini -> on ne montre PAS "joueur/joueuse"
+    return ""; // on tait si non défini
   } else {
     if (s === "H") return "un joueur";
     if (s === "F") return "une joueuse";
-    return "un joueur ou une joueuse"; // recherche neutre
+    return "un joueur ou une joueuse";
   }
 };
 
-// Accord de "classé" : H → classé, F → classée, AUTRE → classé(e)
+// accord de "classé"
 const classWordFor = (sexRaw?: string, forceNeutral = false) => {
   const s = normalizeSex(sexRaw);
   if (forceNeutral || s === "AUTRE") return "classé(e)";
   return s === "F" ? "classée" : "classé";
 };
 
-// Tableau toujours en toutes lettres
+// DD/DH/DM/DI → libellé
 const expandTableau = (t?: string) => {
-  const x = clean(t).toUpperCase();
+  const x = toStr(t).toUpperCase();
   if (x === "DD" || x === "DOUBLE DAME")        return "Double Dame";
   if (x === "DH" || x === "DOUBLE HOMME")       return "Double Homme";
   if (x === "DM" || x === "DOUBLE MIXTE")       return "Double Mixte";
   if (x === "DI" || x === "DOUBLE INTERGENRE")  return "Double Intergenre";
-  return clean(t);
+  return toStr(t);
 };
 
-// Liste naturelle "R5 ou R6" / "D9, D8, D7 ou R6"
+// "R5 ou R6" / "D9, D8, D7 ou R6"
 const listWithOu = (arr: string[]) => {
-  const a = arr.map(s => clean(s)).filter(Boolean);
+  const a = arr.map(toStr).filter(Boolean);
   if (a.length === 0) return "";
   if (a.length === 1) return a[0];
   if (a.length === 2) return `${a[0]} ou ${a[1]}`;
   return `${a.slice(0, -1).join(", ")} ou ${a[a.length - 1]}`;
 };
 
-/* ---------- Hook util : clic extérieur ---------- */
+// ---------- UI util : fermeture au clic externe ----------
 function useOutsideClose<T extends HTMLElement>(open: boolean, onClose: ()=>void) {
   const ref = useRef<T | null>(null);
   useEffect(() => {
@@ -109,26 +111,27 @@ function useOutsideClose<T extends HTMLElement>(open: boolean, onClose: ()=>void
   return ref;
 }
 
-/* ---------- UI : MultiFilter pill ---------- */
+// ---------- UI : MultiFilter (dropdown avec recherche) ----------
 type MultiFilterPillProps = {
   label: string;
   selected: string[];
   onChange: (v: string[]) => void;
-  options: string[];
+  options: readonly string[];
   width?: number;
   placeholder?: string;
-  normalize?: (s: string) => string | null; // pour valider une saisie libre
+  normalize?: (s: string) => string | null; // pour valider saisie libre
 };
 function MultiFilterPill({ label, selected, onChange, options, width = 220, placeholder = "Rechercher…", normalize }: MultiFilterPillProps) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const ref = useOutsideClose<HTMLDivElement>(open, () => setOpen(false));
+  const opts = useMemo(() => options.map(String), [options]);
 
   const filtered = useMemo(() => {
-    if (!q.trim()) return options;
+    if (!q.trim()) return opts;
     const qq = q.toLowerCase();
-    return options.filter(o => o.toLowerCase().includes(qq));
-  }, [q, options]);
+    return opts.filter(o => o.toLowerCase().includes(qq));
+  }, [q, opts]);
 
   const toggle = (opt: string) => {
     if (selected.includes(opt)) onChange(selected.filter(x => x !== opt));
@@ -148,8 +151,7 @@ function MultiFilterPill({ label, selected, onChange, options, width = 220, plac
               value={q}
               onChange={e => setQ(e.target.value)}
               onKeyDown={e => {
-                if (e.key === "Enter") setOpen(false);
-                if (e.key === "Escape") setOpen(false);
+                if (e.key === "Enter" || e.key === "Escape") setOpen(false);
               }}
             />
           </div>
@@ -188,7 +190,16 @@ function MultiFilterPill({ label, selected, onChange, options, width = 220, plac
   );
 }
 
-/* ---------- UI : Sort pill ---------- */
+// ---------- UI : Sort (liste simple) ----------
+type SortKey = "recents" | "recent-asc" | "date-desc" | "date-asc" | "alpha";
+const SORTS: { key: SortKey; label: string }[] = [
+  { key: "recents",    label: "Plus récentes" },
+  { key: "recent-asc", label: "Moins récentes" },
+  { key: "date-desc",  label: "Date du tournoi ↓" },
+  { key: "date-asc",   label: "Date du tournoi ↑" },
+  { key: "alpha",      label: "A → Z (tournoi)" },
+];
+
 function SortPill({ sort, setSort }: { sort: SortKey; setSort: (s: SortKey)=>void }) {
   const [open, setOpen] = useState(false);
   const ref = useOutsideClose<HTMLDivElement>(open, ()=>setOpen(false));
@@ -200,7 +211,11 @@ function SortPill({ sort, setSort }: { sort: SortKey; setSort: (s: SortKey)=>voi
       {open && (
         <div className="partners-pill__menu" style={{ width: 260 }}>
           {SORTS.map(s => (
-            <button key={s.key} className={`partners-pill__opt ${s.key===sort?"is-selected":""}`} onClick={()=>{ setSort(s.key); setOpen(false); }}>
+            <button
+              key={s.key}
+              className={`partners-pill__opt ${s.key===sort?"is-selected":""}`}
+              onClick={()=>{ setSort(s.key); setOpen(false); }}
+            >
               {s.label}
             </button>
           ))}
@@ -210,72 +225,57 @@ function SortPill({ sort, setSort }: { sort: SortKey; setSort: (s: SortKey)=>voi
   );
 }
 
-/* ===================== Page ===================== */
-export default function PartenairesPage() {
+// ===================== Page =====================
+export default function PartenairesIndexPage() {
   const [items, setItems] = useState<Ad[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Filtres (multi)
+  // Filtres
   const [depts, setDepts] = useState<string[]>([]);
   const [tableaux, setTableaux] = useState<string[]>([]);
   const [classements, setClassements] = useState<string[]>([]);
-  const [sort, setSort] = useState<SortKey>("recent_desc");
+  const [sort, setSort] = useState<SortKey>("recents");
 
-  // normaliser une saisie departement (ex: "92", "2a", "971")
+  // normaliser une saisie département (ex: "92", "2a", "971")
   const normDept = (s: string) => {
     const up = s.toUpperCase();
-    if (/^(\d{1,2}|97[1-6]|2A|2B)$/.test(up)) return up.padStart(2, "0");
+    if (/^(?:\d{1,2}|97[1-6]|2A|2B)$/.test(up)) return /^\d{1}$/.test(up) ? up.padStart(2,"0") : up;
     return null;
   };
 
-  /* ----- Fetch des annonces (via /api) ----- */
+  // ---- Fetch (tri côté client → on n’envoie pas "sort") ----
   useEffect(() => {
     const url = new URL("/api/partners/list", window.location.origin);
     if (depts.length)       url.searchParams.set("dept", depts.join(","));
     if (tableaux.length)    url.searchParams.set("tableau", tableaux.join(","));
     if (classements.length) url.searchParams.set("classement", classements.join(","));
-    // ← ne PAS passer "sort" à l'API
 
     setLoading(true);
     fetch(url.toString())
       .then(r => r.json())
-      .then(d => setItems(d.items || []))
+      .then(d => setItems(Array.isArray(d.items) ? d.items : []))
       .catch(() => setItems([]))
       .finally(() => setLoading(false));
-    // dépend des filtres, pas du "sort" (tri client uniquement)
   }, [depts, tableaux, classements]);
 
-
-  /* ----- Tri + filtres client ----- */
-  // Helpers robustes de dates/tri (alpha)
-  const toStr = (v: unknown) => (v ?? "").toString().trim();
-
-  // parse "YYYY-MM-DD" ou "DD/MM/YYYY" ou Date/ISO
-  const parseDateStr = (v?: unknown): number => {
-    if (!v) return Number.NaN;
-    if (v instanceof Date && !Number.isNaN(v.getTime())) return v.getTime();
-    const s = (v ?? "").toString().trim();
-    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return new Date(s + "T12:00:00Z").getTime();
-    const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-    if (m) return new Date(`${m[3]}-${m[2]}-${m[1]}T12:00:00Z`).getTime();
-    const t = Date.parse(s);
-    return Number.isNaN(t) ? Number.NaN : t;
-  };
-  // priorité au created_at (date d’annonce), sinon date du tournoi
-  const getWhen = (ad: Ad): number => {
-    const created = (ad as any).created_at || (ad as any).createdAt || (ad as any)._createdTime;
-    const t = parseDateStr(created);
-    return Number.isNaN(t) ? parseDateStr(ad.date) : t;
-  };
-
+  // ---- Tri client robuste ----
   const sorted = useMemo(() => {
-    const clone = [...items];
-    if (sort === "date-asc")  clone.sort((a,b) => parseDateStr(a.date) - parseDateStr(b.date));
-    if (sort === "date-desc") clone.sort((a,b) => parseDateStr(b.date) - parseDateStr(a.date));
-    if (sort === "recents")   clone.sort((a,b) => getWhen(b) - getWhen(a)); // plus récentes en haut
-    return clone;
-  }, [items, sort]);
+    const arr = [...items];
 
+    if (sort === "recents") {
+      arr.sort((a, b) => getEffectiveDate(b) - getEffectiveDate(a)); // plus récentes en haut
+    } else if (sort === "recent-asc") {
+      arr.sort((a, b) => getEffectiveDate(a) - getEffectiveDate(b));
+    } else if (sort === "date-asc") {
+      arr.sort((a, b) => parseDateSafe(a.date) - parseDateSafe(b.date));
+    } else if (sort === "date-desc") {
+      arr.sort((a, b) => parseDateSafe(b.date) - parseDateSafe(a.date));
+    } else if (sort === "alpha") {
+      arr.sort((a, b) => toStr(a.tournoi).localeCompare(toStr(b.tournoi), "fr", { sensitivity: "base" }));
+    }
+
+    return arr;
+  }, [items, sort]);
 
   return (
     <main className="partners-page">
@@ -283,23 +283,37 @@ export default function PartenairesPage() {
       <header className="partners-hero">
         <h1>Chercher un partenaire pour un tournoi</h1>
         <p>
-          Dépose ton annonce, prend contact avec des joueurs qui cherchent des partenaires pour jouer en tournoi près de chez toi.
+          Dépose ton annonce et contacte des joueurs/joueuses pour jouer en tournoi près de chez toi.
           <br />
           Aucune coordonnée ne sera partagée publiquement.
         </p>
 
         <div className="partners-hero__actions">
-          <a className="cta-primary partners-cta" href="#" aria-disabled>
+          <Link className="cta-primary partners-cta" href="/partenaires/depot">
             Déposer une annonce
-          </a>
+          </Link>
         </div>
 
-        {/* FILTRES */}
+        {/* FILTRES + TRI */}
         <div className="partners-filterbar" role="group" aria-label="Filtres d’annonces">
           <span className="partners-filterbar__label">Filtrer par :</span>
-          <MultiFilterPill label="Département" selected={depts} onChange={setDepts} options={[...DEPTS]} width={300} placeholder="Département (ex: 92, 2A, 971)" normalize={normDept}/>
-          <MultiFilterPill label="Tableau"     selected={tableaux} onChange={setTableaux} options={[...TABLEAUX]} width={260}/>
-          <MultiFilterPill label="Classement"  selected={classements} onChange={setClassements} options={[...CLASSEMENTS]} width={360}/>
+          <MultiFilterPill
+            label="Département"
+            selected={depts} onChange={setDepts}
+            options={DEPTS} width={300}
+            placeholder="Département (ex: 92, 2A, 971)"
+            normalize={normDept}
+          />
+          <MultiFilterPill
+            label="Tableau"
+            selected={tableaux} onChange={setTableaux}
+            options={TABLEAUX} width={260}
+          />
+          <MultiFilterPill
+            label="Classement"
+            selected={classements} onChange={setClassements}
+            options={CLASSEMENTS} width={360}
+          />
           <span className="partners-filterbar__label">Trier :</span>
           <SortPill sort={sort} setSort={setSort}/>
         </div>
@@ -311,115 +325,112 @@ export default function PartenairesPage() {
         <div className="partners-empty">Aucune annonce pour ces filtres.</div>
       )}
 
-      {sorted.map((ad) => {
-        const tournoi   = clean(ad.tournoi || ad.tournoi);
-        const ville     = clean(ad.ville);
-        const dept      = clean(ad.dept_code);
+      <section className="partners-cards">
+        {sorted.map((ad) => {
+          const tournoi = toStr(ad.tournoi);
+          const ville   = toStr(ad.ville);
+          const dept    = toStr(ad.dept_code);
 
-        return (
-          <article key={ad.id} className="partners-card">
-            {/* Titre + bouton externe (désactivé, tooltip) */}
-            <header className="partners-card__head">
-              <h3 className="partners-card__title">{tournoi || "Annonce"}</h3>
+          return (
+            <article key={ad.id} className="partners-card">
+              {/* Titre + bouton externe (placeholder) */}
+              <header className="partners-card__head">
+                <h3 className="partners-card__title">{tournoi || "Annonce"}</h3>
 
-              <button type="button" className="btn btn--ghost partners-card__ext" aria-disabled="true" title="Bientôt disponible">
-                <span className="nowrap">Fiche BadNet</span>
-                <span className="tooltip">Bientôt disponible</span>
-              </button>
-            </header>
+                <button type="button" className="btn btn--ghost partners-card__ext" aria-disabled="true" title="Bientôt disponible">
+                  <span className="nowrap">Fiche BadNet</span>
+                  <span className="tooltip">Bientôt disponible</span>
+                </button>
+              </header>
 
-            {/* Métadonnées : dates + lieu */}
-            <ul className="partners-card__meta">
-              <li className="i-date">
-                {ad.date ? <span className="strong">{fmtDate(ad.date)}</span> : <>Date à préciser</>}
-              </li>
+              {/* Métadonnées : date du tournoi + lieu */}
+              <ul className="partners-card__meta">
+                <li className="i-date">
+                  {ad.date ? <span className="strong">{fmtDate(ad.date)}</span> : <>Date à préciser</>}
+                </li>
+                <li className="i-place">
+                  <span className="strong">{ville}</span>
+                  {dept ? <><span>,{NBSP}</span><span className="strong">{dept}</span></> : null}
+                </li>
+              </ul>
 
-              <li className="i-place">
-                <span className="strong">{ville}</span>
-                {dept ? <><span>,{NBSP}</span><span className="strong">{dept}</span></> : null}
-              </li>
-            </ul>
-
-            {/* identité */}
-            <div className="desc-line i-id">
-              {(() => {
-                const label = personLabel(ad.sexe, "id"); // "" si sexe non défini
-                const cl    = clean(ad.classement);
-                const age   = ad.age;
-
-                // Choix de l'accord pour "classé"
-                const classWord = classWordFor(ad.sexe, !label /* neutre si pas de joueur/joueuse */);
-
-                return (
-                  <>
-                    Je suis{NBSP}
-                    {label ? <><span className="strong">{label}</span>{NBSP}</> : null}
-
-                    {/* classement (si présent) */}
-                    {cl ? <>{classWord}{NBSP}<span className="strong">{cl}</span></> : <>classé(e)</>}
-
-                    {/* âge : "de … ans" si on a un label (joueur/joueuse), sinon "et j'ai … ans" */}
-                    {ad.age_masque ? (
-                      label
-                        ? <> {NBSP}qui ne souhaite pas préciser son âge</>
-                        : <> {NBSP}et je ne souhaite pas préciser mon âge</>
-                    ) : (typeof age === "number" && !Number.isNaN(age)) ? (
-                      label
-                        ? <> {NBSP}de{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
-                        : <> {NBSP}et j'ai{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
-                    ) : null}
-                  </>
-                );
-              })()}
-            </div>
-
-            {/* tableau */}
-            {ad.tableau && (
-              <div className="desc-line i-draw">
-                Je souhaite jouer en {NBSP}<span className="strong">{expandTableau(ad.tableau)}</span>
-              </div>
-            )}
-
-            {/* recherche */}
-            {(ad.search_sex || ad.search_ranking) && (
-              <div className="desc-line i-search">
+              {/* Identité */}
+              <div className="desc-line i-id">
                 {(() => {
-                  const person = personLabel(ad.search_sex, "search"); // "un joueur", "une joueuse", ou "un joueur ou une joueuse"
-                  const raw = Array.isArray(ad.search_ranking)
-                    ? ad.search_ranking
-                    : (ad.search_ranking ? String(ad.search_ranking).split(/[,\s;/]+/) : []);
-                  const list = listWithOu(raw); // ex. "D9 ou R6"
-                  const classWord = classWordFor(ad.search_sex); // AUTRE → "classé(e)"
+                  const label = personLabel(ad.sexe, "id"); // "" si non défini
+                  const cl    = toStr(ad.classement);
+                  const age   = ad.age;
+                  const classWord = classWordFor(ad.sexe, !label);
 
                   return (
                     <>
-                      Je souhaite jouer avec{" "}
-                      {person.includes("ou") ? (
-                        // cas neutre : "un joueur ou une joueuse"
-                        <span className="strong">{person}</span>
-                      ) : (
-                        <>
-                          {/* article + nom séparés */}
-                          <span className="strong">{person.split(" ")[0]}</span>{" "}
-                          <span className="strong">{person.split(" ")[1]}</span>
-                        </>
-                      )}
-                      {list && <> {NBSP}{classWord}{NBSP}<span className="strong">{list}</span></>}
+                      Je suis{NBSP}
+                      {label ? <><span className="strong">{label}</span>{NBSP}</> : null}
+
+                      {/* classement */}
+                      {cl ? <>{classWord}{NBSP}<span className="strong">{cl}</span></> : <>classé(e)</>}
+
+                      {/* âge */}
+                      {ad.age_masque ? (
+                        label
+                          ? <> {NBSP}qui ne souhaite pas préciser son âge</>
+                          : <> {NBSP}et je ne souhaite pas préciser mon âge</>
+                      ) : (typeof age === "number" && !Number.isNaN(age)) ? (
+                        label
+                          ? <> {NBSP}de{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
+                          : <> {NBSP}et j'ai{NBSP}<span className="strong">{age}</span>{NBSP}ans</>
+                      ) : null}
                     </>
                   );
                 })()}
               </div>
-            )}
 
-            {/* actions */}
-            <footer className="partners-card__foot">
-              <Link href={`/partenaires/${ad.id}`} className="btn">
-                Contacter
-              </Link>
-            </footer>
-          </article>
-        );
-      })}
+              {/* Tableau */}
+              {ad.tableau && (
+                <div className="desc-line i-draw">
+                  Je souhaite jouer en {NBSP}<span className="strong">{expandTableau(ad.tableau)}</span>
+                </div>
+              )}
+
+              {/* Recherche */}
+              {(ad.search_sex || ad.search_ranking) && (
+                <div className="desc-line i-search">
+                  {(() => {
+                    const person = personLabel(ad.search_sex, "search");
+                    const raw = Array.isArray(ad.search_ranking)
+                      ? ad.search_ranking
+                      : (ad.search_ranking ? String(ad.search_ranking).split(/[,\s;/]+/) : []);
+                    const list = listWithOu(raw);
+                    const classWord = classWordFor(ad.search_sex);
+
+                    return (
+                      <>
+                        Je souhaite jouer avec{" "}
+                        {person.includes("ou") ? (
+                          <span className="strong">{person}</span>
+                        ) : (
+                          <>
+                            <span className="strong">{person.split(" ")[0]}</span>{" "}
+                            <span className="strong">{person.split(" ")[1]}</span>
+                          </>
+                        )}
+                        {list && <> {NBSP}{classWord}{NBSP}<span className="strong">{list}</span></>}
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
+
+              {/* Actions */}
+              <footer className="partners-card__foot">
+                <Link href={`/partenaires/${ad.id}`} className="btn">
+                  Contacter
+                </Link>
+              </footer>
+            </article>
+          );
+        })}
+      </section>
     </main>
   );
 }
