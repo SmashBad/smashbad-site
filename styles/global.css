@@ -820,7 +820,7 @@ input[type="range"]{ width:100%; }
 
 .pdepot-form {
   /* Palette locale */
-  /*--bg-chip: rgba(255,255,255,.06);*/
+  --bg-chip: rgba(255,255,255,.06);
   --bd-chip: rgba(255,255,255,.18);
   --bg-chip-hover: #00D1FF14;
   --bd-chip-hover: #00D1FF88;
@@ -829,7 +829,7 @@ input[type="range"]{ width:100%; }
   --glow-active: 0 8px 20px rgba(0,209,255,.35);
   --bd-focus: #00D1FF;
   --tx-muted: rgba(255,255,255,.55);
-  --tx-placeholder: rgba(255,255,255,.45);
+  --tx-placeholder: rgba(255,255,255,.3);
 
   /* Police par défaut pour TOUT le formulaire */
   font-family: Outfit, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
@@ -877,10 +877,6 @@ input[type="range"]{ width:100%; }
 .pdepot-form select {
   appearance:none;
   cursor: pointer;
-  background-image: url("/select.svg");
-  background-repeat:no-repeat;
-  background-position: right 12px center;
-  background-size: 16px 16px;
   padding-right: 38px;
 }
 .pdepot-form select option { color:#0b1623; }
@@ -981,10 +977,6 @@ input[type="range"]{ width:100%; }
   text-align:left;
   cursor:pointer;
   font: inherit;
-  background-image: url("/select.svg");
-  background-repeat:no-repeat;
-  background-position: right 12px center;
-  background-size: 16px 16px;
 }
 .pdepot-form .pdepot-select__button:hover { border-color: var(--bd-chip-hover); }
 .pdepot-form .pdepot-select__button.is-open { border-color: var(--bd-focus); box-shadow: 0 0 0 3px rgba(0,209,255,.18); }
