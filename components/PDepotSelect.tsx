@@ -38,6 +38,7 @@ export function PDepotSelect({
   useEffect(() => {
     if (open) {
       setFocusIdx(selectedIndex >= 0 ? selectedIndex : 0);
+      requestAnimationFrame(() => listRef.current?.focus());
     }
   }, [open, selectedIndex]);
 
@@ -84,20 +85,45 @@ export function PDepotSelect({
     setOpen(false);
   };
 
-  const onButtonKeyDown = (e: React.KeyboardEvent) => {
-    if (disabled) return;
-    if (!open && (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ")) {
-      e.preventDefault();
+const onButtonKeyDown = (e: React.KeyboardEvent) => {
+  if (disabled) return;
+
+  // ENTER/SPACE → ouvre OU valide si déjà ouvert
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    if (!open) {
       setOpen(true);
-      return;
+    } else if (focusIdx >= 0) {
+      commit(focusIdx); // ← valide l’option en focus
     }
-    if (/^[a-z0-9]$/i.test(e.key)) {
-      e.preventDefault();
-      if (!open) setOpen(true);
-      typeahead(e.key);
-      return;
-    }
-  };
+    return;
+  }
+
+  // flèches & Home/End même si focus est sur le bouton
+  if (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Home" || e.key === "End") {
+    e.preventDefault();
+    if (!open) setOpen(true);
+    // une fois ouvert, déplace le focus
+    setFocusIdx(i => {
+      const max = options.length - 1;
+      if (e.key === "Home") return 0;
+      if (e.key === "End") return max;
+      if (e.key === "ArrowDown") return Math.min(max, Math.max(0, (i < 0 ? 0 : i + 1)));
+      if (e.key === "ArrowUp")   return Math.max(0, (i < 0 ? 0 : i - 1));
+      return i;
+    });
+    return;
+  }
+
+  // typeahead (5 puis 6 → ira à "56"). Enter ensuite validera (cf. bloc Enter ci-dessus)
+  if (/^[a-z0-9]$/i.test(e.key)) {
+    e.preventDefault();
+    if (!open) setOpen(true);
+    typeahead(e.key);
+    return;
+  }
+};
+
 
   const onListKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") { e.preventDefault(); setOpen(false); btnRef.current?.focus(); return; }
