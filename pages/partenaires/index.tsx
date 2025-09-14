@@ -250,24 +250,6 @@ export default function PartenairesPage() {
   // Helpers robustes de dates/tri (alpha)
   const toStr = (v: unknown) => (v ?? "").toString().trim();
 
-  const parseDateStr = (d?: unknown): number => {
-    if (!d) return Number.NaN;
-    if (d instanceof Date && !Number.isNaN(d.getTime())) return d.getTime();
-    const str = toStr(d);
-    if (/^\d{4}-\d{2}-\d{2}/.test(str)) return new Date(str + "T12:00:00Z").getTime();
-    const m = str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-    if (m) return new Date(`${m[3]}-${m[2]}-${m[1]}T12:00:00Z`).getTime();
-    const t = Date.parse(str);
-    return Number.isNaN(t) ? Number.NaN : t;
-  };
-
-  // created_at si dispo, sinon date de tournoi
-  const getWhen = (ad: Ad): number => {
-    const created = (ad as any).created_at || (ad as any).createdAt || (ad as any)._createdTime;
-    const t = parseDateStr(created);
-    return Number.isNaN(t) ? parseDateStr(ad.date) : t;
-  };
-
   // parse "YYYY-MM-DD" ou "DD/MM/YYYY" ou Date/ISO
   const parseDateStr = (v?: unknown): number => {
     if (!v) return Number.NaN;
