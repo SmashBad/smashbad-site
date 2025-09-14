@@ -820,7 +820,7 @@ input[type="range"]{ width:100%; }
 
 .pdepot-form {
   /* Palette locale */
-  --bg-chip: rgba(255,255,255,.06);
+  /*--bg-chip: rgba(255,255,255,.06);*/
   --bd-chip: rgba(255,255,255,.18);
   --bg-chip-hover: #00D1FF14;
   --bd-chip-hover: #00D1FF88;

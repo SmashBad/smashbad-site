@@ -217,7 +217,7 @@ export default function DepotAnnoncePage() {
           <div className="pdepot-grid3">
             <div className="pdepot-field">
               <span>Ville *</span>
-              <input value={form.ville} onChange={e=>setField("ville", e.target.value)} required />
+              <input placeholder="Rennes" value={form.ville} onChange={e=>setField("ville", e.target.value)} required />
             </div>
 
             <div className="pdepot-field">
