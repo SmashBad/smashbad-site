@@ -180,3 +180,67 @@ export async function createContactRequest(payload: {
   const body = { records: [{ fields }] };
   return airPost(encodeURIComponent(RESPONSES), body);
 }
+
+// ===== Helpers "Contact" (AJOUTER À LA FIN DU FICHIER) ======================
+import Airtable from "airtable";
+
+// Crée un client local. Si tu as déjà un "base" ailleurs dans ce fichier,
+// supprime ces 2 lignes et utilise ton base(...) à la place de AT(...).
+const AT = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY! })
+  .base(process.env.AIRTABLE_BASE_ID!);
+
+const ADS_TABLE = "Partenaires_Annonces";
+const REPLIES_TABLE = "Partenaires_Reponses";
+
+/** Récupère une annonce par son identifiant public (ad.id côté front). */
+export async function getAdById(publicId: string) {
+  const res = await AT(ADS_TABLE).select({
+    filterByFormula: `{public_id} = "${publicId}"`,
+    maxRecords: 1,
+  }).firstPage();
+
+  if (!res.length) return null;
+  const f = res[0].fields as any;
+
+  return {
+    id: f.public_id as string,
+    tournoi: f.tournoi as string,
+    ville: f.ville as string | undefined,
+    dept_code: f.dept_code as string | undefined,
+    date: f.date as string | undefined,
+    tableau: f.tableau as string | undefined,
+    classement: f.classement as string | undefined,
+    contact_email: f.contact_email as string | undefined,
+  };
+}
+
+/** Enregistre une réponse dans la table Partenaires_Reponses. */
+export async function createResponse(fields: {
+  ad: string;
+  first_name: string;
+  last_name: string;
+  sex?: "H" | "F";
+  age?: number;
+  ranking: string;
+  email: string;
+  phone?: string;
+  message?: string;
+  status?: string;
+}) {
+  const recs = await AT(REPLIES_TABLE).create([{
+    fields: {
+      ad: fields.ad,
+      first_name: fields.first_name,
+      last_name: fields.last_name,
+      sex: fields.sex ?? "",
+      age: typeof fields.age === "number" ? fields.age : null,
+      ranking: fields.ranking,
+      email: fields.email,
+      phone: fields.phone || "",
+      message: fields.message || "",
+      status: fields.status || "Nouveau",
+      // "created_at" est auto si c'est un champ Airtable "Créé le"
+    }
+  }]);
+  return recs[0];
+}
