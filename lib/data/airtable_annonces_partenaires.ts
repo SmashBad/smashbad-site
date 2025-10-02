@@ -1,17 +1,13 @@
 // lib/data/airtable_annonces_partenaires.ts
+
 /* ========= Config ========= */
-const API_URL = "https://api.airtable.com/v0";
-const BASE_ID = process.env.AIRTABLE_BASE_ID || "appkxlroj23rDP2Ep";
+const API_URL  = "https://api.airtable.com/v0";
+const BASE_ID  = process.env.AIRTABLE_BASE_ID || "appkxlroj23rDP2Ep";
 const API_TOKEN = process.env.AIRTABLE_API_KEY || process.env.AIRTABLE_TOKEN || "";
 
-const ADS = process.env.AIRTABLE_PARTNERS_ADS || "Partenaires_Annonces";
-const RESPONSES = process.env.AIRTABLE_PARTNERS_RESPONSES || "Partenaires_Reponses";
+const ADS        = process.env.AIRTABLE_PARTNERS_ADS        || "Partenaires_Annonces";
+const RESPONSES  = process.env.AIRTABLE_PARTNERS_RESPONSES  || "Partenaires_Reponses";
 const VIEW_PUBLIC = process.env.AIRTABLE_PARTNERS_VIEW || ""; // optionnel
-
-import Airtable from "airtable";
-
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY! })
-  .base(process.env.AIRTABLE_BASE_ID!);
 
 /* ========= Types ========= */
 export type AdPublic = {
@@ -78,7 +74,7 @@ function mapAd(rec: AdRecord): AdPublic {
     tournoi: f["tournoi"],
     ville: f["ville"],
     dept_code: f["dept_code"],
-    date: f["date"] ||null,
+    date: f["date"] || null,
     badnet_url: f["badnet_url"],
     name: f["name"],
     sexe: f["sexe"],
@@ -107,6 +103,7 @@ export async function listAdsPublic(query: {
   sort?: "date-asc" | "date-desc" | "recents";
 }) {
   if (query.id) {
+    // Recherche directe par recordId
     const rec = (await airGet(`${encodeURIComponent(ADS)}/${query.id}`)) as AdRecord;
     return [mapAd(rec)];
   }
@@ -126,10 +123,8 @@ export async function listAdsPublic(query: {
 
   if (query.depts?.length)       filters.push(orsEq("dept_code", query.depts));
   if (query.tableaux?.length)    filters.push(orsEq("tableau", query.tableaux));
-  if (query.classements?.length) {
-    // classement contient exactement la valeur
-    filters.push(orsEq("classement", query.classements));
-  }
+  if (query.classements?.length) filters.push(orsEq("classement", query.classements));
+
   if (query.search) {
     const s = esc(query.search);
     filters.push(`OR(SEARCH(LOWER('${s}'), LOWER({tournoi})), SEARCH(LOWER('${s}'), LOWER({ville})))`);
@@ -137,8 +132,8 @@ export async function listAdsPublic(query: {
 
   if (filters.length) params.filterByFormula = `AND(${filters.join(",")})`;
 
-  // Tri côté Airtable (facultatif). On laisse le tri côté client si tu veux.
-  // Exemple: par created_at (desc) si "recents".
+  // Tri côté Airtable (facultatif) — on préfère trier côté client,
+  // mais on laisse "recents" possible ici si tu le gardes côté API.
   if (query.sort === "recents") params.sort = JSON.stringify([{ field: "created_at", direction: "desc" }]);
 
   const json = (await airGet(encodeURIComponent(ADS), params)) as AirtableListResponse;
@@ -160,7 +155,7 @@ export async function getAdForContact(id: string) {
   return { record: rec, authorEmail: email, authorName: name };
 }
 
-/* ========= Enregistrer une réponse (contact) ========= */
+/* ========= Enregistrer une réponse (contact) — ancienne version (conserve si utilisé) ========= */
 export async function createContactRequest(payload: {
   adRecordId: string;       // on stocke le recordId dans `ad` (texte)
   first_name: string;
@@ -172,7 +167,7 @@ export async function createContactRequest(payload: {
   message?: string;
 }) {
   const fields = {
-    ad: payload.adRecordId,        // champ texte (pas Link), on met le recordId
+    ad: payload.adRecordId,  // champ texte (pas Link), on met le recordId
     first_name: payload.first_name,
     last_name: payload.last_name,
     sex: payload.sex || "",
@@ -186,40 +181,37 @@ export async function createContactRequest(payload: {
   return airPost(encodeURIComponent(RESPONSES), body);
 }
 
-// ===== Helpers "Contact" (AJOUTER À LA FIN DU FICHIER) ======================
-import Airtable from "airtable";
+/* ========= Nouveaux helpers utilisés par /api/partners/contact.ts ========= */
 
-// Crée un client local. Si tu as déjà un "base" ailleurs dans ce fichier,
-// supprime ces 2 lignes et utilise ton base(...) à la place de AT(...).
-const AT = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY! })
-  .base(process.env.AIRTABLE_BASE_ID!);
-
-const ADS_TABLE = "Partenaires_Annonces";
-const REPLIES_TABLE = "Partenaires_Reponses";
-
-/** Récupère une annonce par son identifiant public (ad.id côté front). */
-export async function getAdById(publicId: string) {
-  const res = await AT(ADS_TABLE).select({
-    filterByFormula: `{public_id} = "${publicId}"`,
-    maxRecords: 1,
-  }).firstPage();
-
-  if (!res.length) return null;
-  const f = res[0].fields as any;
-
-  return {
-    id: f.public_id as string,
-    tournoi: f.tournoi as string,
-    ville: f.ville as string | undefined,
-    dept_code: f.dept_code as string | undefined,
-    date: f.date as string | undefined,
-    tableau: f.tableau as string | undefined,
-    classement: f.classement as string | undefined,
-    contact_email: f.contact_email as string | undefined,
-  };
+/**
+ * Récupère une annonce par identifiant. Accepte soit:
+ *  - un recordId Airtable (chemin direct),
+ *  - soit un "public_id" (fallback via filterByFormula).
+ */
+export async function getAdById(idOrPublic: string) {
+  // 1) Essai direct en recordId
+  try {
+    const rec = (await airGet(`${encodeURIComponent(ADS)}/${idOrPublic}`)) as AdRecord;
+    return mapAd(rec);
+  } catch {
+    // 2) Fallback sur le champ public_id (numérique ou texte)
+    const isNum = /^\d+$/.test(idOrPublic);
+    const value = isNum ? idOrPublic : `'${esc(idOrPublic)}'`;
+    const params: Record<string, string> = {
+      maxRecords: "1",
+      pageSize: "1",
+      filterByFormula: `{public_id} = ${value}`,
+    };
+    const json = (await airGet(encodeURIComponent(ADS), params)) as AirtableListResponse;
+    const rec = (json.records || [])[0];
+    return rec ? mapAd(rec) : null;
+  }
 }
 
-/** Enregistre une réponse dans la table Partenaires_Reponses. */
+/**
+ * Crée une réponse dans la table Partenaires_Reponses (v2 avec age + sex).
+ * Le champ "ad" stocke le recordId de l'annonce (format texte).
+ */
 export async function createResponse(fields: {
   ad: string;
   first_name: string;
@@ -232,20 +224,22 @@ export async function createResponse(fields: {
   message?: string;
   status?: string;
 }) {
-  const recs = await AT(REPLIES_TABLE).create([{
-    fields: {
-      ad: fields.ad,
-      first_name: fields.first_name,
-      last_name: fields.last_name,
-      sex: fields.sex ?? "",
-      age: typeof fields.age === "number" ? fields.age : null,
-      ranking: fields.ranking,
-      email: fields.email,
-      phone: fields.phone || "",
-      message: fields.message || "",
-      status: fields.status || "Nouveau",
-      // "created_at" est auto si c'est un champ Airtable "Créé le"
-    }
-  }]);
-  return recs[0];
+  const body = {
+    records: [{
+      fields: {
+        ad: fields.ad,
+        first_name: fields.first_name,
+        last_name: fields.last_name,
+        sex: fields.sex ?? "",
+        age: typeof fields.age === "number" ? fields.age : null,
+        ranking: fields.ranking,
+        email: fields.email,
+        phone: fields.phone || "",
+        message: fields.message || "",
+        status: fields.status || "Nouveau",
+        // "created_at" : auto si c'est un champ "Créé le" côté Airtable
+      }
+    }]
+  };
+  return airPost(encodeURIComponent(RESPONSES), body);
 }
