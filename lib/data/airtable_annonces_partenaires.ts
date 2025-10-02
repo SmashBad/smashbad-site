@@ -61,9 +61,15 @@ async function airPost(path: string, body: unknown) {
     headers: { Authorization: `Bearer ${API_TOKEN}`, "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!res.ok) throw new Error(`Airtable POST ${path} → ${res.status} ${res.statusText}`);
+
+  if (!res.ok) {
+    let detail = "";
+    try { detail = await res.text(); } catch {}
+    throw new Error(`Airtable POST ${path} → ${res.status} ${res.statusText}${detail ? ` :: ${detail}` : ""}`);
+  }
   return res.json();
 }
+
 
 /* ========= Mapping ========= */
 function mapAd(rec: AdRecord): AdPublic {
@@ -224,10 +230,11 @@ export async function createResponse(fields: {
   message?: string;
   status?: string;
 }) {
-  const body = {
+  // Tentative 1 : on suppose que `ad` est un CHAMP TEXTE
+  const payloadText = {
     records: [{
       fields: {
-        ad: fields.ad,
+        ad: fields.ad, // texte (ex: recordId ou public_id, selon ton choix)
         first_name: fields.first_name,
         last_name: fields.last_name,
         sex: fields.sex ?? "",
@@ -237,9 +244,42 @@ export async function createResponse(fields: {
         phone: fields.phone || "",
         message: fields.message || "",
         status: fields.status || "Nouveau",
-        // "created_at" : auto si c'est un champ "Créé le" côté Airtable
       }
     }]
   };
-  return airPost(encodeURIComponent(RESPONSES), body);
+
+  try {
+    return await airPost(encodeURIComponent(RESPONSES), payloadText);
+  } catch (e: any) {
+    const msg = String(e?.message || "");
+    const likelyTypeMismatch =
+      msg.includes("INVALID_VALUE_FOR_COLUMN") ||
+      msg.includes("FIELD_TYPE_MISMATCH") ||
+      msg.includes("cannot accept the provided value") ||
+      msg.includes("INVALID_REQUEST_MISSING_FIELDS");
+
+    // Tentative 2 (fallback) : si le champ `ad` est en "Lien vers un enregistrement"
+    if (likelyTypeMismatch) {
+      const payloadLink = {
+        records: [{
+          fields: {
+            ad: [{ id: fields.ad }], // lien vers un enregistrement (Airtable attend un tableau d'objets {id})
+            first_name: fields.first_name,
+            last_name: fields.last_name,
+            sex: fields.sex ?? "",
+            age: typeof fields.age === "number" ? fields.age : null,
+            ranking: fields.ranking,
+            email: fields.email,
+            phone: fields.phone || "",
+            message: fields.message || "",
+            status: fields.status || "Nouveau",
+          }
+        }]
+      };
+      return await airPost(encodeURIComponent(RESPONSES), payloadLink);
+    }
+
+    // Sinon on relance l'erreur d'origine (utile pour debug)
+    throw e;
+  }
 }
