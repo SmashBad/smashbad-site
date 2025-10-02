@@ -230,56 +230,27 @@ export async function createResponse(fields: {
   message?: string;
   status?: string;
 }) {
-  // Tentative 1 : on suppose que `ad` est un CHAMP TEXTE
-  const payloadText = {
-    records: [{
-      fields: {
-        ad: fields.ad, // texte (ex: recordId ou public_id, selon ton choix)
-        first_name: fields.first_name,
-        last_name: fields.last_name,
-        sex: fields.sex ?? "",
-        age: typeof fields.age === "number" ? fields.age : null,
-        ranking: fields.ranking,
-        email: fields.email,
-        phone: fields.phone || "",
-        message: fields.message || "",
-        status: fields.status || "Nouveau",
-      }
-    }]
+  // on construit le payload en omettant les vides
+  const out: Record<string, any> = {
+    ad: fields.ad, // champ texte (recordId)
+    first_name: fields.first_name,
+    last_name: fields.last_name,
+    ranking: fields.ranking,
+    email: fields.email,
+    status: fields.status || "Nouveau",
   };
 
-  try {
-    return await airPost(encodeURIComponent(RESPONSES), payloadText);
-  } catch (e: any) {
-    const msg = String(e?.message || "");
-    const likelyTypeMismatch =
-      msg.includes("INVALID_VALUE_FOR_COLUMN") ||
-      msg.includes("FIELD_TYPE_MISMATCH") ||
-      msg.includes("cannot accept the provided value") ||
-      msg.includes("INVALID_REQUEST_MISSING_FIELDS");
+  // sex: mappe H/F -> Homme/Femme si ton champ est un Single select
+  if (fields.sex) out.sex = fields.sex === "H" ? "Homme" : "Femme";
 
-    // Tentative 2 (fallback) : si le champ `ad` est en "Lien vers un enregistrement"
-    if (likelyTypeMismatch) {
-      const payloadLink = {
-        records: [{
-          fields: {
-            ad: [{ id: fields.ad }], // lien vers un enregistrement (Airtable attend un tableau d'objets {id})
-            first_name: fields.first_name,
-            last_name: fields.last_name,
-            sex: fields.sex ?? "",
-            age: typeof fields.age === "number" ? fields.age : null,
-            ranking: fields.ranking,
-            email: fields.email,
-            phone: fields.phone || "",
-            message: fields.message || "",
-            status: fields.status || "Nouveau",
-          }
-        }]
-      };
-      return await airPost(encodeURIComponent(RESPONSES), payloadLink);
-    }
+  if (typeof fields.age === "number" && !Number.isNaN(fields.age)) out.age = fields.age;
+  if (fields.phone)   out.phone = fields.phone;
+  if (fields.message) out.message = fields.message;
 
-    // Sinon on relance l'erreur d'origine (utile pour debug)
-    throw e;
-  }
+  const body = {
+    records: [{ fields: out }],
+    typecast: true, // laisse Airtable accepter/créer l'option si besoin
+  };
+
+  return airPost(encodeURIComponent(RESPONSES), body);
 }

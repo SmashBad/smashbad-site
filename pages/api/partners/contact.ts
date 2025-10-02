@@ -95,13 +95,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ ok: true });
   } catch (err: any) {
     if (err?.name === "ZodError") {
-      // aide debug (visible dans logs Vercel)
-      console.error("partners.contact Zod issues:", err.issues);
       return res.status(400).json({ error: "Bad Request", issues: err.issues });
     }
-    console.error("partners.contact error:", err);
+    const msg = err?.message || "Server error";
+    console.error("partners.contact error:", msg);
+    // En DEV, on expose le détail pour déboguer depuis l’onglet Network
+    if (process.env.NODE_ENV !== "production") {
+      return res.status(500).json({ error: "Server error", detail: msg });
+    }
     return res.status(500).json({ error: "Server error" });
   }
+
 }
 
 // petite util pour éviter l’injection dans l’email HTML
