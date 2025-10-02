@@ -66,21 +66,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     // 3) Email (texte naturel v1)
-    const subject = `🎯 ${parsed.first_name} te contacte pour ${adRec.tournoi}`;
+    const subject = `Contact — ${parsed.first_name} pour « ${adRec.tournoi} »`;
     const html = `
       <div style="font-family:Outfit,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:16px;color:#0b1623">
-        <p>Bonjour,</p>
-        <p><strong>${escapeHtml(parsed.first_name)} ${escapeHtml(parsed.last_name)}</strong> souhaite te contacter pour ton annonce
-        <strong>« ${escapeHtml(adRec.tournoi ?? "")} »</strong>${adRec.ville ? ` à ${escapeHtml(adRec.ville)}` : ""}${adRec.date ? ` (le ${new Date(adRec.date).toLocaleDateString("fr-FR")})` : ""}.</p>
-        <p><strong>Classement :</strong> ${escapeHtml(parsed.ranking)}${
-          parsed.sex ? ` &nbsp;•&nbsp; <strong>Sexe :</strong> ${parsed.sex === "H" ? "homme" : "femme"}` : ""
-        }${parsed.age ? ` &nbsp;•&nbsp; <strong>Âge :</strong> ${parsed.age}` : ""}</p>
-        ${parsed.message ? `<p style="white-space:pre-line">${escapeHtml(parsed.message)}</p>` : ""}
-        <p>Réponds-lui sur <a href="mailto:${parsed.email}">${parsed.email}</a>${parsed.phone ? ` ou au <a href="tel:${parsed.phone}">${parsed.phone}</a>` : ""}.</p>
-        <hr style="border:none;border-top:1px solid #e3eef6;margin:18px 0" />
-        <p style="font-size:14px;opacity:.7">Annonce ${escapeHtml(adRec.id || "")}${adRec.tableau ? ` • ${escapeHtml(adRec.tableau)}` : ""}${adRec.classement ? ` • ${escapeHtml(adRec.classement)}` : ""}</p>
+        <p><strong>${esc(parsed.first_name)} ${esc(parsed.last_name)}</strong> te contacte pour « ${esc(adRec.tournoi)} »${adRec.ville ? ` à ${esc(adRec.ville)}` : ""}${adRec.date ? ` (${new Date(adRec.date).toLocaleDateString("fr-FR")})` : ""}.</p>
+        <p>${esc(parsed.ranking)}${parsed.sex ? ` • ${parsed.sex === "H" ? "homme" : "femme"}` : ""}${parsed.age ? ` • ${parsed.age} ans` : ""}</p>
+        ${parsed.message ? `<p style="white-space:pre-line">${esc(parsed.message)}</p>` : ""}
+        <p>Réponds à <a href="mailto:${parsed.email}">${parsed.email}</a>${parsed.phone ? ` ou au <a href="tel:${parsed.phone}">${parsed.phone}</a>` : ""}.</p>
       </div>
     `;
+    const text = `${parsed.first_name} ${parsed.last_name} te contacte pour "${adRec.tournoi}". ` +
+                `${parsed.ranking}` + (parsed.sex ? ` • ${parsed.sex === "H" ? "homme" : "femme"}` : "") +
+                (parsed.age ? ` • ${parsed.age} ans` : "") + `. ` +
+                (parsed.message ? `\n\n${parsed.message}\n\n` : ``) +
+                `Email: ${parsed.email}` + (parsed.phone ? ` • Tel: ${parsed.phone}` : ``);
+
 
     if (process.env.RESEND_API_KEY) {
       await resend.emails.send({
