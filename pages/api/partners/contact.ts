@@ -166,9 +166,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 }
 
-// petite util pour éviter l’injection dans l’email HTML
-//function escapeHtml(s: string) {
-//  return String(s)
- //   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
- //   .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-//}
+/* petite util pour éviter l’injection dans l’email HTML
+function escapeHtml(s: string) {
+ return String(s)
+   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+   .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+ } */
