@@ -66,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     // 3) Email (texte naturel v1)
-    // --- utils (garde la tienne si déjà présente)
+  // --- utils (garde la tienne si tu en as déjà une)
   const esc = (s?: string) =>
     String(s ?? "")
       .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // Données formatées
   const ownerFirstName = adRec.name ? esc(adRec.name) : null;
-  const greet = ownerFirstName ? `Bonjour ${ownerFirstName},` : "Bonjour,";
+  const greet  = ownerFirstName ? `Bonjour ${ownerFirstName},` : "Bonjour,";
 
   const tournoi = esc(adRec.tournoi ?? "");
   const ville   = adRec.ville ? ` à ${esc(adRec.ville)}` : "";
@@ -119,31 +119,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       <p><em>Rappel de ton annonce :</em><br/>${esc(rappel)}</p>
 
-      <p style="margin-top:16px">Pour rappel, tes coordonnées ne sont pas exposées sur Smash.bad. C'est toi qui décides si tu souhaites contacter ${esc(parsed.first_name)}.</p>
+      <p style="margin-top:16px">Pour rappel, tes coordonnées ne sont pas exposées sur Smash.bad. C'est toi qui décide si tu souhaites contacter ${esc(parsed.first_name)}.</p>
     </div>
   `;
 
-  // -------- Version texte (fallback)
-  const text =
-  `${greet}
+  // -------- Version texte (sans backslashes piégeux)
+  const text = [
+    `${greet}`,
+    "",
+    `${parsed.first_name} ${parsed.last_name} souhaite participer avec toi au tournoi "${adRec.tournoi}"${adRec.ville ? ` à ${adRec.ville}` : ""}${adRec.date ? ` le ${new Date(adRec.date).toLocaleDateString("fr-FR")}` : ""}.`,
+    "",
+    `Son classement : ${parsed.ranking}`,
+    `Son âge : ${ageLbl}`,
+    `Sexe : ${sexLbl}`,
+    "",
+    parsed.message ? `${parsed.first_name} a également laissé un commentaire :\n${parsed.message}\n` : "",
+    `Tu es libre de contacter ${parsed.first_name} si tu le souhaites :`,
+    `- Par mail : ${parsed.email}`,
+    parsed.phone ? `- Par Téléphone : ${parsed.phone}` : "",
+    "",
+    "---",
+    `Rappel de ton annonce : ${rappel}`,
+    `Pour rappel, tes coordonnées ne sont pas exposées sur Smash.bad. C'est toi qui décide si tu souhaites contacter ${parsed.first_name}.`
+  ].filter(Boolean).join("\n");
 
-  ${parsed.first_name} ${parsed.last_name} souhaite participer avec toi au tournoi "${adRec.tournoi}"${adRec.ville ? ` à ${adRec.ville}` : ""}${adRec.date ? ` le ${new Date(adRec.date).toLocaleDateString("fr-FR")}` : ""}.
-
-  Son classement : ${parsed.ranking}
-  Son âge : ${ageLbl}
-  Sexe : ${sexLbl}
-
-  ${parsed.message ? `${parsed.first_name} a également laissé un commentaire :\n${parsed.message}\n\n` : ""}\
-  Tu es libre de contacter ${parsed.first_name} si tu le souhaites :
-  - Par mail : ${parsed.email}
-  ${parsed.phone ? `- Par Téléphone : ${parsed.phone}\n` : ""}
-
-  ---
-  Rappel de ton annonce : ${rappel}
-  Pour rappel, tes coordonnées ne sont pas exposées sur Smash.bad. C'est toi qui décides si tu souhaites contacter ${parsed.first_name}.
-  `;
-
-  // -------- ENVOI (protégé, comme avant)
+  // -------- ENVOI (protégé)
   try {
     if (process.env.RESEND_API_KEY) {
       const { Resend } = await import("resend");
@@ -162,6 +162,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (mailErr) {
     console.error("Resend error:", mailErr);
     // on n'échoue pas la requête si l'email tombe
-  }
-
 }
