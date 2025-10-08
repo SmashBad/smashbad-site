@@ -138,8 +138,8 @@ export default function AdDetail(){
     <p className="contact-intro__summary">
       Cette annonce a été publiée par <strong>{profileLabel}</strong> {classWord}{NBSP}
       {ad.classement ? <><strong>{ad.classement}</strong>{NBSP}</> : null}
-      {agePart && <>{agePart}{". "}</>}
-      {ad.tableau && <>Elle/Il souhaite jouer en <strong>{ad.tableau}</strong>.{" "}</>}
+      {agePart && <>{agePart}{", "}</>}
+      {ad.tableau && <>qui souhaite jouer en <strong>{ad.tableau}</strong>.{" "}</>}
       { (ad.search_sex || ad.search_ranking) && (
         <>
           Pour ce tournoi{dateLabel ? <> du <strong>{dateLabel}</strong></> : null}
@@ -170,13 +170,10 @@ export default function AdDetail(){
       <article className="ad-card">
         <h2>{ad.tournoi}</h2>
         <p>
-          {ad.ville}{ad.dept_code ? `, ${ad.dept_code}` : ""}{ad.date ? ` • ${fmtDate(ad.date)}` : ""}
-          {ad.tableau ? ` • ${ad.tableau}` : ""}{ad.classement ? ` • ${ad.classement}` : ""}
-            <section className="contact-intro">
-              {introConcept}
-             {introSummary}
-           </section>
-
+          <section className="contact-intro">
+            {introSummary}
+            {introConcept}
+          </section>
         </p>
       </article>
 
