@@ -169,12 +169,12 @@ export default function AdDetail(){
     <main className="partners-page">
       <article className="ad-card">
         <h2>{ad.tournoi}</h2>
-        <p>
+        
           <section className="contact-intro">
             <p>{introSummary}</p>
             <p>{introConcept}</p>
           </section>
-        </p>
+        
       </article>
 
       <section className="pdepot-section">
