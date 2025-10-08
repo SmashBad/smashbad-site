@@ -115,6 +115,43 @@ export default function AdDetail(){
   if (loading) return <main className="partners-page"><div className="partners-empty">Chargement…</div></main>;
   if (!ad)     return <main className="partners-page"><div className="partners-empty">Annonce introuvable. <Link href="/partenaires">Retour</Link></div></main>;
 
+  // Intro pédagogique
+  const introConcept = (
+    <p className="contact-intro__lead">
+      Quand tu envoies ce formulaire, <strong>Smash.bad</strong> transmet ton message par e-mail
+      à l’auteur de l’annonce. Cette personne reste libre de te répondre ou non ; tes coordonnées
+      ne sont pas publiées sur le site.
+    </p>
+  );
+
+  // Résumé littéraire du profil + recherche
+  const profileLabel = nounForSex(ad.sexe);
+  const classWord    = classWordFor(ad.sexe);
+  const agePart = ad.age_masque
+    ? "qui ne souhaite pas préciser son âge"
+    : (typeof ad.age === "number" ? `de ${ad.age} ans` : "");
+  const wanted = wantedForSearch(ad.search_sex);
+  const wantedRanks = listWithOu(ad.search_ranking);
+  const dateLabel = ad.date ? fmtDateFR(ad.date) : "";
+
+  const introSummary = (
+    <p className="contact-intro__summary">
+      Cette annonce a été publiée par <strong>{profileLabel}</strong> {classWord}{NBSP}
+      {ad.classement ? <><strong>{ad.classement}</strong>{NBSP}</> : null}
+      {agePart && <>{agePart}{". "}</>}
+      {ad.tableau && <>Elle/Il souhaite jouer en <strong>{ad.tableau}</strong>.{" "}</>}
+      { (ad.search_sex || ad.search_ranking) && (
+        <>
+          Pour ce tournoi{dateLabel ? <> du <strong>{dateLabel}</strong></> : null}
+          {ad.ville ? <> à <strong>{ad.ville}</strong></> : null}, la personne recherche{" "}
+          <strong>{wanted.noun}</strong>
+          {wantedRanks && <> {wanted.classWord} <strong>{wantedRanks}</strong></>}.
+        </>
+      )}
+    </p>
+  );
+
+
   if (ok) {
     return (
       <main className="partners-page">
@@ -135,6 +172,11 @@ export default function AdDetail(){
         <p>
           {ad.ville}{ad.dept_code ? `, ${ad.dept_code}` : ""}{ad.date ? ` • ${fmtDate(ad.date)}` : ""}
           {ad.tableau ? ` • ${ad.tableau}` : ""}{ad.classement ? ` • ${ad.classement}` : ""}
+            <section className="contact-intro">
+              {introConcept}
+             {introSummary}
+           </section>
+
         </p>
       </article>
 
