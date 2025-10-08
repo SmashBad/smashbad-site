@@ -171,8 +171,8 @@ export default function AdDetail(){
         <h2>{ad.tournoi}</h2>
         <p>
           <section className="contact-intro">
-            {introSummary}
-            {introConcept}
+            <p>{introSummary}</p>
+            <p>{introConcept}</p>
           </section>
         </p>
       </article>
