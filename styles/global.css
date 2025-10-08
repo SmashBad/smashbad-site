@@ -1120,3 +1120,28 @@ input[type="range"]{ width:100%; }
   filter: grayscale(.1);
   cursor: not-allowed;
 }
+
+
+
+/* Intro de la page contact partenaires */
+.contact-intro {
+  margin: 12px 0 24px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 16px;
+}
+.contact-intro__lead {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+.contact-intro__summary {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.contact-intro strong {
+  font-weight: 700;
+}
+
