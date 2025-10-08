@@ -4,6 +4,34 @@ import Link from "next/link";
 
 type Ad = import("../../lib/data/airtable_annonces_partenaires").AdPublic;
 
+// Helpers phrasing contact intro
+const NBSP = "\u00A0";
+const fmtDateFR = (s?: string | null) => {
+  if (!s) return "";
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? s : d.toLocaleDateString("fr-FR");
+};
+const isFemme = (sex?: string) => /fem/i.test(String(sex || ""));
+const nounForSex = (sex?: string) => (isFemme(sex) ? "une joueuse" : "un joueur");
+const classWordFor = (sex?: string, neutral = false) =>
+  neutral ? "classé(e)" : (isFemme(sex) ? "classée" : "classé");
+const wantedForSearch = (searchSex?: string) => {
+  if (!searchSex || /peu importe|sans préférence/i.test(searchSex)) {
+    return { noun: "un joueur ou une joueuse", classWord: "classé(e)" };
+  }
+  return /fem/i.test(searchSex)
+    ? { noun: "une joueuse", classWord: "classée" }
+    : { noun: "un joueur", classWord: "classé" };
+};
+const listWithOu = (v: unknown) => {
+  const raw = Array.isArray(v) ? v : (typeof v === "string" ? v.split(/[,\s;/]+/) : []);
+  const arr = raw.map(s => String(s).trim()).filter(Boolean);
+  if (!arr.length) return "";
+  if (arr.length === 1) return arr[0];
+  return `${arr.slice(0, -1).join(", ")} ou ${arr[arr.length - 1]}`;
+};
+
+
 const CLASSEMENTS = ["N1","N2","N3","R4","R5","R6","D7","D8","D9","P10","P11","P12","NC"] as const;
 
 const fmtDate = (iso?: string) => {
