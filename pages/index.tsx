@@ -12,17 +12,13 @@ export default function Home() {
     <>
       <Head>
         <title>SMASH.bad — Ton partenaire badminton</title>
-        <meta
-          name="description"
-          content="Progresse, équipe-toi, joue : SMASH.bad t'accompagne sur et en dehors des terrains."
-        />
+        <meta name="description" content="Progresse, équipe-toi, joue." />
       </Head>
 
       <main className="home-main">
-
         {/* HERO */}
         <section className="hero-split">
-          <div className="container hero-split__inner">
+          <div className="container hero-split__grid">
             <div className="hero-split__text">
               <p className="kicker">Bienvenue sur SMASH</p>
               <h1>
@@ -50,94 +46,73 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FEATURE 1 — SHADOW */}
-        <section className="feature-row">
-          <div className="container">
-            <div className="feature-card">
-              <div className="feature-grid">
-                <div className="feature-media">
-                  <img src="/hero/Hero_Shadow.png" alt="Shadow" />
-                </div>
-                <div className="feature-content">
-                  <h2><span className="accent">Shadow</span></h2>
-                  <p className="feature-lead">
-                    Pose ton téléphone et suis les indications pour travailler
-                    tes déplacements.
-                  </p>
-                  <Link href="/shadow" className="btn btn-primary">
-                    Lancer l’entraînement
-                  </Link>
-                </div>
-              </div>
+        {/* SECTION: SHADOW (image à gauche) */}
+        <section className="slice">
+          <div className="container slice__grid">
+            <div className="slice__media">
+              <img src="/hero/Hero_Shadow.png" alt="Shadow — entraînement déplacements" />
+            </div>
+            <div className="slice__content">
+              <h2><span className="accent">Shadow</span></h2>
+              <p className="slice__lead">
+                Pose ton téléphone et suis les indications pour travailler tes déplacements.
+              </p>
+              <Link href="/shadow" className="btn btn-primary">Lancer l’entraînement</Link>
             </div>
           </div>
         </section>
 
-        {/* FEATURE 2 — MATERIEL (image à droite) */}
-        <section className="feature-row">
-          <div className="container">
-            <div className="feature-card">
-              <div className="feature-grid feature-grid--reverse">
-                <div className="feature-media">
-                  <img src="/hero/Hero_Racket.png" alt="Choisir son matériel" />
-                </div>
-                <div className="feature-content">
-                  <h2>Choisir son <span className="accent">matériel</span></h2>
-                  <p className="feature-lead">
-                    Catalogue, comparateur et conseils pour trouver la raquette qui te correspond.
-                  </p>
-                  <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
-                </div>
-              </div>
+        {/* SECTION: MATÉRIEL (image à droite) */}
+        <section className="slice slice--reverse">
+          <div className="container slice__grid">
+            <div className="slice__media">
+              <img src="/hero/Hero_Racket.png" alt="Choisir son matériel" />
+            </div>
+            <div className="slice__content">
+              <h2>Choisir son <span className="accent">matériel</span></h2>
+              <p className="slice__lead">
+                Catalogue, comparateur et conseils pour trouver la raquette qui te correspond.
+              </p>
+              <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
             </div>
           </div>
         </section>
 
-        {/* FEATURE 3 — PARTENAIRES */}
-        <section className="feature-row">
-          <div className="container">
-            <div className="feature-card">
-              <div className="feature-grid">
-                <div className="feature-media">
-                  <img src="/hero/Hero_Partner.png" alt="Trouver un partenaire" />
-                </div>
-                <div className="feature-content">
-                  <h2>Trouver un <span className="accent">partenaire</span></h2>
-                  <p className="feature-lead">
-                    Publie une annonce ou réponds à celles des autres pour ne plus jouer seul.
-                  </p>
-                  <Link href="/partenaires" className="btn btn-primary">
-                    Consulter les annonces
-                  </Link>
-                </div>
-              </div>
+        {/* SECTION: PARTENAIRES (image à gauche) */}
+        <section className="slice">
+          <div className="container slice__grid">
+            <div className="slice__media">
+              <img src="/hero/Hero_Partner.png" alt="Trouver un partenaire" />
+            </div>
+            <div className="slice__content">
+              <h2>Trouver un <span className="accent">partenaire</span></h2>
+              <p className="slice__lead">
+                Publie une annonce ou réponds à celles des autres pour ne plus jouer seul.
+              </p>
+              <Link href="/partenaires" className="btn btn-primary">Consulter les annonces</Link>
             </div>
           </div>
         </section>
 
-        {/* FEATURE 4 — BOUTIQUE (image à droite) */}
-        <section className="feature-row">
-          <div className="container">
-            <div className="feature-card">
-              <div className="feature-grid feature-grid--reverse">
-                <div className="feature-media">
-                  <img src="/hero/Hero_Shop.png" alt="Boutique SMASH" />
-                </div>
-                <div className="feature-content">
-                  <h2><span className="accent">Boutique</span></h2>
-                  <p className="feature-lead">
-                    Des produits simples et stylés pour porter les couleurs de SMASH.
-                  </p>
-                  <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
-                </div>
-              </div>
+        {/* SECTION: BOUTIQUE (image à droite) */}
+        <section className="slice slice--reverse">
+          <div className="container slice__grid">
+            <div className="slice__media">
+              <img src="/hero/Hero_Shop.png" alt="Boutique SMASH" />
+            </div>
+            <div className="slice__content">
+              <h2><span className="accent">Boutique</span></h2>
+              <p className="slice__lead">
+                Des produits simples et stylés pour porter les couleurs de SMASH.
+              </p>
+              <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
             </div>
           </div>
         </section>
 
-        {/* SUMMARY */}
+        {/* SUMMARY FINAL */}
         <section className="cta-summary">
-          <div className="container cta-summary__inner">
+          <div className="container">
             <h3>Pourquoi SMASH.bad&nbsp;?</h3>
             <p>
               Pensé par des joueurs, pour les joueurs. Un assistant simple et efficace
@@ -149,7 +124,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
       </main>
     </>
   );

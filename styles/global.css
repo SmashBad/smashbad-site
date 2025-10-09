@@ -161,20 +161,21 @@ a{ color:inherit; text-decoration:none }
 .nav-pill:hover .nav-ic{ filter: var(--turq-filter); }
 .nav-pill img, .bottomnav__ic { filter:none !important; opacity:1; }
 
+
 /* =========================
    3) Hero (home)
    ========================= */
 .hero-split{
   background: var(--bg);
-  padding: 36px 0;                 /* compact */
+  padding: 44px 0 28px;                  /* compact */
 }
 
-.hero-split .container{
+.hero-split__grid{
   display: grid;
-  grid-template-columns: 1.1fr .9fr;/* texte / image */
+  grid-template-columns: 1.05fr .95fr;   /* texte / image */
   align-items: center;
   gap: 32px;
-  min-height: 62vh;                 /* plus court que 100vh */
+  min-height: 58vh;                       /* pas un héro interminable */
 }
 
 .hero-split__text h1{
@@ -183,27 +184,26 @@ a{ color:inherit; text-decoration:none }
   margin: 0 0 10px;
   font-weight: 800;
 }
-
 .hero-split__text .accent{ color: var(--turquoise); }
 .lead{ color: var(--muted); max-width: 56ch; }
 
 .hero-actions{
   display: inline-flex;
   gap: 14px;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .hero-split__art{
   justify-self: end;
 }
-
 .hero-split__art img{
   width: 100%;
-  max-width: 340px;                /* image héro contenue */
+  max-width: 340px;
   max-height: 340px;
-  filter: drop-shadow(0 12px 32px rgba(0,0,0,.40));
   display: block;
+  filter: drop-shadow(0 12px 32px rgba(0,0,0,.4));
 }
+
 
 
 /* Responsive home */
@@ -236,13 +236,11 @@ a{ color:inherit; text-decoration:none }
   padding: 0 5%;
 }
 
-/* séparateur simple (pas de gradient) */
-.divider{
-  border: 0;
-  height: 1px;
-  background: rgba(255,255,255,.08);
-  margin: 40px 0;
+/* séparateur simple entre sections (pas de gradient, pas de bordures décoratives) */
+.slice + .slice{
+  border-top: 1px solid rgba(255,255,255,.08);
 }
+
 
 
 /* =========================
@@ -282,97 +280,71 @@ a{ color:inherit; text-decoration:none }
 }
 
 /* =========================
-   Feature blocks
+   Feature slices (alternance simple)
    ========================= */
-
-/* rangée globale (rythme serré) */
-.feature-row{
-  padding: 30px 0 10px;
+.slice{
+  padding: 48px 0;
 }
 
-/* carte trapézoïdale centrée, bord net */
-.feature-card{
-  position: relative;
-  width: 100%;
-  padding: 26px 28px;
-  border: 1px solid rgba(255,255,255,.22); /* plus visible */
-  background: transparent;                 /* fond strictement uni */
-  /* biseau discret à droite, fidèle à la maquette */
-  clip-path: polygon(0 0, 98.5% 0, 100% 50%, 98.5% 100%, 0 100%);
-}
-
-/* grille interne : image fixe + texte fluide */
-.feature-grid{
+.slice__grid{
   display: grid;
-  grid-template-columns: 460px 1fr;  /* image “forte” mais capée */
+  grid-template-columns: minmax(340px, 420px) 1fr;  /* image contenue, texte fluide */
   align-items: center;
-  gap: 28px;
+  gap: 40px;
 }
 
-/* inversion propre (sans bidouille RTL) */
-.feature-grid--reverse{
-  grid-template-columns: 1fr 460px;
-}
-.feature-grid--reverse .feature-media{ order: 2; }
-.feature-grid--reverse .feature-content{ order: 1; }
+.slice--reverse .slice__media{ order: 2; }
+.slice--reverse .slice__content{ order: 1; }
 
 /* média */
-.feature-media{
-  justify-self: start;
-}
-.feature-media img{
+.slice__media img{
   width: 100%;
-  max-width: 460px;
-  max-height: 340px;
-  filter: drop-shadow(0 12px 32px rgba(0,0,0,.45));
+  max-width: 420px;
+  height: auto;
   display: block;
+  filter: drop-shadow(0 12px 32px rgba(0,0,0,.45));
 }
 
 /* contenu */
-.feature-content h2{
-  font-size: clamp(26px, 3vw, 34px);
+.slice__content h2{
+  font-size: clamp(26px, 3.2vw, 36px);
   line-height: 1.06;
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   font-weight: 800;
 }
-.feature-content .accent{ color: var(--turquoise); }
-
-.feature-lead{
+.slice__content .accent{ color: var(--turquoise); }
+.slice__lead{
   color: var(--muted);
-  max-width: 54ch;
-  margin: 0 0 10px;
+  max-width: 56ch;
+  margin: 0 0 12px;
 }
+
 
 
 /* =========================
    Summary final
    ========================= */
 .cta-summary{
-  padding: 48px 0 64px;
-  border-top: 1px solid rgba(255,255,255,.08);  /* trait droit discret */
-}
-
-.cta-summary .container{
+  padding: 56px 0 72px;
+  border-top: 1px solid rgba(255,255,255,.08);
   text-align: center;
 }
-
 .cta-summary h3{
   font-size: clamp(22px, 2.6vw, 30px);
   margin: 0 0 8px;
   font-weight: 800;
 }
-
 .cta-summary p{
   color: var(--muted);
   max-width: 70ch;
   margin: 0 auto 14px;
 }
-
 .cta-summary__actions{
   display: inline-flex;
   gap: 12px;
   margin-top: 6px;
 }
+
 
 
 
