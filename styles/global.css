@@ -174,11 +174,11 @@ a{ color:inherit; text-decoration:none }
 }
 .hero-split__inner{
   display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 36px;
-  min-height: 72vh;  /* réduit depuis 100vh */
-  padding: 56px 0;
+  min-height: 64vh;  /* réduit depuis 100vh */
+  padding: 44px 0;
 }
 .hero-split__art img {
-  width: 100%; max-width: 420px; max-height: 420px; 
+  width: 100%; max-width: 360px; max-height: 360px; 
   filter: drop-shadow(0 12px 36px rgba(0,0,0,.4));
 }
 
@@ -255,13 +255,9 @@ a{ color:inherit; text-decoration:none }
 
 /* Ligne séparatrice très discrète (pas de dégradé) */
 .divider{
-  border: none;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    rgba(255,61,46,0.3),
-    rgba(18,216,223,0.3)
-  );
+  border: 0;
+  height: 1px;
+  background: rgba(255,255,255,.08);
   margin: 48px 0;
 }
 
@@ -310,18 +306,6 @@ a{ color:inherit; text-decoration:none }
   margin: 0 0 16px;
 }
 
-.feature-block::before {
-  content: "";
-  position: absolute;
-  top: -80px;
-  left: 0;
-  width: 140%;
-  height: 200px;
-  background: linear-gradient(20deg, rgba(255,61,46,0.08) 0%, rgba(18,216,223,0.08) 100%);
-  transform: rotate(-3deg);
-  z-index: 0;
-}
-
 .feature-block__content,
 .feature-block__media {
   position: relative;
@@ -329,37 +313,39 @@ a{ color:inherit; text-decoration:none }
 }
 
 /* ====== Feature rows (rythme resserré) ====== */
-.feature-row{ padding: 36px 0 16px; } /* compacité globale */
+.feature-row{ padding: 30px 0 10px; } /* compacité globale */
 
 /* Carte trapézoïdale (bordure oblique à droite) */
 .feature-card{
   position: relative;
-  padding: 36px 32px;
+  padding: 28px 26px;
   /* fond identique, on dessine juste la forme par la bordure + clip-path */
-  clip-path: polygon(0 0, 94% 0, 100% 50%, 94% 100%, 0 100%);
-  border: 1px solid rgba(255,255,255,.12);
+  clip-path: polygon(0 0, 97% 0, 100% 50%, 97% 100%, 0 100%);
+  border: 1px solid rgba(255,255,255,.18);
   background: transparent;
 }
 
 .feature-grid{
-  display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 40px;
+  display: grid; grid-template-columns: 420px 1fr; align-items: center; gap: 36px;
 }
-.feature-grid--reverse{ direction: rtl; }              /* petit truc simple */
+.feature-grid--reverse{ direction: rtl; grid-template-columns: 1fr 420px;}
 .feature-grid--reverse > *{ direction: ltr; }          /* pour garder le texte normal */
+.feature-grid--reverse .feature-media { order: 2; }
+.feature-grid--reverse .feature-content { order: 1; }
 
 .feature-media img{
-  width: 100%; max-width: 380px; max-height: 360px;   /* visuels plus petits */
+  width: 100%; max-width: 420px; max-height: 340px;   /* visuels plus petits */
   filter: drop-shadow(0 12px 36px rgba(0,0,0,.45));
 }
 
 .feature-content h2{
-  font-size: clamp(28px, 3.2vw, 40px);
-  line-height: 1.06; margin: 0 0 8px; font-weight: 800;
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.06; margin: 0 0 6px; font-weight: 800;
 }
 .feature-lead{
   color: var(--muted);
-  max-width: 60ch;
-  margin: 0 0 14px;
+  max-width: 56ch;
+  margin: 0 0 12px;
 }
 /* Ligne très discrète entre blocs (pas de dégradé, juste une séparation fine) */
 .feature-row + .feature-row{ 
@@ -383,17 +369,6 @@ a{ color:inherit; text-decoration:none }
 }
 .cta-summary__actions{
   display: inline-flex; gap: 12px;
-}
-.cta-summary::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -10%;
-  width: 120%;
-  height: 120px;
-  background: linear-gradient(25deg, rgba(255,61,46,0.07), rgba(18,216,223,0.07));
-  transform: rotate(-2.5deg);
-  z-index: 0;
 }
 .cta-summary > * {
   position: relative;
