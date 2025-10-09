@@ -41,53 +41,54 @@ export default function Home() {
 
 
         {/* 4 BLOCS FONCTIONNALITÉS — largeur 75% de la fenêtre */}
-        {/* SHADOW — image à gauche */}
-        <section className="section-left">
-          <div className="section__media">
+        {/* SHADOW – image à gauche, texte à droite */}
+        <section className="section section-left">
+          <div className="section__media image-left">
             <img src="/hero/Hero_Shadow.png" alt="Shadow" />
           </div>
-          <div className="section__content">
+          <div className="section__content text-right">
             <h2><span className="accent">Shadow</span></h2>
             <p className="section__lead">Pose ton téléphone et suis les indications pour travailler tes déplacements.</p>
             <Link href="/shadow" className="btn btn-primary">Lancer l’entraînement</Link>
           </div>
         </section>
 
-        {/* MATÉRIEL — image à droite */}
-        <section className="section-right">
-          <div className="section__media">
+        {/* MATÉRIEL – image à droite, texte à gauche */}
+        <section className="section section-right">
+          <div className="section__media image-right">
             <img src="/hero/Hero_Racket.png" alt="Choisir son matériel" />
           </div>
-          <div className="section__content">
+          <div className="section__content text-left">
             <h2>Choisir son <span className="accent">matériel</span></h2>
             <p className="section__lead">Catalogue, comparateur et conseils pour trouver la raquette qui te correspond.</p>
             <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
           </div>
         </section>
 
-        {/* PARTENAIRES — image à gauche */}
-        <section className="section-left">
-          <div className="section__media">
+        {/* PARTENAIRES – image à gauche, texte à droite */}
+        <section className="section section-left">
+          <div className="section__media image-left">
             <img src="/hero/Hero_Partner.png" alt="Trouver un partenaire" />
           </div>
-          <div className="section__content">
+          <div className="section__content text-right">
             <h2>Trouver un <span className="accent">partenaire</span></h2>
             <p className="section__lead">Publie une annonce ou réponds à celles des autres pour ne plus jouer seul.</p>
             <Link href="/partenaires" className="btn btn-primary">Consulter les annonces</Link>
           </div>
         </section>
 
-        {/* BOUTIQUE — image à droite */}
-        <section className="section-right">
-          <div className="section__media">
+        {/* BOUTIQUE – image à droite, texte à gauche */}
+        <section className="section section-right">
+          <div className="section__media image-right">
             <img src="/hero/Hero_Shop.png" alt="Boutique SMASH" />
           </div>
-          <div className="section__content">
+          <div className="section__content text-left">
             <h2><span className="accent">Boutique</span></h2>
-            <p className="section__lead">Porte fièrement les couleurs de SMASH, découvre les t-shirts, les casquettes et plein d'autres...</p>
+            <p className="section__lead">Des produits simples et stylés pour porter les couleurs de SMASH.</p>
             <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
           </div>
         </section>
+
 
 
         {/* SUMMARY FINAL */}
