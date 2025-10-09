@@ -172,10 +172,14 @@ a{ color:inherit; text-decoration:none }
   padding:60px 5%;
   background:var(--bg);
 }
-
+.hero-split__inner{
+  display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 36px;
+  min-height: 72vh;  /* réduit depuis 100vh */
+  padding: 56px 0;
+}
 .hero-split__art img {
-  max-width: 480px; /* réduit depuis 560px */
-  max-height: 480px;
+  width: 100%; max-width: 420px; max-height: 420px; 
+  filter: drop-shadow(0 12px 36px rgba(0,0,0,.4));
 }
 
 .kicker{
@@ -215,6 +219,13 @@ a{ color:inherit; text-decoration:none }
 /* Petite grille d’actions dans le hero */
 .hero-actions{
   display:flex; gap:14px; margin-top:22px;
+}
+
+/* ====== Container & base spacing ====== */
+.container{
+  max-width: 1160px;  /* centrage propre */
+  margin: 0 auto;
+  padding: 0 5%;
 }
 
 /* Boutons génériques */
@@ -317,23 +328,61 @@ a{ color:inherit; text-decoration:none }
   z-index: 1;
 }
 
+/* ====== Feature rows (rythme resserré) ====== */
+.feature-row{ padding: 36px 0 16px; } /* compacité globale */
+
+/* Carte trapézoïdale (bordure oblique à droite) */
+.feature-card{
+  position: relative;
+  padding: 36px 32px;
+  /* fond identique, on dessine juste la forme par la bordure + clip-path */
+  clip-path: polygon(0 0, 94% 0, 100% 50%, 94% 100%, 0 100%);
+  border: 1px solid rgba(255,255,255,.12);
+  background: transparent;
+}
+
+.feature-grid{
+  display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 40px;
+}
+.feature-grid--reverse{ direction: rtl; }              /* petit truc simple */
+.feature-grid--reverse > *{ direction: ltr; }          /* pour garder le texte normal */
+
+.feature-media img{
+  width: 100%; max-width: 380px; max-height: 360px;   /* visuels plus petits */
+  filter: drop-shadow(0 12px 36px rgba(0,0,0,.45));
+}
+
+.feature-content h2{
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.06; margin: 0 0 8px; font-weight: 800;
+}
+.feature-lead{
+  color: var(--muted);
+  max-width: 60ch;
+  margin: 0 0 14px;
+}
+/* Ligne très discrète entre blocs (pas de dégradé, juste une séparation fine) */
+.feature-row + .feature-row{ 
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+
+
 /* =========================
    Summary final
    ========================= */
 .cta-summary{
-  text-align: center;
-  padding: 60px 5% 80px;
+  padding: 48px 0 72px;
+  border-top: 1px solid rgba(255,255,255,.08);
 }
-.cta-summary h3{
-  font-size: clamp(22px, 3vw, 32px);
-  margin: 0 0 10px; font-weight: 800;
-}
+.cta-summary__inner{ text-align: center; }
+.cta-summary h3{ font-size: clamp(22px, 2.6vw, 30px); margin: 0 0 8px; font-weight: 800; }
 .cta-summary p{
   color: var(--muted);
-  max-width: 70ch; margin: 0 auto 18px;
+  max-width: 70ch; margin: 0 auto 14px;
 }
 .cta-summary__actions{
-  display: inline-flex; gap: 12px; margin-top: 8px;
+  display: inline-flex; gap: 12px;
 }
 .cta-summary::before {
   content: "";
