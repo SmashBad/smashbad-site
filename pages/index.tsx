@@ -16,7 +16,7 @@ export default function Home() {
       </Head>
 
       <main className="home-main">
-        {/* HERO */}
+        {/* HERO PRINCIPAL (traitement à part) */}
         <section className="hero-split">
           <div className="container hero-split__grid">
             <div className="hero-split__text">
@@ -46,9 +46,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION: SHADOW (image à gauche) */}
+        {/* 4 BLOCS FONCTIONNALITÉS — largeur 75% de la fenêtre */}
+        {/* SHADOW (image à gauche) */}
         <section className="slice">
-          <div className="container slice__grid">
+          <div className="slice__grid">
             <div className="slice__media">
               <img src="/hero/Hero_Shadow.png" alt="Shadow — entraînement déplacements" />
             </div>
@@ -62,9 +63,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION: MATÉRIEL (image à droite) */}
+        {/* MATÉRIEL (image à droite) */}
         <section className="slice slice--reverse">
-          <div className="container slice__grid">
+          <div className="slice__grid">
             <div className="slice__media">
               <img src="/hero/Hero_Racket.png" alt="Choisir son matériel" />
             </div>
@@ -78,9 +79,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION: PARTENAIRES (image à gauche) */}
+        {/* PARTENAIRES (image à gauche) */}
         <section className="slice">
-          <div className="container slice__grid">
+          <div className="slice__grid">
             <div className="slice__media">
               <img src="/hero/Hero_Partner.png" alt="Trouver un partenaire" />
             </div>
@@ -94,9 +95,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION: BOUTIQUE (image à droite) */}
+        {/* BOUTIQUE (image à droite) */}
         <section className="slice slice--reverse">
-          <div className="container slice__grid">
+          <div className="slice__grid">
             <div className="slice__media">
               <img src="/hero/Hero_Shop.png" alt="Boutique SMASH" />
             </div>
@@ -125,6 +126,7 @@ export default function Home() {
           </div>
         </section>
       </main>
+
     </>
   );
 }
