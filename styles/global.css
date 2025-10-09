@@ -171,53 +171,47 @@ a{ color:inherit; text-decoration:none }
 }
 
 .container{
-  max-width: 1160px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 5%;
 }
 
 
 /* =========================
-   HERO PRINCIPAL
+   3) Hero (home) — version ample
    ========================= */
 .hero-split{
   background: var(--bg);
-  padding: 28px 0 14px;
+  padding: 60px 0;                        /* air haut/bas */
 }
-
-.hero-split__grid{
+.hero-split .container{
   display: grid;
-  grid-template-columns: 0.95fr 1.05fr;     /* texte plus étroit, image plus large */
+  grid-template-columns: 1.1fr .9fr;      /* texte / image */
   align-items: center;
-  gap: 56px;
-  min-height: 64vh;                       /* plus présent */
+  gap: 40px;
+  min-height: 72vh;                        /* présence mais pas interminable */
 }
 
-.hero-split__text{ max-width: 600px; }  /* évite le “texte comprimé” */
-
+.kicker{
+  display:inline-block; margin:0 0 14px; padding:6px 10px; border-radius:999px;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); color:var(--muted); font-size:14px;
+}
 .hero-split__text h1{
-  font-size: clamp(42px, 6.6vw, 76px);
-  line-height: 1.04;
-  margin: 0 0 12px;
-  font-weight: 800;
+  font-size: clamp(42px, 6.8vw, 78px);    /* gros titre comme ta capture */
+  line-height: 1.04; margin: 0 0 10px; font-weight: 800;
 }
 .hero-split__text .accent{ color: var(--turquoise); }
-.lead{ color: var(--muted); max-width: 62ch; }
+.lead{ color: var(--muted); max-width: 66ch; }
 
-.hero-actions{
-  display: inline-flex;
-  gap: 16px;
-  margin-top: 22px;
-}
+.hero-actions{ display:inline-flex; gap:14px; margin-top:20px; }
 
-.hero-split__art{ justify-self: end; }
+.hero-split__art{ justify-self:end; }
 .hero-split__art img{
-  width: 100%;
-  max-width: 560px;
-  height: auto;
-  display: block;
+  width: 100%; max-width: 620px;          /* visuel héros généreux */
+  height: auto; display:block;
   filter: drop-shadow(0 12px 36px rgba(0,0,0,.4));
 }
+
 
 
 
@@ -288,16 +282,17 @@ a{ color:inherit; text-decoration:none }
    ========================= */
 .section-left,
 .section-right{
-  width: min(70vw, 1160px);   /* 70% mais plafonné pour grand écran */
-  padding: 0 5%;              /* même gutter que .container */
+  width: 70vw;                 /* ⬅️ exactement 70% de la fenêtre */
   margin-left: auto;
   margin-right: auto;
-  padding-top: 28px;          /* sections resserrées */
-  padding-bottom: 28px;
+  padding: 0;                  /* ⬅️ aucun padding interne */
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  column-gap: 64px;
+  column-gap: 64px;            /* espace central constant */
+  /* pour resserrer verticalement la page */
+  margin-top: 28px;
+  margin-bottom: 28px;
 }
 
 .section-left{
@@ -312,17 +307,21 @@ a{ color:inherit; text-decoration:none }
 
 /* ancrages aux bords de la zone 70% */
 .section-left .section__media{  justify-self: start; }
-.section-left .section__content{ justify-self: end;  max-width: 560px; }
+.section-left .section__content{ justify-self: end; }
 
 .section-right .section__media{  justify-self: end;   }
-.section-right .section__content{ justify-self: start; max-width: 560px; }
+.section-right .section__content{ justify-self: start; }
 
 .section__media img{
   width: 100%;
-  max-width: 460px;
+  max-width: 520px;
   height: auto;
   display: block;
   filter: drop-shadow(0 12px 32px rgba(0,0,0,.45));
+}
+
+.section__content{
+  max-width: 620px;            /* garde de belles lignes mais laisse respirer */
 }
 
 .section__content h2{
@@ -335,30 +334,28 @@ a{ color:inherit; text-decoration:none }
 .section__lead{
   color: var(--muted);
   margin: 0 0 12px;
-  max-width: 58ch;
 }
 
 
 
 /* =========================
-   SUMMARY FINAL
+   Summary final (75% respirant)
    ========================= */
 .cta-summary{
-  width: min(75vw, 1160px);
-  padding: 64px 0 82px;        /* + d’air au-dessus et en dessous */
-  margin: 16px auto 0;         /* espace avant le bloc */
+  width: 75vw;                 /* ⬅️ largeur demandée */
+  margin: 72px auto 84px;      /* espace avant/après le bloc */
   text-align: center;
 }
 .cta-summary h3{
   font-size: clamp(24px, 2.8vw, 32px);
-  margin: 0 0 12px; font-weight: 800;
+  margin: 0 0 14px; font-weight: 800;
 }
 .cta-summary p{
-  width: 100%;                 /* laisse s'étendre → plus de coupure forcée */
-  margin: 18px auto 24px;      /* espace avant/après le texte */
+  width: 100%;                 /* s'adapte à la largeur, pas de wrap forcé */
+  margin: 18px auto 26px;
   color: var(--muted);
 }
-.cta-summary__actions{ display:inline-flex; gap:14px; margin-top: 8px; }
+.cta-summary__actions{ display:inline-flex; gap:14px; }
 
 
 
