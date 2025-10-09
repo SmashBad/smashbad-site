@@ -19,7 +19,7 @@ export default function BottomNav() {
   const navItems: NavItem[] = [
     { href: "/entrainements", label: "Entraînement", icon: "/Bolt.svg",    iconOn: "/Bolt_On.svg",    title: "Voir les entraînements", aliases: ["/shadow"]},
     { href: "/materiel",      label: "Matériel",     icon: "/Racket.svg",  iconOn: "/Racket_On.svg",  title: "Matériel - Bientôt disponible",    soon: true },
-    { href: "/partenaires",   label: "Partenaires",  icon: "/Partner.svg", iconOn: "/Partner_On.svg", title: "Partenaires - Bientôt disponible",    soon: true },
+    { href: "/partenaires",   label: "Partenaires",  icon: "/Partner.svg", iconOn: "/Partner_On.svg", title: "Trouver un Partenaire"},
     { href: "/shop",          label: "Boutique",     icon: "/Shop.svg",    iconOn: "/Shop_On.svg",    title: "Boutique - Bientôt disponible",    soon: true },
   ];
 

@@ -58,11 +58,19 @@ export default function Header({ title }: HeaderProps)
         </span>
 
         {/* Partenaires (soon) */}
-        <span className="nav-pill is-soon" aria-disabled="true">
-          <img src="/Partner.svg" className="nav-ic" alt="" />
-          <span className="label">Partenaires</span>
-          <span className="tooltip">Bientôt disponible</span>
-        </span>
+        {(() => {
+          const active = isActiveAny(["/partenaires"]);
+          const icon = active ? "/Partner_On.svg" : "/Partner.svg";
+          return (
+            <a
+              href="/partenaires"
+              className={`nav-pill ${active ? "is-active" : ""}`}
+            >
+              <img src={icon} className="nav-ic" alt="" aria-hidden />
+              <span className="label">Partenaires</span>
+            </a>
+          );
+        })()}
 
         {/* Boutique (soon) */}
         <span className="nav-pill is-soon" aria-disabled="true">
