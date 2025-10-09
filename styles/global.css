@@ -280,6 +280,7 @@ a{ color:inherit; text-decoration:none }
   margin: 48px 0;
 }*/
 
+
 /* =========================
    Feature slices (alternance simple)
    ========================= */
@@ -311,7 +312,7 @@ a{ color:inherit; text-decoration:none }
 /* contenu */
 .slice__content h2{
   font-size: clamp(28px, 3.2vw, 38px);
-  line-height: 1.06;
+  /*line-height: 1.06;*/
   margin: 0 0 10px;
   font-weight: 800;
 }
