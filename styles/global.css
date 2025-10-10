@@ -117,6 +117,11 @@ a{ color:inherit; text-decoration:none }
   filter: none !important; /* annule le grayscale/brightness hérité */
   opacity: 1;              /* l'icône reste bien blanche */
 }
+.nav__actions .is-soon .nav-ic,
+.nav__actions .btn--disabled .nav-ic{
+  filter: none !important;
+  opacity: .85; /* léger voile mais pas noircie */
+}
 
 .tooltip{
   position: absolute;
