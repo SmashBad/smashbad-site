@@ -52,7 +52,7 @@ export default function Home() {
           </div>
           <div className="section__content text-right">
             <h2><span className="accent">Shadow</span></h2>
-            <p className="section__lead">Pose ton téléphone et suis les indications pour travailler tes déplacements.</p>
+            <p className="section__lead">Pose ton téléphone, prends ta raquette et travaille tes déplacements.</p>
             <Link href="/shadow" className="btn btn-primary">Lancer l’entraînement</Link>
           </div>
         </section>
@@ -76,7 +76,7 @@ export default function Home() {
           </div>
           <div className="section__content text-right">
             <h2>Trouver un <span className="accent">partenaire</span></h2>
-            <p className="section__lead">Publie une annonce ou réponds à celles des autres pour ne plus jouer seul.</p>
+            <p className="section__lead">Publie une annonce ou réponds à celles des autres pour ne plus jouer seul en tournoi.</p>
             <Link href="/partenaires" className="btn btn-primary">Consulter les annonces</Link>
           </div>
         </section>
@@ -85,7 +85,7 @@ export default function Home() {
         <section className="section section-right">
           <div className="section__content text-left">
             <h2><span className="accent">Boutique</span></h2>
-            <p className="section__lead">Des produits simples et stylés pour porter les couleurs de SMASH.</p>
+            <p className="section__lead">Porte fièrement les couleurs de SMASH. Découvre nos t-shirt, casquettes et autres produits dérivés.</p>
             <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
           </div>
           <div className="section__media image-right">
@@ -101,7 +101,7 @@ export default function Home() {
             <h3>Pourquoi SMASH.bad&nbsp;?</h3>
             <p>
               Pensé par des joueurs, pour les joueurs. Un assistant simple et efficace
-              pour t’entraîner, choisir ton matériel et trouver ton binôme de tournoi.
+              pour t’entraîner, choisir ton matériel et trouver ton partenaire de tournoi.
             </p>
             <div className="cta-summary__actions">
               <Link href="/shadow" className="btn btn-primary">Essayer le Shadow</Link>
