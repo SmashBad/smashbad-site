@@ -373,96 +373,16 @@ a{ color:inherit; text-decoration:none }
   .cta-summary h3{ font-size: clamp(22px, 2.4vw, 30px); }
 }
 
-/* ========== MOBILE via UA (classe) ========== */
-/* S'applique dès que useViewMode() renvoie "mobile" */
-.view-mobile .main{padding: 0 0;}
-.view-mobile .hero-split{ padding: 20px 0 12px; }
-.view-mobile .hero-split .container{
-  display: grid;
-  grid-template-columns: 1.4fr 0.6fr;
-  gap: 10px;
-  min-height: unset;
-}
-.view-mobile .hero-split__text h1{ font-size: clamp(22px, 6vw, 28px); margin-bottom: 6px; }
-.view-mobile .hero-actions{ display:flex; flex-wrap:wrap; gap:8px 10px; }
-.view-mobile .hero-actions .btn{ height:42px; padding:0 14px; white-space:nowrap; }
-.view-mobile .hero-split__art{ justify-self:end; }
-.view-mobile .hero-split__art img{ max-width:600px; width:100%; height:auto; filter:drop-shadow(0 8px 22px rgba(0,0,0,.35)); }
-.view-mobile .lead {
-  font-size: 14px;
-  max-width: 44ch;
-  margin-bottom: 12px;
-}
-
-.view-mobile .section{
-  width:92vw; grid-template-columns:1fr; row-gap:10px; column-gap:0;
-  margin:42px auto; border-top: none;
-}
-.view-mobile .section + .section{ border-top:none; padding-top:0; }
-.view-mobile .section .section__media{ order:1; justify-self:center; }
-.view-mobile .section .section__content{ order:2; justify-self:center; text-align:center; max-width:60ch; }
-.view-mobile .section__media img{ width:min(70vw, 500px); height:auto; }
-.view-mobile .section__content h2{ font-size:clamp(20px, 6vw, 26px); margin-bottom:6px; }
-.view-mobile .section__lead{ margin-bottom:10px; }
-
-.view-mobile .cta-summary{
-  width:92vw; padding:48px 0 2px; margin-bottom:0;
-}
-.view-mobile .cta-summary h3{ margin-bottom:10px; }
-.view-mobile .cta-summary p{ margin:0 auto 16px; width:100%; }
-.view-mobile .cta-summary__actions{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
-.view-mobile .cta-summary__actions .btn{ height:42px; padding:0 14px; white-space:nowrap; }
-
-/* ========== Fallback largeur (optionnel) ========== */
-/* Si tu veux aussi basculer en mobile sous un certain width (tablettes en mode étroit etc.) */
-@media (max-width: 768px){
-  .hero-split{ padding: 18px 0 10px; }
-  .hero-split .container{ grid-template-columns: 1fr; gap: 16px; }
-  .hero-split__art{ justify-self:start; }
-  .hero-split__art img{ max-width:360px; }
-  .section{ width:92vw; grid-template-columns:1fr; row-gap:10px; margin:16px auto; }
-  .section + .section{ border-top:1px solid rgba(255,255,255,.08); padding-top:16px; }
-  .section .section__media, .section .section__content{ justify-self:center; text-align:center; }
-  .cta-summary{ width:92vw; padding:36px 0 24px; margin-bottom:0; }
-}
-
-
-/* --- FORCE MOBILE HERO: image large, texte discret --- */
-.view-mobile .hero-split .container{
-  /* évite qu’un ancien media-query repasse en 1 colonne */
-  display: grid !important;
-  grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr) !important; /* texte / image */
-  gap: 10px !important;
-  width: 92vw;          /* optionnel : un peu plus large que le container par défaut */
-  margin: 0 auto;
-}
-
-.view-mobile .hero-split__text{
-  max-width: 40ch !important;   /* réduit la place du texte */
-}
-
-.view-mobile .hero-split__art{
-  justify-self: end !important;
-  width: 100% !important;
-}
-
-.view-mobile .hero-split__art img{
-  /* enlève toutes les limites héritées */
-  max-width: none !important;
-  max-height: none !important;
-  width: 100% !important;   /* l’image occupe tout sa colonne */
-  height: auto !important;
-  object-fit: contain;
-}
-
 /* =========================
-   HERO STACK — mobile only (via view-mobile)
+   MOBILE (via view-mobile) — version clean
    ========================= */
+
+/* --- HERO STACK --- */
 .view-mobile .hero-split { padding: 24px 0 12px; }
 
 .view-mobile .hero-split .container{
   display: grid !important;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr !important;
   grid-template-areas:
     "kicker"
     "art"
@@ -470,25 +390,29 @@ a{ color:inherit; text-decoration:none }
     "lead"
     "actions";
   row-gap: 10px;
-  justify-items: center;   /* centre tous les éléments du hero */
+  justify-items: center;
+  min-height: unset;
 }
 
-/* Permet de "sortir" les enfants du bloc texte dans la grille parent */
+/* sortir les enfants pour les placer dans la grille parent */
 .view-mobile .hero-split__text{ display: contents; }
 
-/* Ordre + zones */
 .view-mobile .kicker{ grid-area: kicker; }
 .view-mobile .hero-split__art{ grid-area: art; }
 .view-mobile .hero-split__text h1{ grid-area: title; text-align: center; }
 .view-mobile .lead{ grid-area: lead; text-align: center; }
-.view-mobile .hero-actions{ grid-area: actions; display: flex; flex-direction: column; gap: 10px; }
-
-/* Tailles (ajuste librement ensuite) */
-.view-mobile .hero-split__art img{
-  width: min(80vw, 520px);   /* image dominante */
-  height: auto;
+.view-mobile .hero-actions{
+  grid-area: actions;
+  display: flex; flex-direction: column; gap: 10px;
+  align-items: center;
 }
 
+/* tailles (ajuste si besoin) */
+.view-mobile .hero-split__art img{
+  width: min(80vw, 520px);
+  height: auto;
+  filter: drop-shadow(0 8px 22px rgba(0,0,0,.35));
+}
 .view-mobile .hero-split__text h1{
   font-size: clamp(24px, 7vw, 32px);
   line-height: 1.1;
@@ -497,11 +421,53 @@ a{ color:inherit; text-decoration:none }
 .view-mobile .lead{ font-size: 14px; max-width: 45ch; }
 .view-mobile .hero-actions .btn{
   height: 44px; padding: 0 16px; white-space: nowrap;
-  align-self: center;        /* garde les boutons centrés */
 }
 
+/* --- SECTIONS (1 colonne, centrées) --- */
+.view-mobile .section{
+  width: 92vw;
+  margin: 28px auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 12px;
+  column-gap: 0;
+  border-top: none;          /* pas de ligne entre sections */
+}
+.view-mobile .section + .section{
+  border-top: none; padding-top: 0;
+}
 
+.view-mobile .section .section__media{
+  order: 1; justify-self: center;
+}
+.view-mobile .section .section__content{
+  order: 2; justify-self: center; text-align: center; max-width: 60ch;
+}
+.view-mobile .section__media img{
+  width: min(70vw, 500px);
+  height: auto;
+}
+.view-mobile .section__content h2{
+  font-size: clamp(20px, 6vw, 26px);
+  margin-bottom: 6px;
+}
+.view-mobile .section__lead{ margin-bottom: 10px; }
 
+/* --- SUMMARY (respire en haut, compact en bas) --- */
+.view-mobile .cta-summary{
+  width: 92vw;
+  margin: 0 auto;
+  padding: 48px 0 12px;   /* + d’air au-dessus, moins en bas */
+}
+.view-mobile .cta-summary h3{ margin-bottom: 10px; }
+.view-mobile .cta-summary p{ margin: 0 auto 16px; width: 100%; }
+.view-mobile .cta-summary__actions{
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+}
+.view-mobile .cta-summary__actions .btn{
+  height: 44px; padding: 0 16px; white-space: nowrap;
+}
 
 
 
