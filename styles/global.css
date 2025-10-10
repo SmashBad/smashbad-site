@@ -442,7 +442,7 @@ a{ color:inherit; text-decoration:none }
   margin: 6px 0 0;
 }
 .view-mobile .lead{
-  font-size: 14px;
+  /*font-size: 14px;*/
   max-width: 45ch;
 }
 .view-mobile .hero-actions .btn{

@@ -85,7 +85,7 @@ export default function Home() {
         <section className="section section-right">
           <div className="section__content text-left">
             <h2><span className="accent">Boutique</span></h2>
-            <p className="section__lead">Porte fièrement les couleurs de SMASH. Découvre nos t-shirt, casquettes et autres produits dérivés.</p>
+            <p className="section__lead">Porte fièrement les couleurs de SMASH. Découvre nos t-shirts, casquettes et autres produits dérivés.</p>
             <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
           </div>
           <div className="section__media image-right">
