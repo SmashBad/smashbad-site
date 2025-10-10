@@ -603,7 +603,7 @@ body.is-mobile .nav__title{
   grid-column: 3;
 }
 body.is-mobile .nav__actions{ grid-column: 3; justify-self: end; }
-/*body.is-mobile main{ padding-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom)); }*/
+body.is-mobile main{ padding-bottom: 16px; }
 body.is-mobile .footer{ margin-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom)); }
 
 /* PC étroit */
