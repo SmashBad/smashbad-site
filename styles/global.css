@@ -182,7 +182,7 @@ a{ color:inherit; text-decoration:none }
    ========================= */
 .hero-split{
   background: var(--bg);
-  padding: 60px 0;                        /* air haut/bas */
+  padding: 48px 0;                        /* air haut/bas */
 }
 .hero-split .container{
   display: grid;
@@ -282,7 +282,7 @@ a{ color:inherit; text-decoration:none }
    ========================= */
 .section{
   width: 70vw;               /* real 70% of the viewport */
-  margin: 28px auto;         /* compact vertical rhythm, centered */
+  margin: 12px auto;         /* compact vertical rhythm, centered */
   padding: 0;                /* no inner padding */
   display: grid;
   grid-template-columns: 1fr 1fr;

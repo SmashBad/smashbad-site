@@ -40,7 +40,9 @@ export default function Home() {
         </section>
 
 
-        {/* 4 BLOCS FONCTIONNALITÉS — largeur 75% de la fenêtre */}
+        {/* 4 BLOCS FONCTIONNALITÉS — largeur 70% de la fenêtre */}
+
+
         {/* SHADOW – image à gauche, texte à droite */}
         <section className="section section-left">
           <div className="section__media image-left">
@@ -55,13 +57,13 @@ export default function Home() {
 
         {/* MATÉRIEL – image à droite, texte à gauche */}
         <section className="section section-right">
-          <div className="section__media image-right">
-            <img src="/hero/Hero_Racket.png" alt="Choisir son matériel" />
-          </div>
           <div className="section__content text-left">
             <h2>Choisir son <span className="accent">matériel</span></h2>
             <p className="section__lead">Catalogue, comparateur et conseils pour trouver la raquette qui te correspond.</p>
             <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
+          </div>
+          <div className="section__media image-right">
+            <img src="/hero/Hero_Racket.png" alt="Choisir son matériel" />
           </div>
         </section>
 
@@ -79,13 +81,13 @@ export default function Home() {
 
         {/* BOUTIQUE – image à droite, texte à gauche */}
         <section className="section section-right">
-          <div className="section__media image-right">
-            <img src="/hero/Hero_Shop.png" alt="Boutique SMASH" />
-          </div>
           <div className="section__content text-left">
             <h2><span className="accent">Boutique</span></h2>
             <p className="section__lead">Des produits simples et stylés pour porter les couleurs de SMASH.</p>
             <button className="btn btn-disabled" aria-disabled>Bientôt disponible</button>
+          </div>
+          <div className="section__media image-right">
+            <img src="/hero/Hero_Shop.png" alt="Boutique SMASH" />
           </div>
         </section>
 
