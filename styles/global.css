@@ -455,6 +455,52 @@ a{ color:inherit; text-decoration:none }
   object-fit: contain;
 }
 
+/* =========================
+   HERO STACK — mobile only (via view-mobile)
+   ========================= */
+.view-mobile .hero-split { padding: 24px 0 12px; }
+
+.view-mobile .hero-split .container{
+  display: grid !important;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "kicker"
+    "art"
+    "title"
+    "lead"
+    "actions";
+  row-gap: 10px;
+  justify-items: center;   /* centre tous les éléments du hero */
+}
+
+/* Permet de "sortir" les enfants du bloc texte dans la grille parent */
+.view-mobile .hero-split__text{ display: contents; }
+
+/* Ordre + zones */
+.view-mobile .kicker{ grid-area: kicker; }
+.view-mobile .hero-split__art{ grid-area: art; }
+.view-mobile .hero-split__text h1{ grid-area: title; text-align: center; }
+.view-mobile .lead{ grid-area: lead; text-align: center; }
+.view-mobile .hero-actions{ grid-area: actions; display: flex; flex-direction: column; gap: 10px; }
+
+/* Tailles (ajuste librement ensuite) */
+.view-mobile .hero-split__art img{
+  width: min(80vw, 520px);   /* image dominante */
+  height: auto;
+}
+
+.view-mobile .hero-split__text h1{
+  font-size: clamp(24px, 7vw, 32px);
+  line-height: 1.1;
+  margin: 6px 0 0;
+}
+.view-mobile .lead{ font-size: 14px; max-width: 45ch; }
+.view-mobile .hero-actions .btn{
+  height: 44px; padding: 0 16px; white-space: nowrap;
+  align-self: center;        /* garde les boutons centrés */
+}
+
+
 
 
 
