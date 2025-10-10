@@ -396,7 +396,7 @@ a{ color:inherit; text-decoration:none }
 
 .view-mobile .section{
   width:92vw; grid-template-columns:1fr; row-gap:10px; column-gap:0;
-  margin:28px auto; border-top: none;
+  margin:42px auto; border-top: none;
 }
 .view-mobile .section + .section{ border-top:none; padding-top:0; }
 .view-mobile .section .section__media{ order:1; justify-self:center; }
@@ -603,7 +603,7 @@ body.is-mobile .nav__title{
   grid-column: 3;
 }
 body.is-mobile .nav__actions{ grid-column: 3; justify-self: end; }
-body.is-mobile main{ padding-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom)); }
+/*body.is-mobile main{ padding-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom)); }*/
 body.is-mobile .footer{ margin-bottom: calc(var(--bottomnav-h) + env(safe-area-inset-bottom)); }
 
 /* PC étroit */
