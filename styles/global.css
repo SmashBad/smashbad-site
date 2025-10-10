@@ -374,48 +374,74 @@ a{ color:inherit; text-decoration:none }
 }
 
 /* =========================
-   Mobile (≤ 700px)
+   Mobile (≤ 700px) – Patch
    ========================= */
 @media (max-width: 700px){
 
-  /* HERO sur une colonne */
-  .hero-split{ padding: 24px 0 16px; }
+  /* --- HERO en 2 colonnes : image large, texte discret --- */
+  .hero-split{ padding: 18px 0 10px; }
   .hero-split .container{
-    grid-template-columns: 1fr;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr; /* texte / image */
+    gap: 12px;
     min-height: unset;
   }
-  .hero-split__text h1{ font-size: clamp(28px, 8vw, 40px); }
-  .hero-split__art{ justify-self: start; }
-  .hero-split__art img{ max-width: 340px; }
+  .hero-split__text h1{
+    font-size: clamp(24px, 7vw, 32px);  /* titre plus discret */
+    margin-bottom: 6px;
+  }
+  .lead{ font-size: 14px; max-width: 48ch; }
+  .hero-actions{
+    display: flex; flex-wrap: wrap; gap: 8px 10px;   /* évite que les boutons cassent */
+  }
+  .hero-actions .btn{ height: 42px; padding: 0 14px; white-space: nowrap; }
+  .hero-split__art{ justify-self: end; }
+  .hero-split__art img{
+    max-width: 420px;   /* image bien présente */
+    width: 100%;
+    filter: drop-shadow(0 8px 22px rgba(0,0,0,.35));
+  }
 
-  /* SECTIONS : 1 colonne, 92% de largeur, image au-dessus */
+  /* --- SECTIONS : 1 colonne, séparateur mobile-only --- */
   .section{
     width: 92vw;
     grid-template-columns: 1fr;
-    row-gap: 12px;
-    column-gap: 0;
+    row-gap: 10px; column-gap: 0;
     margin: 16px auto;
+    border-top: none; /* reset safety */
   }
+  .section + .section{
+    border-top: 1px solid rgba(255,255,255,.08);  /* séparateur uniquement mobile */
+    padding-top: 16px;
+  }
+
+  /* Ordre et centrage identiques (left & right) */
   .section .section__media{ order: 1; justify-self: center; }
   .section .section__content{ order: 2; justify-self: center; text-align: center; max-width: 60ch; }
 
-  .image-left, .image-right{ justify-self: center; } /* neutralise les bords */
-  .text-left,  .text-right { justify-self: center; }
+  /* 4 héros : 70% de la fenêtre, capés à 500px */
+  .section__media img{
+    width: min(70vw, 500px);
+    height: auto;
+  }
 
-  .section__media img{ max-width: 320px; }
-  .section__content h2{ font-size: clamp(22px, 6vw, 30px); margin-bottom: 8px; }
+  .section__content h2{ font-size: clamp(20px, 6vw, 26px); margin-bottom: 6px; }
   .section__lead{ margin-bottom: 10px; }
 
-  /* SUMMARY : pleine largeur utile et respiration interne */
+  /* --- SUMMARY : respire à l’intérieur & plus compact en bas --- */
   .cta-summary{
     width: 92vw;
-    padding: 44px 0 56px;
+    padding: 36px 0 24px;   /* moins d’air en bas → réduit l’espace avant le footer */
+    margin-bottom: 0;       /* supprime le trou sous le summary */
   }
-  .cta-summary h3{ margin-bottom: 14px; }
-  .cta-summary p{ margin: 0 auto 20px; }
-  .cta-summary__actions{ gap: 10px; flex-wrap: wrap; }
+  .cta-summary h3{ margin-bottom: 12px; }
+  .cta-summary p{ margin: 0 auto 16px; width: 100%; }
+  .cta-summary__actions{
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  }
+  .cta-summary__actions .btn{ height: 42px; padding: 0 14px; white-space: nowrap; }
 }
+
 
 
 
