@@ -357,7 +357,7 @@ a{ color:inherit; text-decoration:none }
     min-height: 520px;
   }
   .hero-split__text h1{ font-size: clamp(28px, 5vw, 56px); }
-  .hero-split__art img{ max-width: 500px; }
+  .hero-split__art img{ max-width: 600px; }
 
   /* SECTIONS 70% centrées, gap réduit, images capées */
   .section{
@@ -386,7 +386,7 @@ a{ color:inherit; text-decoration:none }
 .view-mobile .hero-actions{ display:flex; flex-wrap:wrap; gap:8px 10px; }
 .view-mobile .hero-actions .btn{ height:42px; padding:0 14px; white-space:nowrap; }
 .view-mobile .hero-split__art{ justify-self:end; }
-.view-mobile .hero-split__art img{ max-width:480px; width:100%; height:auto; filter:drop-shadow(0 8px 22px rgba(0,0,0,.35)); }
+.view-mobile .hero-split__art img{ max-width:600px; width:100%; height:auto; filter:drop-shadow(0 8px 22px rgba(0,0,0,.35)); }
 .view-mobile .lead {
   font-size: 14px;
   max-width: 44ch;
@@ -425,6 +425,34 @@ a{ color:inherit; text-decoration:none }
   .cta-summary{ width:92vw; padding:36px 0 24px; margin-bottom:0; }
 }
 
+
+/* --- FORCE MOBILE HERO: image large, texte discret --- */
+.view-mobile .hero-split .container{
+  /* évite qu’un ancien media-query repasse en 1 colonne */
+  display: grid !important;
+  grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr) !important; /* texte / image */
+  gap: 10px !important;
+  width: 92vw;          /* optionnel : un peu plus large que le container par défaut */
+  margin: 0 auto;
+}
+
+.view-mobile .hero-split__text{
+  max-width: 40ch !important;   /* réduit la place du texte */
+}
+
+.view-mobile .hero-split__art{
+  justify-self: end !important;
+  width: 100% !important;
+}
+
+.view-mobile .hero-split__art img{
+  /* enlève toutes les limites héritées */
+  max-width: none !important;
+  max-height: none !important;
+  width: 100% !important;   /* l’image occupe tout sa colonne */
+  height: auto !important;
+  object-fit: contain;
+}
 
 
 
