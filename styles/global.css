@@ -375,6 +375,7 @@ a{ color:inherit; text-decoration:none }
 
 /* ========== MOBILE via UA (classe) ========== */
 /* S'applique dès que useViewMode() renvoie "mobile" */
+.view-mobile .main{padding: 0 0;}
 .view-mobile .hero-split{ padding: 20px 0 12px; }
 .view-mobile .hero-split .container{
   display: grid;
