@@ -110,8 +110,8 @@ a{ color:inherit; text-decoration:none }
 .nav-ic{ width:18px; height:18px; display:block; flex:0 0 18px; opacity:1 }
 
 /* État "bientôt" (désactivé) + tooltips */
-.is-soon{ position:relative; cursor:not-allowed; color:#9BA8BF; background:rgba(255,255,255,.02); border:1px dashed rgba(255,255,255,.18) }
-.btn--disabled{ opacity:.55; cursor:not-allowed; position:relative }
+.is-soon{ position:relative; cursor:not-allowed; color:#9BA8BF; background:rgba(255,255,255,.3); border:1px dashed rgba(255,255,255,.5) }
+.btn--disabled{ opacity:.7; cursor:not-allowed; position:relative }
 .nav__actions .is-soon .nav-ic,
 .nav__actions .btn--disabled .nav-ic{
   filter: none !important; /* annule le grayscale/brightness hérité */
