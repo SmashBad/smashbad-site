@@ -6,8 +6,10 @@ import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
 import DeviceTest from "../components/DeviceTest";
 import Link from "next/link";
+import useViewMode from "components/hooks/useViewMode";
 
 export default function Home() {
+  const mode = useViewMode();
   return (
     <>
       <Head>
