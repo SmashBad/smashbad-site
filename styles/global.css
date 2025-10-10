@@ -173,7 +173,7 @@ a{ color:inherit; text-decoration:none }
 .container{
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 5%;
+  padding: 0 3%;
 }
 
 
@@ -186,10 +186,10 @@ a{ color:inherit; text-decoration:none }
 }
 .hero-split .container{
   display: grid;
-  grid-template-columns: 1.1fr .9fr;      /* texte / image */
+  grid-template-columns: 1fr 1fr;      /* texte / image */
   align-items: center;
   gap: 40px;
-  min-height: 72vh;                        /* présence mais pas interminable */
+  min-height: 550px;                        /* présence mais pas interminable */
 }
 
 .kicker{
@@ -282,11 +282,11 @@ a{ color:inherit; text-decoration:none }
    ========================= */
 .section{
   width: 70vw;               /* real 70% of the viewport */
-  margin: 12px auto;         /* compact vertical rhythm, centered */
+  margin: 3px auto;         /* compact vertical rhythm, centered */
   padding: 0;                /* no inner padding */
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 64px;          /* fixed center gutter */
+  column-gap: 128px;          /* fixed center gutter */
   align-items: center;
 }
 
@@ -330,8 +330,8 @@ a{ color:inherit; text-decoration:none }
 }
 
 .section .section__media img{
-  max-width: 800px;
-  max-height: 800px;
+  max-width: 750px;
+  max-height: 750px;
   width: 100%;
   height: auto;
   object-fit: contain;
@@ -1104,7 +1104,7 @@ input[type="range"]{ width:100%; }
 .pdepot-form select option { color:#0b1623; }
 
 /* Scrollbars sombres (Chrome/Edge) */
-*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar { width: 12px; height: 10px; }
 *::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 10px; }
 *::-webkit-scrollbar-track { background: rgba(255,255,255,.06); }
 
