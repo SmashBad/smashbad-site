@@ -20,7 +20,7 @@ export default function useViewMode(): ViewMode {
         setMode("mobile");
         return;
       }
-      const w = typeof window !== "undefined" ? window.innerWidth : 1200;
+      const w = typeof window !== "undefined" ? window.innerWidth : 1000;
       setMode(w < 1000 ? "desktop-compact" : "desktop-full");
     };
 
