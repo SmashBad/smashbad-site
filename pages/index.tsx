@@ -15,7 +15,7 @@ export default function Home() {
         <meta name="description" content="Progresse, équipe-toi, joue." />
       </Head>
 
-      <main className="home-main">
+      <main className={`home-main view-${mode}`}>
         {/* HERO PRINCIPAL (traitement à part) */}
         <section className="hero-split">
           <div className="container hero-split__grid">

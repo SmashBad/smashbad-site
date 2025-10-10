@@ -350,7 +350,7 @@ a{ color:inherit; text-decoration:none }
 @media (max-width: 999px){
 
   /* HERO un peu plus ramassé */
-  .hero-split{ padding: 36px 0 20px; }
+  .hero-split{ padding: 0px 0 20px; }
   .hero-split .container{
     grid-template-columns: 1.05fr .95fr;
     gap: 32px;
@@ -373,74 +373,53 @@ a{ color:inherit; text-decoration:none }
   .cta-summary h3{ font-size: clamp(22px, 2.4vw, 30px); }
 }
 
-/* =========================
-   Mobile (≤ 700px) – Patch
-   ========================= */
-@media (max-width: 700px){
-
-  /* --- HERO en 2 colonnes : image large, texte discret --- */
-  .hero-split{ padding: 18px 0 10px; }
-  .hero-split .container{
-    display: grid;
-    grid-template-columns: 0.6fr 1.4fr; /* texte / image */
-    gap: 12px;
-    min-height: unset;
-  }
-  .hero-split__text h1{
-    font-size: clamp(20px, 5vw, 28px);  /* titre plus discret */
-    margin-bottom: 6px;
-  }
-  .lead{ font-size: 14px; max-width: 48ch; }
-  .hero-actions{
-    display: flex; flex-wrap: wrap; gap: 8px 10px;   /* évite que les boutons cassent */
-  }
-  .hero-actions .btn{ height: 42px; padding: 0 14px; white-space: nowrap; }
-  .hero-split__art{ justify-self: end; }
-  .hero-split__art img{
-    max-width: 420px;   /* image bien présente */
-    width: 100%;
-    filter: drop-shadow(0 8px 22px rgba(0,0,0,.35));
-  }
-
-  /* --- SECTIONS : 1 colonne, séparateur mobile-only --- */
-  .section{
-    width: 92vw;
-    grid-template-columns: 1fr;
-    row-gap: 10px; column-gap: 0;
-    margin: 16px auto;
-    border-top: none; /* reset safety */
-  }
-  .section + .section{
-    border-top: 1px solid rgba(255,255,255,.08);  /* séparateur uniquement mobile */
-    padding-top: 16px;
-  }
-
-  /* Ordre et centrage identiques (left & right) */
-  .section .section__media{ order: 1; justify-self: center; }
-  .section .section__content{ order: 2; justify-self: center; text-align: center; max-width: 60ch; }
-
-  /* 4 héros : 70% de la fenêtre, capés à 500px */
-  .section__media img{
-    width: min(70vw, 400px);
-    height: auto;
-  }
-
-  .section__content h2{ font-size: clamp(20px, 6vw, 26px); margin-bottom: 6px; }
-  .section__lead{ margin-bottom: 10px; }
-
-  /* --- SUMMARY : respire à l’intérieur & plus compact en bas --- */
-  .cta-summary{
-    width: 92vw;
-    padding: 4px 0 4px;   /* moins d’air en bas → réduit l’espace avant le footer */
-    margin-bottom: 0;       /* supprime le trou sous le summary */
-  }
-  .cta-summary h3{ margin-bottom: 12px; }
-  .cta-summary p{ margin: 0 auto 16px; width: 100%; }
-  .cta-summary__actions{
-    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-  }
-  .cta-summary__actions .btn{ height: 42px; padding: 0 14px; white-space: nowrap; }
+/* ========== MOBILE via UA (classe) ========== */
+/* S'applique dès que useViewMode() renvoie "mobile" */
+.view-mobile .hero-split{ padding: 18px 0 10px; }
+.view-mobile .hero-split .container{
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 12px;
+  min-height: unset;
 }
+.view-mobile .hero-split__text h1{ font-size: clamp(24px, 7vw, 32px); margin-bottom: 6px; }
+.view-mobile .hero-actions{ display:flex; flex-wrap:wrap; gap:8px 10px; }
+.view-mobile .hero-actions .btn{ height:42px; padding:0 14px; white-space:nowrap; }
+.view-mobile .hero-split__art{ justify-self:end; }
+.view-mobile .hero-split__art img{ max-width:420px; width:100%; filter:drop-shadow(0 8px 22px rgba(0,0,0,.35)); }
+
+.view-mobile .section{
+  width:92vw; grid-template-columns:1fr; row-gap:10px; column-gap:0;
+  margin:16px auto;
+}
+.view-mobile .section + .section{ border-top:1px solid rgba(255,255,255,.08); padding-top:16px; }
+.view-mobile .section .section__media{ order:1; justify-self:center; }
+.view-mobile .section .section__content{ order:2; justify-self:center; text-align:center; max-width:60ch; }
+.view-mobile .section__media img{ width:min(70vw, 500px); height:auto; }
+.view-mobile .section__content h2{ font-size:clamp(20px, 6vw, 26px); margin-bottom:6px; }
+.view-mobile .section__lead{ margin-bottom:10px; }
+
+.view-mobile .cta-summary{
+  width:92vw; padding:36px 0 24px; margin-bottom:0;
+}
+.view-mobile .cta-summary h3{ margin-bottom:12px; }
+.view-mobile .cta-summary p{ margin:0 auto 16px; width:100%; }
+.view-mobile .cta-summary__actions{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.view-mobile .cta-summary__actions .btn{ height:42px; padding:0 14px; white-space:nowrap; }
+
+/* ========== Fallback largeur (optionnel) ========== */
+/* Si tu veux aussi basculer en mobile sous un certain width (tablettes en mode étroit etc.) */
+@media (max-width: 768px){
+  .hero-split{ padding: 18px 0 10px; }
+  .hero-split .container{ grid-template-columns: 1fr; gap: 16px; }
+  .hero-split__art{ justify-self:start; }
+  .hero-split__art img{ max-width:360px; }
+  .section{ width:92vw; grid-template-columns:1fr; row-gap:10px; margin:16px auto; }
+  .section + .section{ border-top:1px solid rgba(255,255,255,.08); padding-top:16px; }
+  .section .section__media, .section .section__content{ justify-self:center; text-align:center; }
+  .cta-summary{ width:92vw; padding:36px 0 24px; margin-bottom:0; }
+}
+
 
 
 
