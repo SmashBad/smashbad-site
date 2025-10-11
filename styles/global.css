@@ -152,7 +152,8 @@ a{ color:inherit; text-decoration:none }
 }
 
 /* Boutons génériques */
-.btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; font-weight:600 }
+.btn{ display:inline-flex; align-items:center; gap:8px; border-radius:12px; font-weight:600 }
+.btn:not(.btn--icon){ padding:10px 14px; }
 .btn--ghost{ border:1px solid rgba(255,255,255,.25); background:transparent; color:#fff }
 .btn--ghost:hover{ border-color:rgba(255,255,255,.35) }
 .btn--icon{ padding:8px; border-radius:12px; gap:0; width:36px; height:36px; justify-content:center }
@@ -256,8 +257,11 @@ body.view-mobile .login--full{ display: none; }
 
 .btn{
   display:inline-flex; align-items:center; justify-content:center;
-  height:44px; padding:0 18px; border-radius:10px; border:1px solid transparent;
+  border-radius:10px; border:1px solid transparent;
   font-weight:700; letter-spacing:.2px; cursor:pointer; transition:transform .06s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+}
+.btn:not(.btn--icon){
+  height:44px; padding:0 18px;
 }
 .btn:active{ transform: translateY(1px); }
 
