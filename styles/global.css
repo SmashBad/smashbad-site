@@ -171,6 +171,27 @@ a{ color:inherit; text-decoration:none }
 .nav-pill:hover .nav-ic{ filter: var(--turq-filter); }
 .nav-pill img, .bottomnav__ic { filter:none !important; opacity:1; }
 
+/* Variantes bouton Login : par défaut (desktop) */
+.login--icon-only{ display: none; }
+.login--full{ display: inline-flex; }
+
+/* Mobile = quand le <body> a la classe view-mobile */
+body.view-mobile .login--icon-only{ display: inline-flex; }
+body.view-mobile .login--full{ display: none; }
+
+/* Lisibilité de l’icône en état "bientôt" (désactivé) */
+.login--icon-only.is-soon .nav-ic{
+  filter: none;   /* l’icône Login.svg reste blanche */
+  opacity: 1;
+}
+
+/* (optionnel) Donner un léger cadre visible au ghost désactivé */
+.login--icon-only.is-soon{
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(255,255,255,.06);
+  border-radius: 12px;
+}
+
 
 /* =========================
    Home – Layout général
