@@ -190,15 +190,18 @@ export async function createContactRequest(payload: {
 /* ========= Nouveaux helpers utilisés par /api/partners/contact.ts ========= */
 
 /**
- * Récupère une annonce par identifiant. Accepte soit:
+ * Récupère une annonce par identifiant. Accepte soit :
  *  - un recordId Airtable (chemin direct),
  *  - soit un "public_id" (fallback via filterByFormula).
+ * ⬇️ On s’assure aussi de remonter le champ formula "Ad_Id".
  */
 export async function getAdById(idOrPublic: string) {
   // 1) Essai direct en recordId
   try {
     const rec = (await airGet(`${encodeURIComponent(ADS)}/${idOrPublic}`)) as AdRecord;
-    return mapAd(rec);
+    const mapped = mapAd(rec);
+    const Ad_Id = (rec.fields as any)?.["Ad_Id"] as string | undefined;
+    return { ...mapped, Ad_Id: Ad_Id ?? (mapped as any).Ad_Id };
   } catch {
     // 2) Fallback sur le champ public_id (numérique ou texte)
     const isNum = /^\d+$/.test(idOrPublic);
@@ -210,15 +213,19 @@ export async function getAdById(idOrPublic: string) {
     };
     const json = (await airGet(encodeURIComponent(ADS), params)) as AirtableListResponse;
     const rec = (json.records || [])[0];
-    return rec ? mapAd(rec) : null;
+    if (!rec) return null;
+    const mapped = mapAd(rec);
+    const Ad_Id = (rec.fields as any)?.["Ad_Id"] as string | undefined;
+    return { ...mapped, Ad_Id: Ad_Id ?? (mapped as any).Ad_Id };
   }
 }
 
 /**
  * Crée une réponse dans la table Partenaires_Reponses (v2 avec age + sex).
  * Le champ "ad" stocke le recordId de l'annonce (format texte).
+ * ⬇️ On ajoute la duplication lisible "annonce_liee" = Ad_Id de l’annonce.
  */
-export async function createResponse(fields: {
+export async function createResponse(data: {
   ad: string;
   first_name: string;
   last_name: string;
@@ -229,23 +236,29 @@ export async function createResponse(fields: {
   phone?: string;
   message?: string;
   status?: string;
+  annonce_liee?: string | null; // <- NOUVEAU : copie lisible (Ad_Id)
 }) {
   // on construit le payload en omettant les vides
   const out: Record<string, any> = {
-    ad: fields.ad, // champ texte (recordId)
-    first_name: fields.first_name,
-    last_name: fields.last_name,
-    ranking: fields.ranking,
-    email: fields.email,
-    status: fields.status || "Nouveau",
+    ad: data.ad,
+    first_name: data.first_name,
+    last_name: data.last_name,
+    ranking: data.ranking,
+    email: data.email,
+    status: data.status ?? "Nouveau",
   };
 
-  // sex: mappe H/F -> Homme/Femme si ton champ est un Single select
-  if (fields.sex) out.sex = fields.sex === "H" ? "Homme" : "Femme";
+  // sex : si ton champ Airtable est un "Single select" et attend "H"/"F", on garde tel quel.
+  // Si au contraire il attend "Homme"/"Femme", remplace la ligne suivante par :
+  // out.sex = data.sex === "H" ? "Homme" : "Femme";
+  if (data.sex) out.sex = data.sex;
 
-  if (typeof fields.age === "number" && !Number.isNaN(fields.age)) out.age = fields.age;
-  if (fields.phone)   out.phone = fields.phone;
-  if (fields.message) out.message = fields.message;
+  if (typeof data.age === "number" && !Number.isNaN(data.age)) out.age = data.age;
+  if (data.phone)   out.phone = data.phone;
+  if (data.message) out.message = data.message;
+
+  // ⬇️ NOUVEAU : on envoie la copie lisible si présente
+  if (data.annonce_liee) out.annonce_liee = data.annonce_liee;
 
   const body = {
     records: [{ fields: out }],

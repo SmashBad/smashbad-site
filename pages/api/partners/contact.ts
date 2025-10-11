@@ -2,6 +2,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 import { Resend } from "resend";
 import { getAdById, createResponse } from "../../../lib/data/airtable_annonces_partenaires";
+import Airtable from "airtable";
+
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
+  .base(process.env.AIRTABLE_BASE_ID!);
+
+  // ⚠️ On lit les noms de table depuis l'env pour coller à ta config Vercel
+const T_ANNONCES = process.env.AIRTABLE_PARTNERS_ADS!;
+const T_REPONSES = process.env.AIRTABLE_PARTNERS_RESPONSES!;
 
 // Schéma unique – on autorise sex optionnel, age optionnel
 const ContactSchema = z.object({
@@ -52,6 +60,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!adRec) return res.status(404).json({ error: "Annonce introuvable" });
     if (!adRec.contact_email) return res.status(400).json({ error: "Annonce sans email de contact" });
 
+    // récupère la valeur lisible de l’annonce à copier côté Réponses
+    const annonce_liee = adRec.Ad_Id ?? adRec.ad_id ?? null;
+
     // 2) Enregistre la réponse (ta table a bien sex + age)
     await createResponse({
       ad: parsed.ad,
@@ -64,6 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       phone: parsed.phone,
       message: parsed.message,
       status: "Nouveau",
+      annonce_liee,
     });
 
     // --- utils (échappement HTML simple)
