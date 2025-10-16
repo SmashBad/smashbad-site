@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!adRec.contact_email) return res.status(400).json({ error: "Annonce sans email de contact" });
 
     // récupère la valeur lisible de l’annonce à copier côté Réponses
-    const annonce_liee = adRec.Ad_Id ?? adRec.ad_id ?? null;
+    const annonce_liee = adRec.Ad_Id ?? null;
 
     // 2) Enregistre la réponse (ta table a bien sex + age)
     await createResponse({
