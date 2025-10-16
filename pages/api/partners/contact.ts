@@ -41,6 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       phone:      raw.phone || undefined,
       message:    raw.message || undefined,
       hp:         raw.hp || undefined,
+      annonce_liee: raw.annonce_liee ?? raw.annonceLiee ?? undefined,
     };
 
     if (payload.hp) return res.status(200).json({ ok: true, spam: true });
@@ -67,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       phone: parsed.phone,
       message: parsed.message,
       status: "Nouveau",
-      annonce_liee,
+      annonce_liee: payload.annonce_liee, // ← AJOUT
     });
 
     // --- utils (échappement HTML simple)

@@ -190,10 +190,10 @@ export async function createContactRequest(payload: {
 /* ========= Nouveaux helpers utilisés par /api/partners/contact.ts ========= */
 
 /**
- * Récupère une annonce par identifiant. Accepte soit :
+ * Récupère une annonce par identifiant. Accepte soit:
  *  - un recordId Airtable (chemin direct),
  *  - soit un "public_id" (fallback via filterByFormula).
- * ⬇️ On s’assure aussi de remonter le champ formula "Ad_Id".
+ * → Remonte aussi le champ formula "Ad_Id" tel quel.
  */
 export async function getAdById(idOrPublic: string) {
   // 1) Essai direct en recordId
@@ -201,7 +201,7 @@ export async function getAdById(idOrPublic: string) {
     const rec = (await airGet(`${encodeURIComponent(ADS)}/${idOrPublic}`)) as AdRecord;
     const mapped = mapAd(rec);
     const Ad_Id = (rec.fields as any)?.["Ad_Id"] as string | undefined;
-    return { ...mapped, Ad_Id: Ad_Id ?? (mapped as any).Ad_Id };
+    return { ...mapped, Ad_Id };
   } catch {
     // 2) Fallback sur le champ public_id (numérique ou texte)
     const isNum = /^\d+$/.test(idOrPublic);
@@ -216,9 +216,10 @@ export async function getAdById(idOrPublic: string) {
     if (!rec) return null;
     const mapped = mapAd(rec);
     const Ad_Id = (rec.fields as any)?.["Ad_Id"] as string | undefined;
-    return { ...mapped, Ad_Id: Ad_Id ?? (mapped as any).Ad_Id };
+    return { ...mapped, Ad_Id };
   }
 }
+
 
 /**
  * Crée une réponse dans la table Partenaires_Reponses (v2 avec age + sex).
@@ -252,7 +253,6 @@ export async function createResponse(data: {
   // Si au contraire il attend "Homme"/"Femme", remplace la ligne suivante par :
   // out.sex = data.sex === "H" ? "Homme" : "Femme";
   if (data.sex) out.sex = data.sex;
-
   if (typeof data.age === "number" && !Number.isNaN(data.age)) out.age = data.age;
   if (data.phone)   out.phone = data.phone;
   if (data.message) out.message = data.message;

@@ -184,6 +184,8 @@ export default function AdDetail(){
         <form className="pdepot-form" onSubmit={onContact} noValidate>
           <input type="text" className="hp" tabIndex={-1} value={form.hp} onChange={e=>setField("hp", e.target.value)} />
 
+          <input type="hidden" name="annonce_liee" value={ad?.Ad_Id ?? ""} />
+
           <div className="pdepot-grid2">
             <div className="pdepot-field">
               <span>Prénom *</span>
