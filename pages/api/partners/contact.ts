@@ -3,13 +3,6 @@ import { z } from "zod";
 import { Resend } from "resend";
 import { getAdById, createResponse } from "../../../lib/data/airtable_annonces_partenaires";
 
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
-  .base(process.env.AIRTABLE_BASE_ID!);
-
-  // ⚠️ On lit les noms de table depuis l'env pour coller à ta config Vercel
-const T_ANNONCES = process.env.AIRTABLE_PARTNERS_ADS!;
-const T_REPONSES = process.env.AIRTABLE_PARTNERS_RESPONSES!;
-
 // Schéma unique – on autorise sex optionnel, age optionnel
 const ContactSchema = z.object({
   ad: z.string().min(3, "id d'annonce manquant"),
