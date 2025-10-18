@@ -192,9 +192,9 @@ export default function AdDetail(){
           <input type="text" className="hp" tabIndex={-1} value={form.hp} onChange={e=>setField("hp", e.target.value)} />
 
           <input
-            //type="hidden"
             name="annonce_liee"
-            value={(ad as { Ad_Id?: string })?.Ad_Id ?? ""}
+            value={(ad as any)?.Ad_Id ?? ""}
+            placeholder={(ad as any)?.Ad_Id ? `Ad_Id : ${(ad as any).Ad_Id}` : "Ad_Id non chargé"}
           />
 
           <div className="pdepot-grid2">

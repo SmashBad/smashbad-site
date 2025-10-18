@@ -13,6 +13,7 @@ const VIEW_PUBLIC = process.env.AIRTABLE_PARTNERS_VIEW || ""; // optionnel
 export type AdPublic = {
   id: string;                // Airtable recordId
   public_id?: number;        // autonumber éventuel
+  Ad_Id?: string;
   tournoi?: string;
   ville?: string;
   dept_code?: string;
@@ -77,6 +78,7 @@ function mapAd(rec: AdRecord): AdPublic {
   return {
     id: rec.id,
     public_id: f["public_id"],
+    Ad_Id: rec.fields?.Ad_Id ?? null,
     tournoi: f["tournoi"],
     ville: f["ville"],
     dept_code: f["dept_code"],
