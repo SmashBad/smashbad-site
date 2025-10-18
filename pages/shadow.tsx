@@ -455,7 +455,7 @@ export default function Shadow() {
 
       {phase === "param" && (
         <>
-          <div className="sb-container">
+          <div className="sb-container" style={{ textAlign: "center" }}>
             <div className="topbar">
               <div className="topbar__grid">
                 <div>
