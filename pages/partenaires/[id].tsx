@@ -185,8 +185,8 @@ export default function AdDetail(){
 
   return (
     <main className="partners-page">
-      
-      <div className="sb-container">
+
+    <div className="sb-container">
         <div className="topbar">
           <div className="topbar__grid">
             <div>
@@ -196,7 +196,7 @@ export default function AdDetail(){
             <div></div>
           </div>
         </div>
-      </div>
+      
 
       
       <article className="ad-card">
@@ -302,6 +302,7 @@ export default function AdDetail(){
           </div>
         </form>
       </section>
+    </div>
     </main>
   );
 }
