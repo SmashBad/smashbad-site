@@ -118,7 +118,6 @@ export default function DepotAnnoncePage() {
             <div></div>
           </div>
         </div>
-        <h1>Déposer une annonce</h1>
         <p>
           Ton e-mail est conservé pour permettre aux autres membres de te contacter via le bouton “Contacter”.
           Il n’est <strong>jamais</strong> publié en clair sur le site.
