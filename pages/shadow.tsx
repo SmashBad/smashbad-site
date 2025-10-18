@@ -470,7 +470,6 @@ export default function Shadow() {
             Prends ta raquette, positionne toi au milieu du terrain face au filet et pose ton téléphone devant toi.
             Chaque flèche t'indique le déplacement à travailler. Gère la durée et le rythme, puis lance-toi.
           </p>
-        </section>
         </>
       )}
 
