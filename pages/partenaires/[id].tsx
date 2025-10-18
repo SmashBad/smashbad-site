@@ -84,20 +84,27 @@ export default function AdDetail(){
     setSubmitting(true); setErr(null);
 
     try {
+      // traduit "H"/"F" vers "Homme"/"Femme" pour Airtable
+      const sexValue =
+      form.sex === "H" ? "Homme" :
+      form.sex === "F" ? "Femme" :
+      undefined;
+
       const payload = {
         ad: id,
         first_name: form.first_name.trim(),
         last_name:  form.last_name.trim(),
-        sex:        form.sex || undefined,
+        sex:        sexValue,
         age:        form.age ? Number(form.age) : undefined,
         ranking:    form.ranking.trim(),
         email:      form.email.trim(),
         phone:      form.phone.trim() || undefined,
         message:    form.message.trim() || undefined,
         hp:         form.hp || undefined,
+        annonce_liee: (ad as { Ad_Id?: string })?.Ad_Id ?? "", // visible pour le test
       };
 
-      const r = await fetch("/api/partners/contact", {
+        const r = await fetch("/api/partners/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -106,11 +113,11 @@ export default function AdDetail(){
       if (!r.ok || !data?.ok) throw new Error(data?.error || "Échec de l’envoi");
       setOk(true);
     } catch (e: any) {
-      setErr(e?.message || "Impossible d’envoyer la demande.");
-    } finally {
-      setSubmitting(false);
-    }
+    setErr(e?.message || "Impossible d’envoyer la demande.");
+  } finally {
+    setSubmitting(false);
   }
+}
 
   if (loading) return <main className="partners-page"><div className="partners-empty">Chargement…</div></main>;
   if (!ad)     return <main className="partners-page"><div className="partners-empty">Annonce introuvable. <Link href="/partenaires">Retour</Link></div></main>;
