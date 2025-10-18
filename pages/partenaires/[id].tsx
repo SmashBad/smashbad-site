@@ -176,6 +176,7 @@ export default function AdDetail(){
 
   return (
     <main className="partners-page">
+      <BackPill href="/partenaires" label="Retour aux annonces" />
       <article className="ad-card">
         <h2>{ad.tournoi}</h2>
         
