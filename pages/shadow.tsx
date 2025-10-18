@@ -463,11 +463,12 @@ export default function Shadow() {
                 </div>
                 <h1 className="sb-h1 topbar__title">Shadow</h1>
                 <div></div>
-                <p>
-                Prends ta raquette, positionne toi au milieu du terrain face au filet et pose ton téléphone devant toi.
-                Chaque flèche t'indique le déplacement à travailler. Gère la durée et le rythme, puis lance-toi.
-                </p>
+                
               </div>
+              <p>
+              Prends ta raquette, positionne toi au milieu du terrain face au filet et pose ton téléphone devant toi.
+              Chaque flèche t'indique le déplacement à travailler. Gère la durée et le rythme, puis lance-toi.
+              </p>
             </div>
           </div>
         </>
