@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Head from "next/head";
+import BackPill from "../components/BackPill";
 
 type State = "idle" | "sending" | "sent" | "error";
 
@@ -42,6 +43,7 @@ export default function ContactPage() {
 
       <section className="sb-section">
         <div className="sb-container" role="form" aria-labelledby="contact-title">
+          <BackPill href="/" label="Retour à l’accueil" />
           <h1 id="contact-title" className="sb-h1">Contact</h1>
           <p className="sb-sub">Un bug à signaler, une idée, une question ? Écris-nous.</p>
 
