@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CLASSEMENTS, TABLEAUX, DEPARTEMENTS } from "../../schemas/partners";
 import { PDepotSelect } from "../../components/PDepotSelect";
+import BackPill from "../../components/BackPill";
 
 export default function DepotAnnoncePage() {
   const [submitting, setSubmitting] = useState(false);
@@ -108,6 +109,7 @@ export default function DepotAnnoncePage() {
 
   return (
     <main className="sb-container sb-section">
+      <BackPill href="/partenaires" label="Retour aux annonces" />
       <header className="partners-hero" style={{ marginBottom: 18 }}>
         <h1>Déposer une annonce</h1>
         <p>
