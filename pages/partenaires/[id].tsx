@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import BackPill from "../../components/BackPill";
 
 type Ad = import("../../lib/data/airtable_annonces_partenaires").AdPublic;
 
@@ -162,6 +163,7 @@ export default function AdDetail(){
   if (ok) {
     return (
       <main className="partners-page">
+        <BackPill href="/partenaires" label="Retour aux annonces" />
         <section className="pcontact-done">
           <h1>Demande envoyée 🎉</h1>
           <p>Nous avons transmis ta demande à l’auteur de « <strong>{ad.tournoi}</strong> ».</p>
