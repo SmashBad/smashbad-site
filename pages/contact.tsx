@@ -43,8 +43,17 @@ export default function ContactPage() {
 
       <section className="sb-section">
         <div className="sb-container" role="form" aria-labelledby="contact-title">
-          <BackPill href="/" label="Retour à l’accueil" />
-          <h1 id="contact-title" className="sb-h1">Contact</h1>
+          
+          <div className="topbar">
+            <div className="topbar__grid">
+              <div>
+                <BackPill href="/" ariaLabel="Retour à l’accueil" />
+              </div>
+              <h1 id="contact-title" className="sb-h1 topbar__title">Contact</h1>
+              <div></div>
+            </div>
+          </div>
+          
           <p className="sb-sub">Un bug à signaler, une idée, une question ? Écris-nous.</p>
 
           <form className="sb-form" onSubmit={onSubmit} noValidate>

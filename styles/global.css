@@ -1481,3 +1481,28 @@ input[type="range"]{ width:100%; }
   font-weight: 700;
 }
 
+/* --- Barre top (Back + Titre) — neutre et réutilisable --- */
+.topbar {
+  /* placé dans .sb-container : pas de débordement */
+  margin: 0 0 12px 0;     /* petit espace sous la barre */
+}
+
+.topbar__grid {
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* back | titre | slot actions */
+  align-items: center;
+  gap: 10px;
+}
+
+/* Titre centré au milieu de la topbar */
+.topbar__title {
+  margin: 0;
+  text-align: center;
+}
+
+/* L’icône elle-même (si besoin d’un micro-ajustement) */
+.back-ic {
+  width: 20px;
+  height: 20px;
+  display: block;
+}

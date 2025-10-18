@@ -163,9 +163,18 @@ export default function AdDetail(){
   if (ok) {
     return (
       <main className="partners-page">
-        <BackPill href="/partenaires" label="Retour aux annonces" />
+        <div className="sb-container">
+          <div className="topbar">
+            <div className="topbar__grid">
+              <div>
+                <BackPill href="/partenaires" ariaLabel="Retour aux annonces" />
+              </div>
+              <h1>Demande envoyée 🎉</h1>
+              <div></div>
+            </div>
+          </div>
+        </div>        
         <section className="pcontact-done">
-          <h1>Demande envoyée 🎉</h1>
           <p>Nous avons transmis ta demande à l’auteur de « <strong>{ad.tournoi}</strong> ».</p>
           <p>Il/elle te recontactera peut-être prochainement. Merci !</p>
           <p><Link href="/partenaires" className="cta-primary">Retour aux annonces</Link></p>
@@ -176,7 +185,20 @@ export default function AdDetail(){
 
   return (
     <main className="partners-page">
-      <BackPill href="/partenaires" label="Retour aux annonces" />
+      
+      <div className="sb-container">
+        <div className="topbar">
+          <div className="topbar__grid">
+            <div>
+              <BackPill href="/partenaires" ariaLabel="Retour aux annonces" />
+            </div>
+            <h1 className="sb-h1 topbar__title">Contacter</h1>
+            <div></div>
+          </div>
+        </div>
+      </div>
+
+      
       <article className="ad-card">
         <h2>{ad.tournoi}</h2>
         

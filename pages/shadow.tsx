@@ -455,9 +455,17 @@ export default function Shadow() {
 
       {phase === "param" && (
         <>
-        <BackPill href="/entrainements" label="Retour aux entraînements" />
-        <section className="shadow-hero">
-          <h1>Shadow</h1>
+          <div className="sb-container">
+            <div className="topbar">
+              <div className="topbar__grid">
+                <div>
+                  <BackPill href="/entrainements" ariaLabel="Retour aux entraînements" />
+                </div>
+                <h1 className="sb-h1 topbar__title">Shadow</h1>
+                <div></div>
+              </div>
+            </div>
+          </div>
           <p>
             Prends ta raquette, positionne toi au milieu du terrain face au filet et pose ton téléphone devant toi.
             Chaque flèche t'indique le déplacement à travailler. Gère la durée et le rythme, puis lance-toi.

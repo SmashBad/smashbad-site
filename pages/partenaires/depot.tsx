@@ -109,8 +109,15 @@ export default function DepotAnnoncePage() {
 
   return (
     <main className="sb-container sb-section">
-      <BackPill href="/partenaires" label="Retour aux annonces" />
-      <header className="partners-hero" style={{ marginBottom: 18 }}>
+        <header className="partners-hero" style={{ marginBottom: 18 }}><div className="topbar">
+          <div className="topbar__grid">
+            <div>
+              <BackPill href="/partenaires" ariaLabel="Retour aux annonces" />
+            </div>
+            <h1 className="sb-h1 topbar__title">Déposer une annonce</h1>
+            <div></div>
+          </div>
+        </div>
         <h1>Déposer une annonce</h1>
         <p>
           Ton e-mail est conservé pour permettre aux autres membres de te contacter via le bouton “Contacter”.

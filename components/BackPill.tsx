@@ -1,22 +1,15 @@
+// components/BackPill.tsx
 import Link from "next/link";
 
 type Props = {
   href: string;
-  label?: string;          // texte visible
-  ariaLabel?: string;      // accessibilité (si tu veux différent)
+  ariaLabel?: string;
 };
 
-export default function BackPill({ href, label = "Retour", ariaLabel }: Props) {
+export default function BackPill({ href, ariaLabel = "Retour" }: Props) {
   return (
-    <div className="shadow-topbar" style={{ marginBottom: 12 }}>
-      <div className="shadow-left">
-        <Link href={href} className="back-pill" aria-label={ariaLabel || label}>
-          <img src="/Back.svg" alt="" className="back-ic" aria-hidden />
-          <span>{label}</span>
-        </Link>
-      </div>
-      <div /> {/* centre vide */}
-      <div className="shadow-actions" />
-    </div>
+    <Link href={href} className="back-pill back-icon" aria-label={ariaLabel}>
+      <img src="/Back.svg" alt="" className="back-ic" aria-hidden />
+    </Link>
   );
 }
