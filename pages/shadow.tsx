@@ -1,6 +1,7 @@
 // pages/shadow.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import BackPill from "../components/BackPill";
 
 // ---------- Types & constantes ----------
 type DirKey = "AG" | "AD" | "G" | "D" | "DG" | "DD";
@@ -453,6 +454,8 @@ export default function Shadow() {
       </div>
 
       {phase === "param" && (
+        <>
+        <BackPill href="/entrainements" label="Retour aux entraînements" />
         <section className="shadow-hero">
           <h1>Shadow</h1>
           <p>
@@ -460,6 +463,7 @@ export default function Shadow() {
             Chaque flèche t'indique le déplacement à travailler. Gère la durée et le rythme, puis lance-toi.
           </p>
         </section>
+        </>
       )}
 
 
