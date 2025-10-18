@@ -184,18 +184,19 @@ export default function AdDetail(){
   }
 
   return (
-    <main className="partners-page">
+    <main className="sb-container sb-section">
 
-    <div className="sb-container">
-        <div className="topbar">
-          <div className="topbar__grid">
-            <div>
-              <BackPill href="/partenaires" ariaLabel="Retour aux annonces" />
-            </div>
-            <h1 className="sb-h1 topbar__title">Contacter</h1>
-            <div></div>
+    <header className="partners-hero" style={{ marginBottom: 18 }}>
+      <div className="topbar">
+        <div className="topbar__grid">
+          <div>
+            <BackPill href="/partenaires" ariaLabel="Retour aux annonces" />
           </div>
+          <h1 className="sb-h1 topbar__title">Contacter</h1>
+          <div></div>
         </div>
+      </div>
+    </header>
       
 
       
