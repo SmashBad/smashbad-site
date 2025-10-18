@@ -304,6 +304,6 @@ export default function AdDetail(){
           </form>
         </section>
       </div>
-    //</main>
+    </main>
   );
 }
