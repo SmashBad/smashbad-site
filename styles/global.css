@@ -711,7 +711,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
 /* =========================
    8) SHADOW (exercice)
    ========================= */
-.shadow-page { padding: 18px 5% 90px; background: #0b1426; }
+.shadow-page { padding: 18px 5% 90px; background:var(--bg); }
 
 .range-line .numbox,
 .range-line .numbox-suffix{
@@ -828,7 +828,7 @@ body.is-desktop-standard .nav-pill .label{ display:inline; }
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: #0b1426;
+  background: var(--bg);
   z-index: 0;
 }
 
