@@ -547,6 +547,41 @@ body.view-mobile .login--full{ display: none; }
 .footer a{ text-decoration: underline; font: inherit; }
 .footer a:hover{ text-decoration: none; }
 
+/* Footer — mini section réseaux sociaux */
+.footer__row{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer__social .social-link{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  transition: transform .1s ease, box-shadow .2s ease;
+}
+
+.footer__social .social-link:hover .social-ic{
+  transform: translateY(-1px);
+}
+
+.footer__social .social-link:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(18,216,223,.35); /* halo turquoise accessible */
+  border-radius: 8px;
+}
+
+.social-ic{
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+
 /* =========================
    5) Entraînements (listing)
    ========================= */
