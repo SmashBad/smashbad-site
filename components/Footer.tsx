@@ -4,10 +4,11 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-     <footer className="footer" role="contentinfo">
-      <Link href="/contact" aria-label="Formulaire de contact">Contact</Link>
+    <footer className="footer" role="contentinfo">
+      <div className="footer__row">
+        <Link href="/contact" aria-label="Formulaire de contact">Contact</Link>
 
-      {/* Réseaux sociaux */}
+        {/* Réseaux sociaux */}
         <div className="footer__social" aria-label="Réseaux sociaux">
           <a
             href="https://www.instagram.com/smashbad_fr"
