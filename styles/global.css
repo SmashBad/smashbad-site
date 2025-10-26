@@ -1389,14 +1389,13 @@ body.is-mobile .partners-page .partners-sort{
   display:flex; align-items:center; gap:8px;
   flex:0 0 auto;
 }
-/* Le label "Tri :" reste texte (pas d'icône ici) — si tu veux l’icône à la place du texte, dé-commente:
+/*Le label "Tri :" reste texte (pas d'icône ici) — si tu veux l’icône à la place du texte, dé-commente:*/
    body.is-mobile .partners-page .partners-sort > .partners-filterbar__label{
      position:relative; width:22px; height:22px; overflow:hidden; text-indent:200%;
    }
    body.is-mobile .partners-page .partners-sort > .partners-filterbar__label::before{
      content:""; position:absolute; inset:0; background:url("/Sort.svg") center/contain no-repeat;
    }
-*/
 
 /* Le bouton de tri : icône + libellé "Tri" (ouvre le menu) */
 body.is-mobile .partners-page .partners-sort .partners-pill__btn{
