@@ -1064,7 +1064,7 @@ input[type="range"]{ width:100%; }
 .partners-chip:hover{ background: rgba(255,255,255,.18); }
 .partners-chip--add{ background: rgba(18,216,223,.18); border-color: rgba(18,216,223,.45); }
 .partners-pill__search{
-  flex: 1 1 140px; min-width: 140px;
+  min-width: 120px;
   border-radius: 10px; border: 1px solid rgba(255,255,255,.2);
   padding: 8px 10px; background: rgba(255,255,255,.06); color: #fff;
 }
