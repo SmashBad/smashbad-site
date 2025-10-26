@@ -5,7 +5,7 @@ import Link from "next/link";
 type Ad = import("../../lib/data/airtable_annonces_partenaires").AdPublic;
 
 // ---------- Constantes ----------
-const NBSP = "\u00A0";
+const NBSP = "\u2009";
 const TABLEAUX = ["Double Dame", "Double Homme", "Double Mixte", "Double Intergenre"] as const;
 const CLASSEMENTS = ["N1","N2","N3","R4","R5","R6","D7","D8","D9","P10","P11","P12","NC"] as const;
 

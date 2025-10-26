@@ -1177,6 +1177,11 @@ input[type="range"]{ width:100%; }
 .desc-line.i-draw::before   { background-image: url("/Trophy.svg"); }
 .desc-line.i-search::before { background-image: url("/LookFor.svg"); }
 
+/* espace entre chaque mini-paragraphe */
+.desc-line + .desc-line{
+  margin-top: 6px;   /* 6–8px selon ton goût */
+}
+
 .partners-card__cta{ display: flex; justify-content: center; margin-top: 14px; min-height: 52px;; }
 
 .partners-card__cta .cta-primary{ border-radius: 999px; padding: 12px 22px; }
