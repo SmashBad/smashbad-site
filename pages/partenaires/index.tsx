@@ -318,7 +318,7 @@ export default function PartenairesIndexPage() {
             />
           </div>
           
-          <span className="partners-filterbar__label">Trier :</span>
+          <span className="partners-filterbar__label">Tri :</span>
           <div className="partners-sort">
             <SortPill 
              sort={sort}

@@ -1518,6 +1518,96 @@ body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
   background: url("/Sort.svg") center/contain no-repeat;
 }
 
+/* ===================== PARTENAIRES — DESKTOP ===================== */
+/* Aligne les filtres sur une ligne en bureau (sans changer le reste) */
+body:not(.is-mobile) .partners-page .partners-filterbar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px 20px;
+  flex-wrap:wrap;                    /* autorise un retour si fenêtre très étroite */
+}
+body:not(.is-mobile) .partners-page .partners-filterstrip{
+  display:flex;                       /* ← FIX: évite l'empilement vertical */
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* Empêche "Trier :" de tomber seul à la ligne */
+body:not(.is-mobile) .partners-page .partners-filterbar .partners-filterbar__label + .partners-pill{
+  white-space:nowrap;
+}
+
+/* ===================== PARTENAIRES — MOBILE ONLY ===================== */
+body.is-mobile .partners-page .partners-filterbar{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:6px auto 12px;
+  padding:0 8px;
+  flex-wrap:nowrap;                   /* 1 seule ligne */
+}
+
+/* Label gauche = icône Filter.svg (non cliquable, accessibilité OK) */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-of-type{
+  position:relative;
+  flex:0 0 22px;                      /* largeur fixe, pas de wrap */
+  width:22px; height:22px;
+  overflow:hidden; text-indent:200%; white-space:nowrap;
+}
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-of-type::before{
+  content:""; position:absolute; inset:0;
+  background:url("/Filter.svg") center/contain no-repeat;
+}
+
+/* Rail scrollable = les 3 pills (avec labels originaux) */
+body.is-mobile .partners-page .partners-filterstrip{
+  flex:1 1 auto;                      /* occupe tout l'espace entre les icônes */
+  min-width:0;                        /* nécessaire pour autoriser la réduction */
+  display:flex; gap:8px;
+  overflow-x:auto; overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none; -ms-overflow-style:none;
+}
+body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display:none; }
+body.is-mobile .partners-page .partners-filterstrip .partners-pill{ flex:0 0 auto; }
+body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
+  height:36px; padding:6px 12px; font-size:13px; line-height:1; white-space:nowrap;
+}
+
+/* Zone Tri à droite : icône + texte court "Tri" dans UNE pill */
+body.is-mobile .partners-page .partners-sort{
+  display:flex; align-items:center; gap:8px;
+  flex:0 0 auto;
+}
+/* Remplace le label "Trier :" par une icône Sort.svg */
+body.is-mobile .partners-page .partners-sort > .partners-filterbar__label{
+  position:relative;
+  width:22px; height:22px;
+  overflow:hidden; text-indent:200%; white-space:nowrap;
+  display:inline-block;
+}
+body.is-mobile .partners-page .partners-sort > .partners-filterbar__label::before{
+  content:""; position:absolute; inset:0;
+  background:url("/Sort.svg") center/contain no-repeat;
+}
+/* Le bouton de tri reste une pill cliquable mais affiche "Tri" court */
+body.is-mobile .partners-page .partners-sort .partners-pill__btn{
+  height:36px; padding:6px 12px; line-height:1; white-space:nowrap;
+  display:inline-flex; align-items:center; gap:8px;
+}
+/* Cache le libellé long généré par le composant et injecte "Tri" + icône */
+body.is-mobile .partners-page .partners-sort .partners-pill__btn > *{ display:none; }
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
+  content:""; width:18px; height:18px; display:inline-block;
+  background:url("/Sort.svg") center/contain no-repeat;
+  margin-right:2px;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
+  content:"Tri"; font-size:13px; display:inline-block;
+}
+
 
 
 
