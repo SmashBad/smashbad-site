@@ -1448,6 +1448,77 @@ body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
 }
 
 
+/* ===== PARTENAIRES — FIX FINAL ===== */
+
+/* Desktop : garde la barre sur une seule ligne (évite "Trier :" à la ligne) */
+body:not(.is-mobile) .partners-page .partners-filterbar{
+  flex-wrap: nowrap;
+}
+
+/* MOBILE : 1 seule ligne + rail scrollable entre les deux icônes */
+body.is-mobile .partners-page .partners-filterbar{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 6px auto 12px;
+  flex-wrap: nowrap !important;     /* force 1 ligne */
+  padding: 0 8px;
+}
+
+/* libellé gauche = icône Filter.svg (décoratif, non cliquable) */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
+  position: relative;
+  display: inline-block;
+  width: 22px; height: 22px;
+  flex: 0 0 22px;
+  overflow: hidden; text-indent: 200%; white-space: nowrap;
+}
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
+  content: ""; position: absolute; inset: 0;
+  background: url("/Filter.svg") center/contain no-repeat;
+}
+
+/* rail scrollable au centre : tes 3 pills (labels originaux) */
+body.is-mobile .partners-page .partners-filterstrip{
+  flex: 1 1 auto;                /* ← occupe tout l’espace restant */
+  min-width: 0;                  /* ← autorise le rétrécissement */
+  display: flex; gap: 8px;
+  overflow-x: auto; overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display: none; }
+body.is-mobile .partners-page .partners-filterstrip .partners-pill{
+  flex: 0 0 auto;                /* éléments fixes dans le rail */
+}
+body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
+  height: 36px; padding: 6px 12px; font-size: 13px; line-height: 1; white-space: nowrap;
+}
+
+/* bloc de tri à droite (icône Sort seule qui ouvre le menu) */
+body.is-mobile .partners-page .partners-sort{ flex: 0 0 auto; }
+body.is-mobile .partners-page .partners-sort > .partners-filterbar__label{
+  position: relative;
+  width: 22px; height: 22px;
+  overflow: hidden; text-indent: 200%; white-space: nowrap;
+  display: inline-block;
+}
+body.is-mobile .partners-page .partners-sort > .partners-filterbar__label::before{
+  content: ""; position: absolute; inset: 0;
+  background: url("/Sort.svg") center/contain no-repeat;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn{
+  width: 36px; height: 36px; padding: 0; justify-content: center;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn > *{ display: none; } /* masque le texte+caret */
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
+  content: ""; width: 18px; height: 18px; display: inline-block;
+  background: url("/Sort.svg") center/contain no-repeat;
+}
+
+
 
 
 /* ============================================================
