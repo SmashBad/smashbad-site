@@ -298,7 +298,7 @@ export default function PartenairesIndexPage() {
         <div className="partners-filterbar" role="group" aria-label="Filtres d’annonces">
           <span className="partners-filterbar__label">Filtrer par :</span>
 
-          <div className="partners-filterstrip"></div>
+          <div className="partners-filterstrip">
             <MultiFilterPill
               label="Département"
               selected={depts} onChange={setDepts}
