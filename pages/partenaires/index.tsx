@@ -297,25 +297,29 @@ export default function PartenairesIndexPage() {
         {/* FILTRES + TRI */}
         <div className="partners-filterbar" role="group" aria-label="Filtres d’annonces">
           <span className="partners-filterbar__label">Filtrer par :</span>
-          <MultiFilterPill
-            label="Département"
-            selected={depts} onChange={setDepts}
-            options={DEPTS} width={300}
-            placeholder="Département (ex: 92, 2A, 971)"
-            normalize={normDept}
-          />
-          <MultiFilterPill
-            label="Tableau"
-            selected={tableaux} onChange={setTableaux}
-            options={TABLEAUX} width={260}
-          />
-          <MultiFilterPill
-            label="Classement"
-            selected={classements} onChange={setClassements}
-            options={CLASSEMENTS} width={360}
-          />
-          <div className="partners-sort partners-sort--iconOnly">
-            <span className="partners-filterbar__label">Trier :</span>
+
+          <div className="partners-filterstrip"></div>
+            <MultiFilterPill
+              label="Département"
+              selected={depts} onChange={setDepts}
+              options={DEPTS} width={300}
+              placeholder="Département (ex: 92, 2A, 971)"
+              normalize={normDept}
+            />
+            <MultiFilterPill
+              label="Tableau"
+              selected={tableaux} onChange={setTableaux}
+              options={TABLEAUX} width={260}
+            />
+            <MultiFilterPill
+              label="Classement"
+              selected={classements} onChange={setClassements}
+              options={CLASSEMENTS} width={360}
+            />
+          </div>
+          
+          <span className="partners-filterbar__label">Trier :</span>
+          <div className="partners-sort">
             <SortPill 
              sort={sort}
              setSort={setSort}

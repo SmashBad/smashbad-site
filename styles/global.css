@@ -1398,6 +1398,57 @@ body.is-mobile .partners-page .pill--classement .partners-pill__caret{ margin-le
 
 
 
+body.is-mobile .partners-page .partners-filterbar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:6px auto 12px;
+}
+
+/* 1) Remplacer visuellement les 2 libellés par des icônes */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label{
+  position:relative; display:inline-block; width:22px; height:22px;
+  overflow:hidden; text-indent:200%; white-space:nowrap; /* texte conservé pour l’accessibilité */
+}
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-of-type::before{
+  content:""; position:absolute; inset:0;
+  background:url("/Filter.svg") center/contain no-repeat;
+}
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:last-of-type::before{
+  content:""; position:absolute; inset:0;
+  background:url("/Sort.svg") center/contain no-repeat;
+}
+
+/* 2) Rail scrollable pour les 3 filtres (labels originaux) */
+body.is-mobile .partners-page .partners-filterstrip{
+  flex:1 1 auto;                 /* prend la place dispo entre les 2 icônes */
+  display:flex; gap:8px;
+  overflow-x:auto; overscroll-behavior-x:contain;
+  scrollbar-width:none; -ms-overflow-style:none;
+}
+body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display:none; }
+
+/* Les pills deviennent des éléments "fixes" dans le rail */
+body.is-mobile .partners-page .partners-filterstrip .partners-pill{
+  flex:0 0 auto;
+}
+body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
+  height:36px; padding:6px 12px; font-size:13px; line-height:1; white-space:nowrap;
+}
+
+/* 3) Pill de TRI à droite : icône seule qui ouvre le menu */
+body.is-mobile .partners-page .partners-sort .partners-pill__btn{
+  width:36px; height:36px; padding:0; justify-content:center;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn > *{ display:none; } /* masque label/caret */
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
+  content:""; width:18px; height:18px; display:inline-block;
+  background:url("/Sort.svg") center/contain no-repeat;
+}
+
+
+
 
 /* ============================================================
    Dépôt d'annonce — styles isolés (scopés .pdepot-form)
