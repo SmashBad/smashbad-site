@@ -1548,6 +1548,84 @@ body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
 }
 
 
+/* ===================== PARTENAIRES — MOBILE ===================== */
+
+/* barre : 1 ligne, pas de scroll ici */
+body.is-mobile .partners-page .partners-filterbar{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:6px auto 12px;
+  padding:0 8px;
+  flex-wrap:nowrap;
+  overflow:visible;                     /* IMPORTANT */
+}
+
+/* icône "Filtrer" décorative à gauche */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
+  position:relative; flex:0 0 22px; width:22px; height:22px;
+  overflow:hidden; text-indent:200%; white-space:nowrap;
+  pointer-events:none;                  /* ne bloque pas les taps */
+}
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
+  content:""; position:absolute; inset:0;
+  background:url("/Filter.svg") center/contain no-repeat;
+}
+
+/* cache "Tri :" en mobile (tu ne le veux pas) */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:last-of-type{
+  display:none !important;
+}
+
+/* WRAPPER MASQUANT : coupe proprement sans toucher aux événements */
+body.is-mobile .partners-page .partners-filterstripWrap{
+  flex:1 1 auto; min-width:0;
+  overflow:hidden;                      /* pas de scroll ici */
+  position:relative; z-index:1;
+}
+
+/* SCROLLER INTERNE : le vrai rail cliquable */
+body.is-mobile .partners-page .partners-filterstrip{
+  display:flex; gap:8px;
+  flex:1 1 auto; min-width:0;
+  overflow-x:auto;                      /* scroll ICI, et seulement ici */
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+  scrollbar-width:none; -ms-overflow-style:none;
+  padding-inline:2px;                   /* micro air pour éviter la “coupure hard” */
+}
+body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display:none; }
+
+/* pills : éléments fixes + clics garantis */
+body.is-mobile .partners-page .partners-filterstrip .partners-pill{ flex:0 0 auto; }
+body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
+  height:36px; padding:6px 12px; font-size:13px; line-height:1; white-space:nowrap;
+  pointer-events:auto;
+}
+
+/* TRI (pill icône + "Tri" seulement, jamais le mode actif) */
+body.is-mobile .partners-page .partners-sort{ flex:0 0 auto; }
+body.is-mobile .partners-page .partners-sort .partners-pill__btn{
+  height:36px; padding:6px 12px; display:inline-flex; align-items:center; gap:8px;
+  line-height:1; white-space:nowrap; font-size:0 !important;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn *{ display:none !important; }
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
+  content:""; width:18px; height:18px; display:inline-block;
+  background:url("/Sort.svg") center/contain no-repeat;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
+  content:"Tri"; font-size:13px;
+}
+
+/* --- Sécurité popover : quand un menu est fermé, il ne bloque jamais les clics --- */
+body.is-mobile .partners-page .partners-pill__menu{ pointer-events:none; }
+body.is-mobile .partners-page .partners-pill.is-open .partners-pill__menu{ pointer-events:auto; }
+
+
+
+
 
 /* ============================================================
    Dépôt d'annonce — styles isolés (scopés .pdepot-form)

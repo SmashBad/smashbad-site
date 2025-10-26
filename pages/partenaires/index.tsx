@@ -298,34 +298,35 @@ export default function PartenairesIndexPage() {
         <div className="partners-filterbar" role="group" aria-label="Filtres d’annonces">
           <span className="partners-filterbar__label">Filtrer par :</span>
 
-          <div className="partners-filterstrip">
-            <MultiFilterPill
-              label="Département"
-              selected={depts} onChange={setDepts}
-              options={DEPTS} width={300}
-              placeholder="Département (ex: 92, 2A, 971)"
-              normalize={normDept}
-            />
-            <MultiFilterPill
-              label="Tableau"
-              selected={tableaux} onChange={setTableaux}
-              options={TABLEAUX} width={260}
-            />
-            <MultiFilterPill
-              label="Classement"
-              selected={classements} onChange={setClassements}
-              options={CLASSEMENTS} width={360}
-            />
+          {/* ⬇️ nouveau wrapper */}
+          <div className="partners-filterstripWrap">
+            <div className="partners-filterstrip">
+              <MultiFilterPill
+                label="Département"
+                selected={depts} onChange={setDepts}
+                options={DEPTS} width={300}
+                placeholder="Département (ex: 92, 2A, 971)"
+                normalize={normDept}
+              />
+              <MultiFilterPill
+                label="Tableau"
+                selected={tableaux} onChange={setTableaux}
+                options={TABLEAUX} width={260}
+              />
+              <MultiFilterPill
+                label="Classement"
+                selected={classements} onChange={setClassements}
+                options={CLASSEMENTS} width={360}
+              />
+            </div>
           </div>
-          
+
           <span className="partners-filterbar__label">Tri :</span>
           <div className="partners-sort">
-            <SortPill 
-             sort={sort}
-             setSort={setSort}
-           />
+            <SortPill sort={sort} setSort={setSort} />
           </div>
         </div>
+
       </header>
 
       {/* LISTE */}
