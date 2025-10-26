@@ -1488,6 +1488,65 @@ body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
   content: "Tri"; font-size: 13px; display: inline-block;
 }
 
+/* ===================== PARTENAIRES — MOBILE : CLIC FIX DEFINITIF ===================== */
+body.is-mobile .partners-page .partners-filterbar{
+  position: relative;
+  overflow: visible !important;
+  mask-image: none !important;             /* neutralise tout masque résiduel */
+  -webkit-mask-image: none !important;
+}
+
+body.is-mobile .partners-page .partners-filterstrip{
+  position: relative;
+  z-index: 20;                              /* au-dessus de tout décor voisin */
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  pointer-events: auto !important;          /* reçoit les taps */
+}
+body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display: none; }
+
+/* priorité d'interaction sur CHAQUE pill et son bouton */
+body.is-mobile .partners-page .partners-filterstrip .partners-pill{
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 21;
+  pointer-events: auto !important;
+}
+body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
+  pointer-events: auto !important;
+  height: 36px; padding: 6px 12px; font-size: 13px; line-height: 1; white-space: nowrap;
+}
+
+/* tout élément décoratif aux extrémités ne doit pas capter les clics */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label{
+  pointer-events: none !important;
+}
+body.is-mobile .partners-page .partners-sort{
+  position: relative; z-index: 10;         /* sous le rail, ne le recouvre pas */
+}
+
+/* Tri mobile : pill icône + "Tri" seulement (déjà OK côté toi, on verrouille) */
+body.is-mobile .partners-page .partners-sort .partners-pill__btn{
+  height: 36px; padding: 6px 12px; line-height: 1; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0 !important;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn *{
+  display: none !important;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
+  content: ""; width: 18px; height: 18px; display: inline-block;
+  background: url("/Sort.svg") center/contain no-repeat;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
+  content: "Tri"; font-size: 13px;
+}
 
 
 
