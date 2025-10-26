@@ -1343,287 +1343,25 @@ body:not(.is-mobile) .partners-page .partners-filterbar .partners-filterbar__lab
   white-space:nowrap;
 }
 
-/* ===================== PARTENAIRES — MOBILE ONLY ===================== */
-body.is-mobile .partners-page .partners-filterbar{
-  width:100%;
+/* ============================================================
+   PARTENAIRES — BARRE FILTRES / TRI
+   ============================================================ */
+
+/* ---------- Desktop (inchangé) ---------- */
+body:not(.is-mobile) .partners-page .partners-filterbar{
   display:flex;
   align-items:center;
-  gap:8px;
-  margin:6px auto 12px;
-  padding:0 8px;
-  flex-wrap:nowrap;       /* 1 seule ligne */
-  overflow:visible;       /* IMPORTANT: pas de scroll/mask ici, sinon zones non cliquables */
+  justify-content:center;
+  gap:14px 20px;
+  flex-wrap:wrap;                 /* tolère un wrap si fenêtre étroite */
 }
-
-/* Décoration "Filtrer par" = icône. On enlève toute interception de clic. */
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
-  position:relative;
-  flex:0 0 22px;
-  width:22px; height:22px;
-  overflow:hidden; text-indent:200%; white-space:nowrap;
-  pointer-events:none;    /* ne capture pas les taps */
-}
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
-  content:""; position:absolute; inset:0;
-  background:url("/Filter.svg") center/contain no-repeat;
-}
-
-/* Cache le label "Tri :" (il est *en dehors* de .partners-sort dans ton JSX) */
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:last-of-type{
-  display:none;
-}
-
-/* --- RAIL SCROLLABLE (3 filtres) --- */
-body.is-mobile .partners-page .partners-filterstrip{
-  flex:1 1 auto;          /* occupe tout l’espace entre l’icône et le tri */
-  min-width:0;            /* autorise la réduction, indispensable pour flex */
+body:not(.is-mobile) .partners-page .partners-filterstrip{
   display:flex;
-  gap:8px;
-  overflow-x:auto;        /* scroll H ICI uniquement */
-  overscroll-behavior-x:contain;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none; -ms-overflow-style:none;
-  position:relative; z-index:1;   /* au-dessus de tout décor éventuel */
-}
-body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display:none; }
-body.is-mobile .partners-page .partners-filterstrip .partners-pill{ flex:0 0 auto; }
-body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
-  height:36px; padding:6px 12px; font-size:13px; line-height:1; white-space:nowrap;
-  pointer-events:auto;           /* clics assurés */
+  gap:10px;
+  flex-wrap:wrap;                 /* évite l'empilement vertical des 3 filtres */
 }
 
-/* --- TRI (icône + "Tri" seulement) --- */
-body.is-mobile .partners-page .partners-sort{ flex:0 0 auto; }
-
-body.is-mobile .partners-page .partners-sort .partners-pill__btn{
-  height:36px; padding:6px 12px;
-  display:inline-flex; align-items:center; gap:8px;
-  line-height:1; white-space:nowrap;
-  position:relative;
-}
-/* Masque TOUT le contenu interne (libellé "Plus récentes", caret, etc.) */
-body.is-mobile .partners-page .partners-sort .partners-pill__btn *{
-  display:none !important;
-}
-/* Ajoute l’icône + le libellé court "Tri" */
-body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
-  content:""; width:18px; height:18px; display:inline-block;
-  background:url("/Sort.svg") center/contain no-repeat;
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
-  content:"Tri"; font-size:13px;
-}
-
-
-/* ===================== PARTENAIRES — MOBILE (fix clic + tri) ===================== */
-body.is-mobile .partners-page .partners-filterbar{
-  position: relative;                /* ancre les z-index internes */
-  overflow: visible;                 /* pas d'overlay du parent */
-  flex-wrap: nowrap;
-}
-
-/* --- RAIL SCROLLABLE : priorité aux clics --- */
-body.is-mobile .partners-page .partners-filterstrip{
-  position: relative;
-  z-index: 5;                        /* passe au-dessus de tout décor voisin */
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-}
-body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display: none; }
-
-/* Les boutons eux-mêmes ont la priorité et acceptent les événements */
-body.is-mobile .partners-page .partners-filterstrip .partners-pill{
-  flex: 0 0 auto;
-  position: relative;
-  z-index: 6;
-}
-body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
-  pointer-events: auto;              /* force l’interaction */
-  height: 36px; padding: 6px 12px; font-size: 13px; line-height: 1; white-space: nowrap;
-}
-
-/* Tout ce qui est décoratif autour ne capte pas les clics */
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
-  pointer-events: none;              /* l’icône Filter ne bloque rien */
-  position: relative; flex: 0 0 22px; width: 22px; height: 22px;
-  overflow: hidden; text-indent: 200%; white-space: nowrap;
-}
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
-  content:""; position:absolute; inset:0; background:url("/Filter.svg") center/contain no-repeat;
-}
-
-/* Cache complètement le span "Tri :" en mobile */
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:last-of-type{
-  display: none !important;
-}
-
-/* --- PILL DE TRI : icône + "Tri" uniquement, jamais le mode actif --- */
-body.is-mobile .partners-page .partners-sort{
-  flex: 0 0 auto;
-  position: relative;
-  z-index: 4;                        /* sous le rail, pour ne pas le recouvrir */
-}
-
-/* Neutralise tout texte interne (y compris texte nu) et reconstruit le label */
-body.is-mobile .partners-page .partners-sort .partners-pill__btn{
-  height: 36px; padding: 6px 12px; line-height: 1; white-space: nowrap;
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0 !important;          /* masque "Plus récentes" quelle que soit la structure */
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn *{
-  display: none !important;         /* cache les enfants (spans, caret, etc.) */
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
-  content: ""; width: 18px; height: 18px; display: inline-block;
-  background: url("/Sort.svg") center/contain no-repeat;
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
-  content: "Tri"; font-size: 13px; display: inline-block;
-}
-
-/* ===================== PARTENAIRES — MOBILE : CLIC FIX DEFINITIF ===================== */
-body.is-mobile .partners-page .partners-filterbar{
-  position: relative;
-  overflow: visible !important;
-  mask-image: none !important;             /* neutralise tout masque résiduel */
-  -webkit-mask-image: none !important;
-}
-
-body.is-mobile .partners-page .partners-filterstrip{
-  position: relative;
-  z-index: 20;                              /* au-dessus de tout décor voisin */
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  pointer-events: auto !important;          /* reçoit les taps */
-}
-body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display: none; }
-
-/* priorité d'interaction sur CHAQUE pill et son bouton */
-body.is-mobile .partners-page .partners-filterstrip .partners-pill{
-  flex: 0 0 auto;
-  position: relative;
-  z-index: 21;
-  pointer-events: auto !important;
-}
-body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
-  pointer-events: auto !important;
-  height: 36px; padding: 6px 12px; font-size: 13px; line-height: 1; white-space: nowrap;
-}
-
-/* tout élément décoratif aux extrémités ne doit pas capter les clics */
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label{
-  pointer-events: none !important;
-}
-body.is-mobile .partners-page .partners-sort{
-  position: relative; z-index: 10;         /* sous le rail, ne le recouvre pas */
-}
-
-/* Tri mobile : pill icône + "Tri" seulement (déjà OK côté toi, on verrouille) */
-body.is-mobile .partners-page .partners-sort .partners-pill__btn{
-  height: 36px; padding: 6px 12px; line-height: 1; white-space: nowrap;
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0 !important;
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn *{
-  display: none !important;
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
-  content: ""; width: 18px; height: 18px; display: inline-block;
-  background: url("/Sort.svg") center/contain no-repeat;
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
-  content: "Tri"; font-size: 13px;
-}
-
-
-/* ===================== PARTENAIRES — MOBILE ===================== */
-
-/* barre : 1 ligne, pas de scroll ici */
-body.is-mobile .partners-page .partners-filterbar{
-  width:100%;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin:6px auto 12px;
-  padding:0 8px;
-  flex-wrap:nowrap;
-  overflow:visible;                     /* IMPORTANT */
-}
-
-/* icône "Filtrer" décorative à gauche */
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
-  position:relative; flex:0 0 22px; width:22px; height:22px;
-  overflow:hidden; text-indent:200%; white-space:nowrap;
-  pointer-events:none;                  /* ne bloque pas les taps */
-}
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
-  content:""; position:absolute; inset:0;
-  background:url("/Filter.svg") center/contain no-repeat;
-}
-
-/* cache "Tri :" en mobile (tu ne le veux pas) */
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:last-of-type{
-  display:none !important;
-}
-
-/* WRAPPER MASQUANT : coupe proprement sans toucher aux événements */
-body.is-mobile .partners-page .partners-filterstripWrap{
-  flex:1 1 auto; min-width:0;
-  overflow:hidden;                      /* pas de scroll ici */
-  position:relative; z-index:1;
-}
-
-/* SCROLLER INTERNE : le vrai rail cliquable */
-body.is-mobile .partners-page .partners-filterstrip{
-  display:flex; gap:8px;
-  flex:1 1 auto; min-width:0;
-  overflow-x:auto;                      /* scroll ICI, et seulement ici */
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior-x:contain;
-  scrollbar-width:none; -ms-overflow-style:none;
-  padding-inline:2px;                   /* micro air pour éviter la “coupure hard” */
-}
-body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display:none; }
-
-/* pills : éléments fixes + clics garantis */
-body.is-mobile .partners-page .partners-filterstrip .partners-pill{ flex:0 0 auto; }
-body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
-  height:36px; padding:6px 12px; font-size:13px; line-height:1; white-space:nowrap;
-  pointer-events:auto;
-}
-
-/* TRI (pill icône + "Tri" seulement, jamais le mode actif) */
-body.is-mobile .partners-page .partners-sort{ flex:0 0 auto; }
-body.is-mobile .partners-page .partners-sort .partners-pill__btn{
-  height:36px; padding:6px 12px; display:inline-flex; align-items:center; gap:8px;
-  line-height:1; white-space:nowrap; font-size:0 !important;
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn *{ display:none !important; }
-body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
-  content:""; width:18px; height:18px; display:inline-block;
-  background:url("/Sort.svg") center/contain no-repeat;
-}
-body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
-  content:"Tri"; font-size:13px;
-}
-
-/* --- Sécurité popover : quand un menu est fermé, il ne bloque jamais les clics --- */
-body.is-mobile .partners-page .partners-pill__menu{ pointer-events:none; }
-body.is-mobile .partners-page .partners-pill.is-open .partners-pill__menu{ pointer-events:auto; }
-
-/* ===================== PARTENAIRES — MOBILE (sans scroll) ===================== */
+/* ---------- Mobile : 2 LIGNES FIXES, PAS DE SCROLL ---------- */
 body.is-mobile .partners-page .partners-filterbar{
   width:100%;
   display:flex;
@@ -1632,69 +1370,97 @@ body.is-mobile .partners-page .partners-filterbar{
   gap:8px 10px;
   margin:6px auto 12px;
   padding:0 8px;
-  flex-wrap:wrap;            /* 2 lignes : filtres puis tri */
-  overflow:visible;          /* pas de masque qui bloque les clics */
+  flex-wrap:wrap;                 /* 2 lignes : filtres (L1) puis tri (L2) */
+  overflow:visible;               /* rien ne recouvre les boutons */
 }
 
-/* Icône "Filtrer" à gauche de la 1ère ligne (décorative) */
+/* (Mobile) On retire entièrement le label "Filtrer par :" pour la V1 */
 body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
-  order:1;
-  position:relative;
-  width:22px; height:22px;
-  overflow:hidden; text-indent:200%; white-space:nowrap;
-  pointer-events:none;       /* ne capte pas de taps */
-}
-body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
-  content:""; position:absolute; inset:0;
-  background:url("/Filter.svg") center/contain no-repeat;
+  display:none !important;
 }
 
-/* Cache "Tri :" (on le remplace par la pill “Tri”) */
+/* (Mobile) On retire aussi le label "Tri :" : seule une pill "Tri" doit s'afficher */
 body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:last-of-type{
   display:none !important;
 }
 
-/* ----- LIGNE 1 : les 3 filtres ----- */
+/* LIGNE 1 — les 3 filtres, sur une seule ligne, cliquables */
 body.is-mobile .partners-page .partners-filterstrip{
-  order:2;
-  flex:1 1 100%;             /* occupe toute la ligne */
+  order:1;
+  flex:1 1 100%;                 /* occupe toute la largeur de la rangée */
   display:flex;
   gap:8px;
   justify-content:center;
-  flex-wrap:nowrap;          /* on essaie de tenir sur 1 ligne */
-  overflow:visible;          /* clics garantis */
+  flex-wrap:nowrap;              /* on essaie de tenir sur 1 ligne */
   min-width:0;
+  overflow:visible;              /* pas de scroll en V1 */
 }
 body.is-mobile .partners-page .partners-filterstrip .partners-pill{
   flex:0 0 auto;
 }
 body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
-  height:36px; padding:6px 12px; font-size:13px; line-height:1; white-space:nowrap;
-  pointer-events:auto;
+  height:36px;
+  padding:6px 12px;
+  font-size:13px;
+  line-height:1;
+  white-space:nowrap;
+  pointer-events:auto;           /* clics garantis */
 }
 
-/* ----- LIGNE 2 : Tri (icône + "Tri" uniquement) ----- */
+/* LIGNE 2 — Tri : une pill cliquable "icône + Tri" (jamais le mode actif) */
 body.is-mobile .partners-page .partners-sort{
-  order:3;
-  flex:1 1 100%;             /* passe à la ligne suivante */
-  display:flex; align-items:center; justify-content:center;
+  order:2;
+  flex:1 1 100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 body.is-mobile .partners-page .partners-sort .partners-pill__btn{
-  height:36px; padding:6px 12px;
-  display:inline-flex; align-items:center; gap:8px;
-  line-height:1; white-space:nowrap;
-  font-size:0 !important;   /* masque tout texte interne (ex: "Plus récentes") */
+  height:36px;
+  padding:6px 12px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  line-height:1;
+  white-space:nowrap;
+  font-size:0 !important;        /* masque tout texte interne (ex : "Plus récentes") */
 }
 body.is-mobile .partners-page .partners-sort .partners-pill__btn *{
-  display:none !important;  /* cache spans internes et caret */
+  display:none !important;       /* cache caret / spans internes */
 }
 body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
-  content:""; width:18px; height:18px; display:inline-block;
+  content:"";
+  width:18px; height:18px;
+  display:inline-block;
   background:url("/Sort.svg") center/contain no-repeat;
 }
 body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
-  content:"Tri"; font-size:13px;
+  content:"Tri";
+  font-size:13px;
 }
+
+/* ============================================================
+   V2 / À REPRENDRE PLUS TARD — Scroll horizontal du rail filtres
+   (Nous avons tenté plusieurs approches. À relire quand la page
+   sera dédiée et sticky.)
+   ------------------------------------------------------------
+   Problèmes rencontrés :
+   - Sur iOS, un overflow-x sur le parent + mask créait une "zone
+     coupure" non cliquable.
+   - Des popovers fermés mais positionnés pouvaient capter les clics.
+   - Solution stable : wrapper masquant + scroller interne, pointer-
+     events désactivés sur les éléments décoratifs, menus fermés
+     non interactifs.
+   ------------------------------------------------------------
+   Exemple de config stable :
+   .partners-filterstripWrap { flex:1 1 auto; min-width:0; overflow:hidden; }
+   .partners-filterstrip     { display:flex; gap:8px; overflow-x:auto;
+                               -webkit-overflow-scrolling:touch; }
+   .partners-pill__menu      { pointer-events:none; } 
+   .partners-pill.is-open .partners-pill__menu { pointer-events:auto; }
+   Désactiver tout mask sur le parent :
+   .partners-filterbar { mask-image:none; -webkit-mask-image:none; }
+   ============================================================ */
 
 
 
