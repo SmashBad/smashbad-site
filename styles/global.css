@@ -1145,8 +1145,13 @@ input[type="range"]{ width:100%; }
   list-style: none; padding: 0; margin: 10px 0 10px;
   display: grid; gap: 8px; font-size: 15px; line-height: 1.45;
 }
-.partners-card__meta li { display: flex; align-items: center; gap: 10px; line-height: 1.25; }
+.partners-card__meta li { display: flex; align-items: center; gap: 4px; line-height: 1.25; }
 
+/* virgule compacte et lisible */
+.sep{
+  display:inline-block;
+  margin: 0 3px;   /* 2–4px selon rendu; 3px marche bien */
+}
 /* Icônes SVG via pseudo-éléments */
 .partners-card__meta li::before,
 .desc-line::before {
@@ -1179,7 +1184,7 @@ input[type="range"]{ width:100%; }
 
 /* espace entre chaque mini-paragraphe */
 .desc-line + .desc-line{
-  margin-top: 6px;   /* 6–8px selon ton goût */
+  margin-top: 10px;   /* 6–8px selon ton goût */
 }
 
 .partners-card__cta{ display: flex; justify-content: center; margin-top: 14px; min-height: 52px;; }

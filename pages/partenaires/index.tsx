@@ -355,7 +355,8 @@ export default function PartenairesIndexPage() {
                 </li>
                 <li className="i-place">
                   <span className="strong">{ville}</span>
-                  {dept ? <><span>,{NBSP}</span><span className="strong">{dept}</span></> : null}
+                  <span className="sep">,</span>
+                  <span className="strong">{dept}</span>
                 </li>
               </ul>
 
