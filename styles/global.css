@@ -1623,6 +1623,78 @@ body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
 body.is-mobile .partners-page .partners-pill__menu{ pointer-events:none; }
 body.is-mobile .partners-page .partners-pill.is-open .partners-pill__menu{ pointer-events:auto; }
 
+/* ===================== PARTENAIRES — MOBILE (sans scroll) ===================== */
+body.is-mobile .partners-page .partners-filterbar{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px 10px;
+  margin:6px auto 12px;
+  padding:0 8px;
+  flex-wrap:wrap;            /* 2 lignes : filtres puis tri */
+  overflow:visible;          /* pas de masque qui bloque les clics */
+}
+
+/* Icône "Filtrer" à gauche de la 1ère ligne (décorative) */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
+  order:1;
+  position:relative;
+  width:22px; height:22px;
+  overflow:hidden; text-indent:200%; white-space:nowrap;
+  pointer-events:none;       /* ne capte pas de taps */
+}
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
+  content:""; position:absolute; inset:0;
+  background:url("/Filter.svg") center/contain no-repeat;
+}
+
+/* Cache "Tri :" (on le remplace par la pill “Tri”) */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:last-of-type{
+  display:none !important;
+}
+
+/* ----- LIGNE 1 : les 3 filtres ----- */
+body.is-mobile .partners-page .partners-filterstrip{
+  order:2;
+  flex:1 1 100%;             /* occupe toute la ligne */
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:nowrap;          /* on essaie de tenir sur 1 ligne */
+  overflow:visible;          /* clics garantis */
+  min-width:0;
+}
+body.is-mobile .partners-page .partners-filterstrip .partners-pill{
+  flex:0 0 auto;
+}
+body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
+  height:36px; padding:6px 12px; font-size:13px; line-height:1; white-space:nowrap;
+  pointer-events:auto;
+}
+
+/* ----- LIGNE 2 : Tri (icône + "Tri" uniquement) ----- */
+body.is-mobile .partners-page .partners-sort{
+  order:3;
+  flex:1 1 100%;             /* passe à la ligne suivante */
+  display:flex; align-items:center; justify-content:center;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn{
+  height:36px; padding:6px 12px;
+  display:inline-flex; align-items:center; gap:8px;
+  line-height:1; white-space:nowrap;
+  font-size:0 !important;   /* masque tout texte interne (ex: "Plus récentes") */
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn *{
+  display:none !important;  /* cache spans internes et caret */
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
+  content:""; width:18px; height:18px; display:inline-block;
+  background:url("/Sort.svg") center/contain no-repeat;
+}
+body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
+  content:"Tri"; font-size:13px;
+}
 
 
 
