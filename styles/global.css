@@ -1152,16 +1152,27 @@ input[type="range"]{ width:100%; }
 .desc-line::before {
   content: "";
   display: inline-block;
-  width: 20px; height: 20px; margin-right: 8px; flex: 0 0 20px;
+  width: 20px; height: 20px; flex: 0 0 20px;
   background: center/contain no-repeat;
   filter: drop-shadow(0 0 0 rgba(0,0,0,0));
   align-self: center;
+  position: absolute;
+  left: 0;
+  top: 2px;
+  margin-right: 0;        /* plus besoin de marge droite */
+  /* on garde width:20px; height:20px; définis plus haut */
 }
 .partners-card__meta .i-date::before   { background-image: url("/Planning.svg"); }
 .partners-card__meta .i-place::before  { background-image: url("/Location.svg"); }
 
 .partners-card__desc{ margin: 12px 0 10px; display: grid; gap: 10px; font-size: 15px; line-height: 1.45;}
-.desc-line{ display: flex; gap: 8px; align-items: baseline; }
+.desc-line{
+  display: block;
+  position: relative;
+  padding-left: 28px;     /* place pour l’icône */
+  line-height: 1.45;
+  gap: 8px;
+  align-items: baseline; }
 .desc-line.i-id::before     { background-image: url("/Id.svg"); }
 .desc-line.i-draw::before   { background-image: url("/Trophy.svg"); }
 .desc-line.i-search::before { background-image: url("/LookFor.svg"); }
