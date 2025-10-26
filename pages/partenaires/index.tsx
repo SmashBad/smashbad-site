@@ -314,13 +314,13 @@ export default function PartenairesIndexPage() {
             selected={classements} onChange={setClassements}
             options={CLASSEMENTS} width={360}
           />
-          <span className="partners-filterbar__label">Trier :</span>
-          <SortPill
-            className="pill partners-sort partners-sort--iconOnly"
-            sort={sort}
-            setSort={setSort}
-            ariaLabel="Trier les annonces"
-          />
+          <div className="partners-sort partners-sort--iconOnly"></div>
+            <span className="partners-filterbar__label">Trier :</span>
+            <SortPill 
+             sort={sort}
+             setSort={setSort}
+           />
+          </div>
         </div>
       </header>
 
