@@ -1416,6 +1416,39 @@ body.is-mobile .partners-page .partners-sort .partners-pill__btn::after{
 }
 
 
+/* ===================== PARTENAIRES — MOBILE (fix clic + tri) ===================== */
+body.is-mobile .partners-page .partners-filterbar{
+  position: relative;                /* ancre les z-index internes */
+  overflow: visible;                 /* pas d'overlay du parent */
+  flex-wrap: nowrap;
+}
+
+/* --- RAIL SCROLLABLE : priorité aux clics --- */
+body.is-mobile .partners-page .partners-filterstrip{
+  position: relative;
+  z-index: 5;                        /* passe au-dessus de tout décor voisin */
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display: none; }
+
+/* Les boutons eux-mêmes ont la priorité et acceptent les événements */
+body.is-mobile .partners-page .partners-filterstrip .partners-pill{
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 6;
+}
+body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
+  pointer-events: auto;              /* force l’interaction */
+  height: 36px; padd
+
+
 
 
 /* ============================================================
