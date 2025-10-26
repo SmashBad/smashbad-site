@@ -209,7 +209,7 @@ function SortPill({ sort, setSort }: { sort: SortKey; setSort: (s: SortKey)=>voi
         {SORTS.find(s=>s.key===sort)?.label}<span className="partners-pill__caret">▾</span>
       </button>
       {open && (
-        <div className="partners-pill__menu" style={{ width: 260 }}>
+        <div className="partners-pill__menu" style={{ width: 180 }}>
           {SORTS.map(s => (
             <button
               key={s.key}
