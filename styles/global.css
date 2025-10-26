@@ -1150,7 +1150,6 @@ input[type="range"]{ width:100%; }
 /* virgule compacte et lisible */
 .sep{
   display:inline-block;
-  margin: 0 3px;   /* 2–4px selon rendu; 3px marche bien */
 }
 /* Icônes SVG via pseudo-éléments */
 .partners-card__meta li::before,
