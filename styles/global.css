@@ -1103,7 +1103,6 @@ input[type="range"]{ width:100%; }
   display:flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  max-width: fit-content;
 }
 .partners-pill__list{
   display: grid; grid-template-columns: 1fr;
@@ -1265,7 +1264,7 @@ input[type="range"]{ width:100%; }
 }
 
 .partners-filterbar__label{
-  font-weight:700; opacity:.85; margin: 0 6px;
+  font-weight:700; opacity:.85; margin: 0 0px;
 }
 .partners-filterbar__label--split{ margin-left: 16px; }
 
