@@ -1320,6 +1320,11 @@ input[type="range"]{ width:100%; }
   border-color: rgba(255,255,255,.3);
 }
 
+.partners-sort partners-sort--iconOnly {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* ============================================================
    Partenaires — MOBILE ONLY (via body.is-mobile)
    ============================================================ */
