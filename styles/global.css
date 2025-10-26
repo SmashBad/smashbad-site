@@ -1044,6 +1044,7 @@ input[type="range"]{ width:100%; }
   display: flex; flex-wrap: wrap; gap: 10px;
   justify-content: center;
   margin: 6px auto 14px;
+  align-items:center;
 }
 
 /* Multi-select UI (scopé) */
@@ -1142,10 +1143,22 @@ input[type="range"]{ width:100%; }
 .partners-card__ext{ border-radius: 12px; padding: 8px 12px; white-space:nowrap; flex-shrink:0; }
 
 .partners-card__meta{
-  list-style: none; padding: 0; margin: 10px 0 10px;
-  display: grid; gap: 8px; font-size: 15px; line-height: 1.45;
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 10px;
+  display: grid; 
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.45;
 }
-.partners-card__meta li { display: flex; align-items: center; gap: 4px; line-height: 1.25; }
+.partners-card__meta li{
+  position: relative;
+  display: block;
+  padding-left: 28px;      /* place pour l’icône */
+  line-height: 1.45;
+}
+
+
 
 /* virgule compacte et lisible */
 .sep{
@@ -1166,6 +1179,18 @@ input[type="range"]{ width:100%; }
   margin-right: 0;        /* plus besoin de marge droite */
   /* on garde width:20px; height:20px; définis plus haut */
 }
+
+/* Base icône (scopée à la carte pour éviter la “fuite” sous la navbar) */
+.partners-card .partners-card__meta li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  background: center/contain no-repeat;
+}
+
 .partners-card__meta .i-date::before   { background-image: url("/Planning.svg"); }
 .partners-card__meta .i-place::before  { background-image: url("/Location.svg"); }
 
@@ -1194,7 +1219,8 @@ input[type="range"]{ width:100%; }
 
 .strong {
   font-weight: bold;
-  margin-right: 0.1em; /* espace minuscule après */
+  /*margin-right: 0.1em; espace minuscule après non nécessaire */
+  margin-left: 0.2em; /* espace minuscule après */
 }
 
 .partners-filterbar__label{
