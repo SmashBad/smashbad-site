@@ -298,7 +298,7 @@ export default function PartenairesIndexPage() {
         <div className="partners-filterbar" role="group" aria-label="Filtres d’annonces">
           <span className="partners-filterbar__label">Filtrer par :</span>
           <MultiFilterPill
-            label="Dept."
+            label="Département"
             selected={depts} onChange={setDepts}
             options={DEPTS} width={300}
             placeholder="Département (ex: 92, 2A, 971)"
@@ -310,7 +310,7 @@ export default function PartenairesIndexPage() {
             options={TABLEAUX} width={260}
           />
           <MultiFilterPill
-            label="Class."
+            label="Classement"
             selected={classements} onChange={setClassements}
             options={CLASSEMENTS} width={360}
           />

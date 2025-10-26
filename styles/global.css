@@ -1399,6 +1399,28 @@ body.is-mobile .partners-page .partners-sort.partners-sort--iconOnly .partners-p
   background: url("/Sort.svg") center/contain no-repeat;
 }
 
+/* Département -> "Dpt" */
+body.is-mobile .partners-page .pill--dept .partners-pill__btn{
+  font-size:0;                 /* on masque le texte réel, caret exclu */
+}
+body.is-mobile .partners-page .pill--dept .partners-pill__btn::before{
+  content:"Dpt";
+  font-size:13px;              /* le libellé visible */
+}
+body.is-mobile .partners-page .pill--dept .partners-pill__caret{
+  margin-left:6px; font-size:13px;
+}
+
+/* Classement -> "Class." */
+body.is-mobile .partners-page .pill--classement .partners-pill__btn{ font-size:0; }
+body.is-mobile .partners-page .pill--classement .partners-pill__btn::before{
+  content:"Class.";
+  font-size:13px;
+}
+body.is-mobile .partners-page .pill--classement .partners-pill__caret{
+  margin-left:6px; font-size:13px;
+}
+
 
 
 /* ============================================================
