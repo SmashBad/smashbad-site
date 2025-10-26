@@ -1180,16 +1180,7 @@ input[type="range"]{ width:100%; }
   /* on garde width:20px; height:20px; définis plus haut */
 }
 
-/* Base icône (scopée à la carte pour éviter la “fuite” sous la navbar) */
-.partners-card .partners-card__meta li::before{
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 2px;
-  width: 20px;
-  height: 20px;
-  background: center/contain no-repeat;
-}
+
 
 .partners-card__meta .i-date::before   { background-image: url("/Planning.svg"); }
 .partners-card__meta .i-place::before  { background-image: url("/Location.svg"); }
