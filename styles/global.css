@@ -1036,14 +1036,14 @@ input[type="range"]{ width:100%; }
   opacity: .9;
   margin: 0 0 18px;
 }
-.partners-hero__actions{ margin: 14px 0 14px; }
+.partners-hero__actions{ margin: 14px 0 28px; }
 .partners-cta{ border-radius: 999px; padding: 12px 22px; }
 
 /* FILTER BAR */
 .partners-filterbar{
   display: flex; flex-wrap: wrap; gap: 10px;
   justify-content: center;
-  margin: 6px auto 14px;
+  margin: 6px auto 24px;
   align-items:center;
 }
 
