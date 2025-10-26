@@ -1320,6 +1320,71 @@ input[type="range"]{ width:100%; }
   border-color: rgba(255,255,255,.3);
 }
 
+/* ============================================================
+   Index Partenaire - version mobile
+   ============================================================ */
+
+body.is-mobile .partners-page .partners-filterbar{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin: 6px auto 12px;
+}
+
+/* 1) "Filtrer par" -> icône Filter.svg (décoratif, non cliquable) */
+body.is-mobile .partners-page .partners-filterbar .partners-filterbar__label:first-of-type{
+  position: relative;
+  display: inline-block;
+  width: 22px;               /* taille de l’icône */
+  height: 22px;
+  overflow: hidden;          /* cache le texte */
+  text-indent: 200%;         /* garde le texte pour l’accessibilité */
+  white-space: nowrap;
+}
+body.is-mobile .partners-page .partners-filterbar .partners-filterbar__label:first-of-type::before{
+  content: "";
+  position: absolute; inset: 0;
+  background: url("/Filter.svg") center/contain no-repeat;
+}
+
+/* 2) "Trier par" -> icône Sort.svg (décoratif, non cliquable) */
+body.is-mobile .partners-page .partners-filterbar .partners-filterbar__label:last-of-type{
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  overflow: hidden;
+  text-indent: 200%;
+  white-space: nowrap;
+}
+body.is-mobile .partners-page .partners-filterbar .partners-filterbar__label:last-of-type::before{
+  content: "";
+  position: absolute; inset: 0;
+  background: url("/Sort.svg") center/contain no-repeat;
+}
+
+/* 3) Pills de filtres : compacts, toujours visibles */
+body.is-mobile .partners-page .partners-filterbar .partners-pill .partners-pill__btn{
+  height: 36px;             /* compact mais confortable */
+  padding: 6px 10px;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;      /* pas de retour à la ligne dans un pill */
+}
+
+/* (Optionnel) Si ça coince sur très petit écran, autoriser le scroll horizontal discret */
+body.is-mobile .partners-page .partners-filterbar{
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
+}
+body.is-mobile .partners-page .partners-filterbar::-webkit-scrollbar{ display: none; }
+
+
+
 
 
 /* ============================================================
