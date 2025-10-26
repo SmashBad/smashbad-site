@@ -1352,58 +1352,61 @@ body.is-mobile .partners-page .partners-filterbar{
   gap:8px;
   margin:6px auto 12px;
   padding:0 8px;
-  flex-wrap:nowrap;           /* 1 seule ligne */
-  overflow:visible;           /* IMPORTANT: pas de scroll ni mask sur le parent */
+  flex-wrap:nowrap;       /* 1 seule ligne */
+  overflow:visible;       /* IMPORTANT: pas de scroll/mask ici, sinon zones non cliquables */
 }
 
-/* "Filtrer par :" -> icône Filter (non cliquable) */
+/* Décoration "Filtrer par" = icône. On enlève toute interception de clic. */
 body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
   position:relative;
   flex:0 0 22px;
   width:22px; height:22px;
   overflow:hidden; text-indent:200%; white-space:nowrap;
+  pointer-events:none;    /* ne capture pas les taps */
 }
 body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
   content:""; position:absolute; inset:0;
   background:url("/Filter.svg") center/contain no-repeat;
 }
 
-/* Rail scrollable au centre = tes 3 pills (labels originaux) */
+/* Cache le label "Tri :" (il est *en dehors* de .partners-sort dans ton JSX) */
+body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:last-of-type{
+  display:none;
+}
+
+/* --- RAIL SCROLLABLE (3 filtres) --- */
 body.is-mobile .partners-page .partners-filterstrip{
-  flex:1 1 auto;            /* occupe l’espace entre Filter et Tri */
-  min-width:0;              /* autorise la réduction */
-  display:flex; gap:8px;
-  overflow-x:auto;          /* ← scroll ICI (et seulement ici) */
+  flex:1 1 auto;          /* occupe tout l’espace entre l’icône et le tri */
+  min-width:0;            /* autorise la réduction, indispensable pour flex */
+  display:flex;
+  gap:8px;
+  overflow-x:auto;        /* scroll H ICI uniquement */
   overscroll-behavior-x:contain;
   -webkit-overflow-scrolling:touch;
   scrollbar-width:none; -ms-overflow-style:none;
+  position:relative; z-index:1;   /* au-dessus de tout décor éventuel */
 }
 body.is-mobile .partners-page .partners-filterstrip::-webkit-scrollbar{ display:none; }
 body.is-mobile .partners-page .partners-filterstrip .partners-pill{ flex:0 0 auto; }
 body.is-mobile .partners-page .partners-filterstrip .partners-pill .partners-pill__btn{
   height:36px; padding:6px 12px; font-size:13px; line-height:1; white-space:nowrap;
+  pointer-events:auto;           /* clics assurés */
 }
 
-/* Zone tri à droite : label "Tri :" + pill compacte "Tri" (icône + texte court) */
-body.is-mobile .partners-page .partners-sort{
-  display:flex; align-items:center; gap:8px;
-  flex:0 0 auto;
-}
-/*Le label "Tri :" reste texte (pas d'icône ici) — si tu veux l’icône à la place du texte, dé-commente:*/
-   body.is-mobile .partners-page .partners-sort > .partners-filterbar__label{
-     position:relative; width:22px; height:22px; overflow:hidden; text-indent:200%;
-   }
-   body.is-mobile .partners-page .partners-sort > .partners-filterbar__label::before{
-     content:""; position:absolute; inset:0; background:url("/Sort.svg") center/contain no-repeat;
-   }
+/* --- TRI (icône + "Tri" seulement) --- */
+body.is-mobile .partners-page .partners-sort{ flex:0 0 auto; }
 
-/* Le bouton de tri : icône + libellé "Tri" (ouvre le menu) */
 body.is-mobile .partners-page .partners-sort .partners-pill__btn{
-  height:36px; padding:6px 12px; display:inline-flex; align-items:center; gap:8px;
+  height:36px; padding:6px 12px;
+  display:inline-flex; align-items:center; gap:8px;
   line-height:1; white-space:nowrap;
+  position:relative;
 }
-/* Masque l’éventuel contenu long du composant et injecte icône + "Tri" court */
-body.is-mobile .partners-page .partners-sort .partners-pill__btn > *{ display:none; }
+/* Masque TOUT le contenu interne (libellé "Plus récentes", caret, etc.) */
+body.is-mobile .partners-page .partners-sort .partners-pill__btn *{
+  display:none !important;
+}
+/* Ajoute l’icône + le libellé court "Tri" */
 body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
   content:""; width:18px; height:18px; display:inline-block;
   background:url("/Sort.svg") center/contain no-repeat;
