@@ -1117,6 +1117,48 @@ input[type="range"]{ width:100%; }
 .partners-pill__opt.is-selected{ background: rgba(18,216,223,.22); }
 .partners-pill__opt.is-clear{ font-style: italic; opacity: .8; }
 
+/* ajout GPT Option */
+/* --- PILL MENU (filtre) : liste verticale propre --- */
+
+/* conteneur scrollable (une seule colonne) */
+.partners-pill__options{
+  display: block;
+  max-height: 300px;      /* slider/scroll */
+  overflow: auto;
+  padding: 4px 0;
+  scrollbar-width: thin;
+}
+
+/* chaque option = une ligne full-width */
+.partners-pill__options .partners-pill__opt{
+  display: flex;          /* checkbox + libellé alignés */
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin: 2px 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.partners-pill__options .partners-pill__opt:hover{
+  background: rgba(255,255,255,.08);
+}
+.partners-pill__options .partners-pill__opt.is-selected{
+  background: rgba(18,216,223,.12);
+  box-shadow: 0 0 0 1px rgba(18,216,223,.25) inset;
+}
+
+/* petit soin pour la case à cocher */
+.partners-pill__options .partners-pill__opt input[type="checkbox"]{
+  margin: 0;              /* supprime le décalage par défaut */
+}
+
+/*fin de l'ajout*/
+
 /* Grid & Cards */
 .partners-cards{
   max-width: 1200px; margin: 18px auto 0;
