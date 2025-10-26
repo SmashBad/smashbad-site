@@ -1383,7 +1383,21 @@ body.is-mobile .partners-page .partners-filterbar{
 }
 body.is-mobile .partners-page .partners-filterbar::-webkit-scrollbar{ display: none; }
 
-
+/* Tri en icône seule : le bouton garde la logique, mais on masque toute la partie texte/caret */
+body.is-mobile .partners-page .partners-sort.partners-sort--iconOnly .partners-pill__btn{
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  justify-content: center;
+}
+body.is-mobile .partners-page .partners-sort.partners-sort--iconOnly .partners-pill__btn > *{
+  display: none; /* cache label interne et caret, donc jamais "Plus récentes" dans le bouton */
+}
+body.is-mobile .partners-page .partners-sort.partners-sort--iconOnly .partners-pill__btn::before{
+  content: "";
+  width: 18px; height: 18px; display: inline-block;
+  background: url("/Sort.svg") center/contain no-repeat;
+}
 
 
 
