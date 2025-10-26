@@ -314,7 +314,7 @@ export default function PartenairesIndexPage() {
             selected={classements} onChange={setClassements}
             options={CLASSEMENTS} width={360}
           />
-          <div className="partners-sort partners-sort--iconOnly">
+          <div className="partners-sort partners-sort--iconOnly" style="display: inline-flex; align-items: center;">
             <span className="partners-filterbar__label">Trier :</span>
             <SortPill 
              sort={sort}

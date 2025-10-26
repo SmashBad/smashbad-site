@@ -1321,122 +1321,34 @@ input[type="range"]{ width:100%; }
 }
 
 /* ============================================================
-   Index Partenaire - version mobile
+   Partenaires — MOBILE ONLY (via body.is-mobile)
    ============================================================ */
 
 body.is-mobile .partners-page .partners-filterbar{
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  justify-content: center;
-  margin: 6px auto 12px;
-  overflow-x:auto;                 /* si ça déborde : scroll horizontal */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:6px auto 12px;
+  /* Scroll horizontal discret si ça déborde */
+  overflow-x:auto;
   overscroll-behavior-x:contain;
   scrollbar-width:none;
+  -ms-overflow-style:none;
+  mask-image:linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
 }
 body.is-mobile .partners-page .partners-filterbar::-webkit-scrollbar{ display:none; }
 
-/* 1) "Filtrer par" -> icône Filter.svg (décoratif, non cliquable) */
-body.is-mobile .partners-page .partners-filterbar .partners-filterbar__label:first-of-type{
-  position: relative;
-  display: inline-block;
-  width: 22px;               /* taille de l’icône */
-  height: 22px;
-  overflow: hidden;          /* cache le texte */
-  text-indent: 200%;         /* garde le texte pour l’accessibilité */
-  white-space: nowrap;
-}
-body.is-mobile .partners-page .partners-filterbar .partners-filterbar__label:first-of-type::before{
-  content: "";
-  position: absolute; inset: 0;
-  background: url("/Filter.svg") center/contain no-repeat;
-}
-
-/* 2) "Trier par" -> icône Sort.svg (décoratif, non cliquable) */
-body.is-mobile .partners-page .partners-filterbar .partners-filterbar__label:last-of-type{
-  position: relative;
-  display: inline-block;
-  width: 22px;
-  height: 22px;
-  overflow: hidden;
-  text-indent: 200%;
-  white-space: nowrap;
-}
-body.is-mobile .partners-page .partners-filterbar .partners-filterbar__label:last-of-type::before{
-  content: "";
-  position: absolute; inset: 0;
-  background: url("/Sort.svg") center/contain no-repeat;
-}
-
-/* 3) Pills de filtres : compacts, toujours visibles */
-body.is-mobile .partners-page .partners-filterbar .partners-pill .partners-pill__btn{
-  height: 36px;             /* compact mais confortable */
-  padding: 6px 10px;
-  font-size: 13px;
-  line-height: 1;
-  white-space: nowrap;      /* pas de retour à la ligne dans un pill */
-}
-
-/* (Optionnel) Si ça coince sur très petit écran, autoriser le scroll horizontal discret */
-body.is-mobile .partners-page .partners-filterbar{
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
-}
-body.is-mobile .partners-page .partners-filterbar::-webkit-scrollbar{ display: none; }
-
-/* Tri en icône seule : le bouton garde la logique, mais on masque toute la partie texte/caret */
-body.is-mobile .partners-page .partners-sort.partners-sort--iconOnly .partners-pill__btn{
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  justify-content: center;
-}
-body.is-mobile .partners-page .partners-sort.partners-sort--iconOnly .partners-pill__btn > *{
-  display: none; /* cache label interne et caret, donc jamais "Plus récentes" dans le bouton */
-}
-body.is-mobile .partners-page .partners-sort.partners-sort--iconOnly .partners-pill__btn::before{
-  content: "";
-  width: 18px; height: 18px; display: inline-block;
-  background: url("/Sort.svg") center/contain no-repeat;
-}
-
-/* Département -> "Dpt" */
-body.is-mobile .partners-page .pill--dept .partners-pill__btn{
-  font-size:0;                 /* on masque le texte réel, caret exclu */
-}
-body.is-mobile .partners-page .pill--dept .partners-pill__btn::before{
-  content:"Dpt";
-  font-size:13px;              /* le libellé visible */
-}
-body.is-mobile .partners-page .pill--dept .partners-pill__caret{
-  margin-left:6px; font-size:13px;
-}
-
-/* Classement -> "Class." */
-body.is-mobile .partners-page .pill--classement .partners-pill__btn{ font-size:0; }
-body.is-mobile .partners-page .pill--classement .partners-pill__btn::before{
-  content:"Class.";
-  font-size:13px;
-}
-body.is-mobile .partners-page .pill--classement .partners-pill__caret{
-  margin-left:6px; font-size:13px;
-}
-
-/* "Filtrer par" -> une seule icône Filter.svg (NON cliquable) 
-   CIBLE PRÉCISE : le PREMIER label DIRECT de la barre */
+/* 1) Remplacer visuellement les libellés par des icônes */
 body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child{
   position:relative; display:inline-block; width:22px; height:22px;
-  overflow:hidden; text-indent:200%; white-space:nowrap;
+  overflow:hidden; text-indent:200%; white-space:nowrap; /* garde le texte pour l'accessibilité */
 }
 body.is-mobile .partners-page .partners-filterbar > .partners-filterbar__label:first-child::before{
   content:""; position:absolute; inset:0;
   background:url("/Filter.svg") center/contain no-repeat;
 }
 
-/* "Trier :" -> icône Sort.svg dans le CONTENEUR de tri seulement */
 body.is-mobile .partners-page .partners-sort > .partners-filterbar__label{
   position:relative; display:inline-block; width:22px; height:22px;
   overflow:hidden; text-indent:200%; white-space:nowrap;
@@ -1446,39 +1358,38 @@ body.is-mobile .partners-page .partners-sort > .partners-filterbar__label::befor
   background:url("/Sort.svg") center/contain no-repeat;
 }
 
-/* Si SortPill rend un .partners-pill__btn : l’icône seule suffit pour ouvrir le menu */
+/* 2) Pills visibles et compacts */
+body.is-mobile .partners-page .partners-pill .partners-pill__btn{
+  height:36px;
+  padding:6px 10px;
+  font-size:13px;
+  line-height:1;
+  white-space:nowrap;  /* pas de retour à la ligne dans un pill */
+}
+
+/* 3) Tri en icône seule (le bouton ouvre le menu, ne montre jamais le texte) */
 body.is-mobile .partners-page .partners-sort .partners-pill__btn{
   width:36px; height:36px; padding:0; justify-content:center;
 }
-body.is-mobile .partners-page .partners-sort .partners-pill__btn > *{ display:none; } /* cache label/caret internes */
+body.is-mobile .partners-page .partners-sort .partners-pill__btn > *{ display:none; }
 body.is-mobile .partners-page .partners-sort .partners-pill__btn::before{
   content:""; width:18px; height:18px; display:inline-block;
   background:url("/Sort.svg") center/contain no-repeat;
 }
 
-
-/* Compacter les pills sur mobile */
-body.is-mobile .partners-page .partners-pill .partners-pill__btn{
-  height:36px; padding:6px 10px; font-size:13px; line-height:1; white-space:nowrap;
-}
-
-/* Département -> "Dpt" (texte réel masqué, label court en ::before) */
+/* 4) Labels courts (rendu visuel, DOM inchangé) */
 body.is-mobile .partners-page .pill--dept .partners-pill__btn{ font-size:0; }
 body.is-mobile .partners-page .pill--dept .partners-pill__btn::before{
   content:"Dpt"; font-size:13px;
 }
-body.is-mobile .partners-page .pill--dept .partners-pill__caret{
-  margin-left:6px; font-size:13px;
-}
+body.is-mobile .partners-page .pill--dept .partners-pill__caret{ margin-left:6px; font-size:13px; }
 
-/* Classement -> "Class." */
 body.is-mobile .partners-page .pill--classement .partners-pill__btn{ font-size:0; }
 body.is-mobile .partners-page .pill--classement .partners-pill__btn::before{
   content:"Class."; font-size:13px;
 }
-body.is-mobile .partners-page .pill--classement .partners-pill__caret{
-  margin-left:6px; font-size:13px;
-}
+body.is-mobile .partners-page .pill--classement .partners-pill__caret{ margin-left:6px; font-size:13px; }
+
 
 
 
