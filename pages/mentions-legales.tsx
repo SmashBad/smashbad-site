@@ -79,7 +79,7 @@ export default function MentionsLegales() {
 
         /* Fallback si les variables CSS ne sont pas chargées */
         :global(body) { background: var(--sb-bg, #010b2e); color: var(--sb-fg, #f5f7fb); }
-        :global(a) { text-decoration: underline; }
+        :global(a) { }
       `}</style>
     </>
   );
