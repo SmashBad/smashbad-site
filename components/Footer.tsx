@@ -29,7 +29,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <small>© {new Date().getFullYear()} SMASH.bad — Tous droits réservés</small>
+      <small>© {new Date().getFullYear()} SMASH.bad — Tous droits réservés — <Link href="/mentions-legales" aria-label="Mentions légales">Mentions légales</Link></small>
     </footer>
   );
 }
+
