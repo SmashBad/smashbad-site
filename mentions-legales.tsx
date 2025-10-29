@@ -1,7 +1,7 @@
 // pages/mentions-legales.tsx
 import Head from "next/head";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function MentionsLegales() {
   const lastUpdate = "29 octobre 2025"; // Mets à jour si besoin
