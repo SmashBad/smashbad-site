@@ -18,8 +18,6 @@ export default function MentionsLegales() {
         <meta name="robots" content="index,follow" />
       </Head>
 
-      <Header />
-
       <main className="sb-container sb-section" aria-labelledby="page-title">
         <header className="topbar" style={{ marginBottom: 18 }}>
           <div className="topbar__grid">
@@ -72,8 +70,6 @@ export default function MentionsLegales() {
           </section>
         </article>
       </main>
-
-      <Footer />
 
       <style jsx>{`
         .legal-wrapper { max-width: 860px; margin: 0 auto; }
