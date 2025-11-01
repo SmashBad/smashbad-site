@@ -1175,6 +1175,7 @@ input[type="range"]{ width:100%; }
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 20px; padding: 18px;
   box-shadow: 0 8px 30px rgba(0,0,0,.30);
+  position: absolute;
 }
 .partners-card__head{
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
@@ -1333,13 +1334,29 @@ input[type="range"]{ width:100%; }
   min-height: 36px;
 }
 
+/* --- Icône Message (absolue, bas-gauche) --- */
+.partners-card__notes{
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
 /* apparence de l'icône */
 .notes-ic{
-  width: 20px;
-  height: 20px;
+  width: 36px;
+  height: 36px;
   display: block;
-  opacity: .95;
 }
+
+.notes-ic-btn.is-empty .notes-ic{
+  opacity: .45;
+  filter: grayscale(1) brightness(.85);
+}
+
 .notes-ic.is-off{
   opacity: .45;
   filter: grayscale(1) brightness(.85);
@@ -1351,6 +1368,47 @@ input[type="range"]{ width:100%; }
   max-width: min(420px, calc(100vw - 24px));
   line-height: 1.35;
   word-break: break-word;
+}
+
+/* --- Infobulle longue (message) --- */
+.tooltip--notes{
+  /* Toujours au-dessus de tout (contact, etc.) */
+  z-index: 40;
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 10px);   /* au-dessus de l’icône */
+  max-width: min(460px, calc(100vw - 32px));
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
+}
+/* Si tu utilises un petit triangle via ::after dans ton thème tooltip : ancre en bas */
+.notes-ic-btn .tooltip::after{
+  content: "";
+  position: absolute;
+  left: 14px;               /* pointe alignée avec l’icône */
+  top: 100%;
+  width: 8px; height: 8px;
+  transform: rotate(45deg);
+}
+
+/* Rassurer le mobile : on décale un peu si très petit écran */
+@media (max-width: 420px){
+  .partners-card__notes{ left: 14px; bottom: 12px; }
+}
+
+/* le "bouton" n'en est pas un : aucune bordure/fond  */
+.notes-ic-btn{
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;            /* indique une info */
+  position: relative;      /* contexte pour la tooltip */
+  outline-offset: 2px;     /* focus visible */
 }
 
 

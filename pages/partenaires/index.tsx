@@ -363,8 +363,8 @@ export default function PartenairesIndexPage() {
                     aria-label="Ouvrir la fiche tournoi sur BadNet (nouvel onglet)"
                     title="Ouvrir sur BadNet"
                   >
-                    <span className="nowrap">Fiche BadNet</span>
-                    <span className="tooltip">Ouvrir la fiche sur BadNet</span>
+                    <span className="nowrap">Infos Tournoi</span>
+                    <span className="tooltip">Accéder au Tournoi sur BadNet</span>
                   </a>
                 ) : (
                   <button
@@ -373,7 +373,7 @@ export default function PartenairesIndexPage() {
                     aria-disabled="true"
                     title="Bientôt disponible"
                   >
-                    <span className="nowrap">Fiche BadNet</span>
+                    <span className="nowrap">Infos Tournoi</span>
                     <span className="tooltip">Bientôt disponible</span>
                   </button>
                 )}
@@ -462,37 +462,38 @@ export default function PartenairesIndexPage() {
               {(() => {
                 const notes = toStr((ad as any).notes);
                 const hasNotes = !!notes;
-                // on transforme les retours à la ligne en <br> pour l’infobulle
                 const notesHtml = notes.replace(/\n/g, "<br />");
 
                 return (
-                  <div className="partners-card__extras">
+                  <div className="partners-card__notes">
                     <button
                       type="button"
-                      className={`btn btn--icon ${hasNotes ? "" : "btn--disabled"}`}
-                      aria-disabled={hasNotes ? undefined : true}
-                      aria-label={hasNotes ? "Lire le message de l’annonce" : "Aucun message"}
+                      className={`notes-ic-btn ${hasNotes ? "" : "is-empty"}`}
+                      aria-label={hasNotes ? "Lire le message de l’annonce" : "Aucun message saisi"}
+                      // petit titre natif pour le hover rapide
                       title={hasNotes ? "Message" : "Aucun message"}
                     >
                       <img
                         src="/Message.svg"
                         alt=""
-                        className={`notes-ic ${hasNotes ? "is-on" : "is-off"}`}
-                        width={20}
-                        height={20}
+                        width={36}
+                        height={36}
+                        className="notes-ic"
                       />
-                      <span
-                        className={`tooltip tooltip--text`}
-                        // seulement si on a un message, on affiche la bulle longue
-                        style={{ display: hasNotes ? undefined : "none" }}
-                        dangerouslySetInnerHTML={{ __html: notesHtml }}
-                      />
-                      {!hasNotes && <span className="tooltip">Aucun message</span>}
+
+                      {/* Bulle riche uniquement s'il y a un message */}
+                      {hasNotes ? (
+                        <span
+                          className="tooltip tooltip--text tooltip--notes"
+                          dangerouslySetInnerHTML={{ __html: notesHtml }}
+                        />
+                      ) : (
+                        <span className="tooltip">Aucun message</span>
+                      )}
                     </button>
                   </div>
                 );
               })()}
-
 
               {/* Actions */}
               <footer className="partners-card__foot">
