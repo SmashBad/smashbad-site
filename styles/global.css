@@ -1175,7 +1175,7 @@ input[type="range"]{ width:100%; }
   border: 1px solid rgba(255,255,255,.10);
   border-radius: 20px; padding: 18px;
   box-shadow: 0 8px 30px rgba(0,0,0,.30);
-  position: sticky;
+  position: relative;
 }
 .partners-card__head{
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
@@ -1190,7 +1190,19 @@ input[type="range"]{ width:100%; }
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden; line-clamp: 2;
 }
-.partners-card__ext{ border-radius: 12px; padding: 8px 12px; white-space:nowrap; flex-shrink:0; }
+/* Bouton "Infos Tournoi" — taille et rythme identiques (lien/btn) */
+.partners-card__ext{
+  font-size: 14px;
+  line-height: 1;          /* pas de variation de hauteur entre a/button */
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 10px;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
 
 .partners-card__meta{
   list-style: none;
@@ -1325,65 +1337,17 @@ input[type="range"]{ width:100%; }
   align-items: center;
 }
 
+/* === Message (notes) — version inline, pas de nouvelle ligne === */
 
-/* Icône "Message" sous le résumé */
-.partners-card__extras{
-  display: flex;
-  justify-content: flex-end;       /* alignée à droite, change en flex-start si tu la veux à gauche */
-  margin-top: 6px;
-  min-height: 36px;
-}
-
-/* --- Icône Message (absolue, bas-gauche) --- */
-.partners-card__notes{
-  position: absolute;
-  left: 18px;
-  bottom: 14px;
+/* petit conteneur collé au texte */
+.notes-ic-wrap{
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  pointer-events: auto;
+  margin-left: 8px;            /* petite respiration après le texte */
+  vertical-align: text-bottom; /* s'aligne proprement sur la ligne */
 }
 
-/* apparence de l'icône */
-.notes-ic{
-  width: 36px;
-  height: 36px;
-  display: block;
-}
-
-.notes-ic-btn.is-empty .notes-ic{
-  opacity: .45;
-  filter: grayscale(1) brightness(.85);
-}
-
-.notes-ic.is-off{
-  opacity: .45;
-  filter: grayscale(1) brightness(.85);
-}
-
-/* infobulle texte (wrap + largeur) */
-.tooltip--text{
-  white-space: normal;
-  max-width: min(420px, calc(100vw - 24px));
-  line-height: 1.35;
-  word-break: break-word;
-}
-
-
-/* --- La carte doit être contexte de positionnement si besoin ailleurs --- */
-/* .partners-card { position: relative; }  // Si déjà présent, inutile */
-
-/* Ligne "Message" : dans le flux, mais collée visuellement en bas à gauche */
-.partners-card__notes{
-  position: sticky;
-  bottom: 14px;           /* reste lisible si la page défile */
-  display: inline-flex;
-  align-items: center;
-  margin-top: 4px;        /* très faible pour ne pas "gonfler" la carte */
-}
-
-/* Bouton nu : aucune bordure/fond */
+/* bouton nu (accessible) */
 .notes-ic-btn{
   background: none;
   border: 0;
@@ -1392,98 +1356,62 @@ input[type="range"]{ width:100%; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;     /* contexte pour la tooltip */
+  position: relative;          /* contexte tooltip */
   cursor: help;
-  outline-offset: 2px;    /* focus visible au clavier */
+  line-height: 0;              /* évite d'étirer la ligne */
+  outline-offset: 2px;
 }
 
-/* Icône 36px ; grisée si pas de message */
-.notes-ic{ width: 36px; height: 36px; display: block; }
+/* icône 20px pour ne pas bousculer la hauteur de ligne */
+.notes-ic{ width: 20px; height: 20px; display: block; }
 .notes-ic-btn.is-empty .notes-ic{
   opacity: .45;
-  filter: grayscale(1) brightness(.85);
+  filter: grayscale(1) brightness(.9);
+  cursor: default;
 }
 
-/* Tooltip : cachée par défaut */
+/* tooltip cachée par défaut */
 .notes-ic-btn .tooltip{
   position: absolute;
   left: 0;
-  bottom: calc(100% + 10px);  /* au-dessus de l’icône */
-  z-index: 50;                /* au-dessus du bouton "Contacter" */
+  bottom: calc(100% + 8px);
+  z-index: 200;                            /* au-dessus du CTA */
   max-width: min(460px, calc(100vw - 32px));
   white-space: normal;
   word-break: break-word;
   line-height: 1.35;
 
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(4px);
-  transition: opacity .18s ease, transform .18s ease, visibility 0s .18s;
+  /* style de bulle (reprend ton thème tooltip) */
+  display: none;
+  padding: 8px 10px;
+  background: rgba(0,0,0,.85);
+  color: #fff;
+  font-size: 12px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 8px;
 }
 
-/* Règles d'ouverture : hover/focus clavier/tap mobile (data-open) */
+/* ouverture : hover/focus clavier/tap (data-open) */
 .notes-ic-btn:hover .tooltip,
 .notes-ic-btn:focus .tooltip,
 .notes-ic-btn:focus-within .tooltip,
 .notes-ic-btn[data-open="1"] .tooltip{
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-  transition-delay: 0s;
+  display: block;
 }
 
-/* Variante longue (texte) */
-.tooltip--notes{
-  /* si tu as déjà un style de bulle générique (fond, bord, padding), il s'applique ici */
-}
-
-/* Ajustements petit écran */
-@media (max-width: 420px){
-  .partners-card__notes{ bottom: 12px; }
-  .notes-ic{ width: 32px; height: 32px; }
-}
-
-
-/* --- Infobulle longue (message) --- */
-.tooltip--notes{
-  /* Toujours au-dessus de tout (contact, etc.) */
-  z-index: 40;
-  position: absolute;
-  left: 0;
-  bottom: calc(100% + 10px);   /* au-dessus de l’icône */
-  max-width: min(460px, calc(100vw - 32px));
-  white-space: normal;
-  word-break: break-word;
-  line-height: 1.35;
-}
-/* Si tu utilises un petit triangle via ::after dans ton thème tooltip : ancre en bas */
+/* petit triangle si tu le veux */
 .notes-ic-btn .tooltip::after{
   content: "";
   position: absolute;
-  left: 14px;               /* pointe alignée avec l’icône */
+  left: 12px;
   top: 100%;
   width: 8px; height: 8px;
   transform: rotate(45deg);
+  background: rgba(0,0,0,.85);
+  border-right: 1px solid rgba(255,255,255,.14);
+  border-bottom: 1px solid rgba(255,255,255,.14);
 }
 
-/* Rassurer le mobile : on décale un peu si très petit écran */
-@media (max-width: 420px){
-  .partners-card__notes{ left: 14px; bottom: 12px; }
-}
-
-/* le "bouton" n'en est pas un : aucune bordure/fond  */
-.notes-ic-btn{
-  background: none;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: help;            /* indique une info */
-  position: relative;      /* contexte pour la tooltip */
-  outline-offset: 2px;     /* focus visible */
-}
 
 
 

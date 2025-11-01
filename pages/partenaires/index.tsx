@@ -452,6 +452,42 @@ export default function PartenairesIndexPage() {
                           </>
                         )}
                         {list && <> {NBSP}{classWord}{NBSP}<span className="strong">{list}</span></>}
+                        {(() => {
+                          const rawNotes = (ad as any).notes ?? "";
+                          const notes = String(rawNotes);
+                          const hasNotes = notes.trim().length > 0;
+                          const notesHtml = notes.replace(/\n/g, "<br />");
+
+                          return (
+                            <span className="notes-ic-wrap">
+                              <button
+                                type="button"
+                                className={`notes-ic-btn ${hasNotes ? "" : "is-empty"}`}
+                                aria-label={hasNotes ? "Lire le message de l’annonce" : "Aucun message saisi"}
+                                title={hasNotes ? "Message" : "Aucun message"}
+                                onClick={(e) => {
+                                  // Mobile : tap pour ouvrir / refermer
+                                  const el = e.currentTarget;
+                                  el.getAttribute("data-open")
+                                    ? el.removeAttribute("data-open")
+                                    : el.setAttribute("data-open", "1");
+                                }}
+                              >
+                                <img src="/Message.svg" alt="" className="notes-ic" width={20} height={20} />
+
+                                {hasNotes ? (
+                                  <span
+                                    className="tooltip tooltip--notes"
+                                    dangerouslySetInnerHTML={{ __html: notesHtml }}
+                                  />
+                                ) : (
+                                  <span className="tooltip tooltip--notes">Aucun message</span>
+                                )}
+                              </button>
+                            </span>
+                          );
+                        })()}
+
                       </>
                     );
                   })()}
