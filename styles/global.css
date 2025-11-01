@@ -1190,17 +1190,18 @@ input[type="range"]{ width:100%; }
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden; line-clamp: 2;
 }
-/* Bouton "Infos Tournoi" — taille et rythme identiques (lien/btn) */
+/* Bouton/lien "Infos Tournoi" – mêmes métriques lien/btn */
 .partners-card__ext{
-  font-size: 14px;
-  line-height: 1;          /* pas de variation de hauteur entre a/button */
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 10px;
-  padding: 6px 10px;
-  white-space: nowrap;
+  font-size:14px;
+  line-height:1;        /* évite toute variation de hauteur */
+  font-weight:700;
+  height:32px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border-radius:10px;
+  padding:6px 10px;
+  white-space:nowrap;
 }
 
 
@@ -1337,80 +1338,84 @@ input[type="range"]{ width:100%; }
   align-items: center;
 }
 
-/* === Message (notes) — version inline, pas de nouvelle ligne === */
+/* === Message (notes) — icône inline + tooltip, sans ajouter de ligne === */
 
-/* petit conteneur collé au texte */
+/* L’icône se colle à la phrase, ne crée aucune ligne en plus */
 .notes-ic-wrap{
-  display: inline-flex;
-  align-items: center;
-  margin-left: 8px;            /* petite respiration après le texte */
-  vertical-align: text-bottom; /* s'aligne proprement sur la ligne */
+  display:inline-flex;
+  align-items:center;
+  margin-left:8px;              /* petite respiration après le texte */
+  vertical-align:text-bottom;   /* bien alignée sur la ligne de texte */
 }
 
-/* bouton nu (accessible) */
+/* Bouton nu (accessible), sert d’ancre à la tooltip */
 .notes-ic-btn{
-  background: none;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;          /* contexte tooltip */
-  cursor: help;
-  line-height: 0;              /* évite d'étirer la ligne */
-  outline-offset: 2px;
+  background:none;
+  border:0;
+  padding:0;
+  margin:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;            /* contexte de positionnement de la bulle */
+  cursor:help;
+  line-height:0;                /* n’étire pas la ligne */
+  outline-offset:2px;
+}
+.notes-ic-btn:focus-visible{
+  outline:2px solid rgba(18,216,223,.5);
+  border-radius:6px;
 }
 
-/* icône 20px pour ne pas bousculer la hauteur de ligne */
-.notes-ic{ width: 20px; height: 20px; display: block; }
+/* Icône : un peu plus grande, mais reste “dans la ligne” */
+.notes-ic{ width:22px; height:22px; display:block; }
 .notes-ic-btn.is-empty .notes-ic{
-  opacity: .45;
-  filter: grayscale(1) brightness(.9);
-  cursor: default;
+  opacity:.45;
+  filter:grayscale(1) brightness(.9);
+  cursor:default;
 }
 
-/* tooltip cachée par défaut */
+/* Tooltip : large et lisible (Outfit héritée), au-dessus de tout */
 .notes-ic-btn .tooltip{
-  position: absolute;
-  left: 0;
-  bottom: calc(100% + 8px);
-  z-index: 200;                            /* au-dessus du CTA */
-  max-width: min(460px, calc(100vw - 32px));
-  white-space: normal;
-  word-break: break-word;
-  line-height: 1.35;
-
-  /* style de bulle (reprend ton thème tooltip) */
-  display: none;
-  padding: 8px 10px;
-  background: rgba(0,0,0,.85);
-  color: #fff;
-  font-size: 12px;
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 8px;
+  position:absolute;
+  left:0;
+  bottom:calc(100% + 8px);
+  z-index:650;                                  /* > CTA */
+  display:none;                                 /* ouverte au hover/focus/data-open */
+  max-width:min(520px, calc(100vw - 32px));
+  padding:10px 12px;
+  background:rgba(0,0,0,.88);
+  color:#fff;
+  font-size:12px;
+  line-height:1.35;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;
+  white-space:normal;                            /* ← IMPORTANT : pas en colonne ! */
+  word-break:break-word;
 }
 
-/* ouverture : hover/focus clavier/tap (data-open) */
+/* Ouverture : hover (PC), focus clavier, ou data-open (mobile) */
 .notes-ic-btn:hover .tooltip,
 .notes-ic-btn:focus .tooltip,
 .notes-ic-btn:focus-within .tooltip,
 .notes-ic-btn[data-open="1"] .tooltip{
-  display: block;
+  display:block;
 }
 
-/* petit triangle si tu le veux */
+/* Petit triangle */
 .notes-ic-btn .tooltip::after{
-  content: "";
-  position: absolute;
-  left: 12px;
-  top: 100%;
-  width: 8px; height: 8px;
-  transform: rotate(45deg);
-  background: rgba(0,0,0,.85);
-  border-right: 1px solid rgba(255,255,255,.14);
-  border-bottom: 1px solid rgba(255,255,255,.14);
+  content:"";
+  position:absolute;
+  left:12px;
+  top:100%;
+  width:8px; height:8px;
+  transform:rotate(45deg);
+  background:rgba(0,0,0,.88);
+  border-right:1px solid rgba(255,255,255,.14);
+  border-bottom:1px solid rgba(255,255,255,.14);
 }
+
+
 
 
 

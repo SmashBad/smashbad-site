@@ -460,31 +460,42 @@ export default function PartenairesIndexPage() {
 
                           return (
                             <span className="notes-ic-wrap">
-                              <button
-                                type="button"
-                                className={`notes-ic-btn ${hasNotes ? "" : "is-empty"}`}
-                                aria-label={hasNotes ? "Lire le message de l’annonce" : "Aucun message saisi"}
-                                title={hasNotes ? "Message" : "Aucun message"}
-                                onClick={(e) => {
-                                  // Mobile : tap pour ouvrir / refermer
-                                  const el = e.currentTarget;
-                                  el.getAttribute("data-open")
-                                    ? el.removeAttribute("data-open")
-                                    : el.setAttribute("data-open", "1");
-                                }}
-                              >
-                                <img src="/Message.svg" alt="" className="notes-ic" width={20} height={20} />
+                              {(() => {
+                                const rawNotes  = (ad as any).notes ?? "";
+                                const notes     = String(rawNotes);
+                                const hasNotes  = notes.trim().length > 0;
+                                const notesHtml = notes.replace(/\n/g, "<br />");
 
-                                {hasNotes ? (
-                                  <span
-                                    className="tooltip tooltip--notes"
-                                    dangerouslySetInnerHTML={{ __html: notesHtml }}
-                                  />
-                                ) : (
-                                  <span className="tooltip tooltip--notes">Aucun message</span>
-                                )}
-                              </button>
+                                return (
+                                  <button
+                                    type="button"
+                                    className={`notes-ic-btn ${hasNotes ? "" : "is-empty"}`}
+                                    aria-label={hasNotes ? "Lire le message de l’annonce" : "Aucun message saisi"}
+                                    // pas de title → on évite la bulle native du navigateur
+                                    onClick={(e) => {
+                                      // mobile : tap pour ouvrir/fermer
+                                      const el = e.currentTarget;
+                                      el.getAttribute("data-open")
+                                        ? el.removeAttribute("data-open")
+                                        : el.setAttribute("data-open", "1");
+                                    }}
+                                  >
+                                    <img src="/Message.svg" alt="" className="notes-ic" width={22} height={22} />
+
+                                    {hasNotes ? (
+                                      <span
+                                        className="tooltip tooltip--notes"
+                                        // Outfit est héritée du body, mais on redéfinit un style dédié en CSS
+                                        dangerouslySetInnerHTML={{ __html: notesHtml }}
+                                      />
+                                    ) : (
+                                      <span className="tooltip tooltip--notes">Aucun message</span>
+                                    )}
+                                  </button>
+                                );
+                              })()}
                             </span>
+
                           );
                         })()}
 
