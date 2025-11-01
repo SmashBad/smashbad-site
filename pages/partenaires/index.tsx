@@ -458,7 +458,7 @@ export default function PartenairesIndexPage() {
                 </div>
               )}
 
-              {/* --------- Message libre (notes) --------- */}
+              {/* --------- Message libre (notes) : sticky + tooltip fiable --------- */}
               {(() => {
                 const notes = toStr((ad as any).notes);
                 const hasNotes = !!notes;
@@ -470,30 +470,28 @@ export default function PartenairesIndexPage() {
                       type="button"
                       className={`notes-ic-btn ${hasNotes ? "" : "is-empty"}`}
                       aria-label={hasNotes ? "Lire le message de l’annonce" : "Aucun message saisi"}
-                      // petit titre natif pour le hover rapide
                       title={hasNotes ? "Message" : "Aucun message"}
+                      onClick={(e) => {
+                        // Toggle pour mobile : un second tap referme la bulle
+                        const el = e.currentTarget;
+                        el.getAttribute("data-open") ? el.removeAttribute("data-open") : el.setAttribute("data-open", "1");
+                      }}
                     >
-                      <img
-                        src="/Message.svg"
-                        alt=""
-                        width={36}
-                        height={36}
-                        className="notes-ic"
-                      />
+                      <img src="/Message.svg" alt="" width={36} height={36} className="notes-ic" />
 
-                      {/* Bulle riche uniquement s'il y a un message */}
                       {hasNotes ? (
                         <span
                           className="tooltip tooltip--text tooltip--notes"
                           dangerouslySetInnerHTML={{ __html: notesHtml }}
                         />
                       ) : (
-                        <span className="tooltip">Aucun message</span>
+                        <span className="tooltip tooltip--notes">Aucun message</span>
                       )}
                     </button>
                   </div>
                 );
               })()}
+
 
               {/* Actions */}
               <footer className="partners-card__foot">

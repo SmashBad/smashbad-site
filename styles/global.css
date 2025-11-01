@@ -1370,6 +1370,80 @@ input[type="range"]{ width:100%; }
   word-break: break-word;
 }
 
+
+/* --- La carte doit être contexte de positionnement si besoin ailleurs --- */
+/* .partners-card { position: relative; }  // Si déjà présent, inutile */
+
+/* Ligne "Message" : dans le flux, mais collée visuellement en bas à gauche */
+.partners-card__notes{
+  position: sticky;
+  bottom: 14px;           /* reste lisible si la page défile */
+  display: inline-flex;
+  align-items: center;
+  margin-top: 4px;        /* très faible pour ne pas "gonfler" la carte */
+}
+
+/* Bouton nu : aucune bordure/fond */
+.notes-ic-btn{
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;     /* contexte pour la tooltip */
+  cursor: help;
+  outline-offset: 2px;    /* focus visible au clavier */
+}
+
+/* Icône 36px ; grisée si pas de message */
+.notes-ic{ width: 36px; height: 36px; display: block; }
+.notes-ic-btn.is-empty .notes-ic{
+  opacity: .45;
+  filter: grayscale(1) brightness(.85);
+}
+
+/* Tooltip : cachée par défaut */
+.notes-ic-btn .tooltip{
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 10px);  /* au-dessus de l’icône */
+  z-index: 50;                /* au-dessus du bouton "Contacter" */
+  max-width: min(460px, calc(100vw - 32px));
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity .18s ease, transform .18s ease, visibility 0s .18s;
+}
+
+/* Règles d'ouverture : hover/focus clavier/tap mobile (data-open) */
+.notes-ic-btn:hover .tooltip,
+.notes-ic-btn:focus .tooltip,
+.notes-ic-btn:focus-within .tooltip,
+.notes-ic-btn[data-open="1"] .tooltip{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
+
+/* Variante longue (texte) */
+.tooltip--notes{
+  /* si tu as déjà un style de bulle générique (fond, bord, padding), il s'applique ici */
+}
+
+/* Ajustements petit écran */
+@media (max-width: 420px){
+  .partners-card__notes{ bottom: 12px; }
+  .notes-ic{ width: 32px; height: 32px; }
+}
+
+
 /* --- Infobulle longue (message) --- */
 .tooltip--notes{
   /* Toujours au-dessus de tout (contact, etc.) */
