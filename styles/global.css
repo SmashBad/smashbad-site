@@ -1324,6 +1324,37 @@ input[type="range"]{ width:100%; }
   align-items: center;
 }
 
+
+/* Icône "Message" sous le résumé */
+.partners-card__extras{
+  display: flex;
+  justify-content: flex-end;       /* alignée à droite, change en flex-start si tu la veux à gauche */
+  margin-top: 6px;
+  min-height: 36px;
+}
+
+/* apparence de l'icône */
+.notes-ic{
+  width: 20px;
+  height: 20px;
+  display: block;
+  opacity: .95;
+}
+.notes-ic.is-off{
+  opacity: .45;
+  filter: grayscale(1) brightness(.85);
+}
+
+/* infobulle texte (wrap + largeur) */
+.tooltip--text{
+  white-space: normal;
+  max-width: min(420px, calc(100vw - 24px));
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+
+
 /* ===================== PARTENAIRES — DESKTOP ===================== */
 /* Garde tout sur une ligne et évite l'empilement des 3 filtres */
 body:not(.is-mobile) .partners-page .partners-filterbar{

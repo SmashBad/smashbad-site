@@ -18,6 +18,8 @@ const DEPTS = [
 ];
 
 // ---------- Helpers génériques ----------
+const isHttpUrl = (s?: unknown) => /^https?:\/\//i.test(toStr(s));
+
 const toStr = (v: unknown) => (v ?? "").toString().trim();
 
 const fmtDate = (iso?: string) => {
@@ -352,10 +354,29 @@ export default function PartenairesIndexPage() {
               <header className="partners-card__head">
                 <h3 className="partners-card__title">{tournoi || "Annonce"}</h3>
 
-                <button type="button" className="btn btn--ghost partners-card__ext" aria-disabled="true" title="Bientôt disponible">
-                  <span className="nowrap">Fiche BadNet</span>
-                  <span className="tooltip">Bientôt disponible</span>
-                </button>
+                {isHttpUrl((ad as any).badnet_url) ? (
+                  <a
+                    href={toStr((ad as any).badnet_url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn--ghost partners-card__ext"
+                    aria-label="Ouvrir la fiche tournoi sur BadNet (nouvel onglet)"
+                    title="Ouvrir sur BadNet"
+                  >
+                    <span className="nowrap">Fiche BadNet</span>
+                    <span className="tooltip">Ouvrir la fiche sur BadNet</span>
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn--ghost partners-card__ext"
+                    aria-disabled="true"
+                    title="Bientôt disponible"
+                  >
+                    <span className="nowrap">Fiche BadNet</span>
+                    <span className="tooltip">Bientôt disponible</span>
+                  </button>
+                )}
               </header>
 
               {/* Métadonnées : date du tournoi + lieu */}
@@ -436,6 +457,42 @@ export default function PartenairesIndexPage() {
                   })()}
                 </div>
               )}
+
+              {/* --------- Message libre (notes) --------- */}
+              {(() => {
+                const notes = toStr((ad as any).notes);
+                const hasNotes = !!notes;
+                // on transforme les retours à la ligne en <br> pour l’infobulle
+                const notesHtml = notes.replace(/\n/g, "<br />");
+
+                return (
+                  <div className="partners-card__extras">
+                    <button
+                      type="button"
+                      className={`btn btn--icon ${hasNotes ? "" : "btn--disabled"}`}
+                      aria-disabled={hasNotes ? undefined : true}
+                      aria-label={hasNotes ? "Lire le message de l’annonce" : "Aucun message"}
+                      title={hasNotes ? "Message" : "Aucun message"}
+                    >
+                      <img
+                        src="/Message.svg"
+                        alt=""
+                        className={`notes-ic ${hasNotes ? "is-on" : "is-off"}`}
+                        width={20}
+                        height={20}
+                      />
+                      <span
+                        className={`tooltip tooltip--text`}
+                        // seulement si on a un message, on affiche la bulle longue
+                        style={{ display: hasNotes ? undefined : "none" }}
+                        dangerouslySetInnerHTML={{ __html: notesHtml }}
+                      />
+                      {!hasNotes && <span className="tooltip">Aucun message</span>}
+                    </button>
+                  </div>
+                );
+              })()}
+
 
               {/* Actions */}
               <footer className="partners-card__foot">
