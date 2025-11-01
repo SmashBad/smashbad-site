@@ -1338,85 +1338,102 @@ input[type="range"]{ width:100%; }
   align-items: center;
 }
 
-/* === Message (notes) — icône inline + tooltip, sans ajouter de ligne === */
 
-/* L’icône se colle à la phrase, ne crée aucune ligne en plus */
-.notes-ic-wrap{
-  display:inline-flex;
-  align-items:center;
-  margin-left:8px;              /* petite respiration après le texte */
-  vertical-align:text-bottom;   /* bien alignée sur la ligne de texte */
+/* --- Carte : s’assurer qu’elle est le contexte pour un absolu interne --- */
+.partners-card{
+  position: relative; /* nécessaire pour ancrer bas-gauche */
 }
 
-/* Bouton nu (accessible), sert d’ancre à la tooltip */
-.notes-ic-btn{
-  background:none;
-  border:0;
-  padding:0;
-  margin:0;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;            /* contexte de positionnement de la bulle */
-  cursor:help;
-  line-height:0;                /* n’étire pas la ligne */
-  outline-offset:2px;
-}
-.notes-ic-btn:focus-visible{
-  outline:2px solid rgba(18,216,223,.5);
-  border-radius:6px;
+/* --- Icône Message : bas-gauche SANS ajouter de ligne --- */
+.partners-card__notes{
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+  /* rien d'autre ici : on ne touche pas à la hauteur de la carte */
 }
 
-/* Icône : un peu plus grande, mais reste “dans la ligne” */
-.notes-ic{ width:22px; height:22px; display:block; }
-.notes-ic-btn.is-empty .notes-ic{
-  opacity:.45;
-  filter:grayscale(1) brightness(.9);
-  cursor:default;
+.notes-btn{
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;      /* pour positionner la pop-up */
+  cursor: help;
+  line-height: 0;          /* n'étire aucune ligne */
+  outline-offset: 3px;
+}
+.notes-btn:focus-visible{
+  outline: 2px solid rgba(18,216,223,.5);
+  border-radius: 6px;
 }
 
-/* Tooltip : large et lisible (Outfit héritée), au-dessus de tout */
-.notes-ic-btn .tooltip{
-  position:absolute;
-  left:0;
-  bottom:calc(100% + 8px);
-  z-index:650;                                  /* > CTA */
-  display:none;                                 /* ouverte au hover/focus/data-open */
-  max-width:min(520px, calc(100vw - 32px));
-  padding:10px 12px;
-  background:rgba(0,0,0,.88);
-  color:#fff;
-  font-size:12px;
-  line-height:1.35;
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:8px;
-  white-space:normal;                            /* ← IMPORTANT : pas en colonne ! */
-  word-break:break-word;
+.notes-icon{
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+.notes-btn.is-empty .notes-icon{
+  opacity: .45;
+  filter: grayscale(1) brightness(.9);
+  cursor: default;
 }
 
-/* Ouverture : hover (PC), focus clavier, ou data-open (mobile) */
-.notes-ic-btn:hover .tooltip,
-.notes-ic-btn:focus .tooltip,
-.notes-ic-btn:focus-within .tooltip,
-.notes-ic-btn[data-open="1"] .tooltip{
-  display:block;
+/* --- Pop-up message : large, lisible, police héritée (Outfit) --- */
+.notes-pop{
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 10px);  /* au-dessus de l'icône */
+  z-index: 700;               /* au-dessus du CTA */
+  display: none;              /* visible au hover/focus/tap */
+  min-width: 240px;           /* <-- corrige le "2 caractères de large" */
+  max-width: min(560px, calc(100vw - 40px));
+  padding: 10px 12px;
+
+  background: rgba(0,0,0,.88);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 8px;
+
+  font: inherit;              /* hérite d'Outfit */
+  font-size: 14px;
+  line-height: 1.4;
+
+  white-space: normal;        /* texte sur plusieurs lignes normal */
+  word-break: normal;
+  overflow-wrap: anywhere;    /* coupe proprement si besoin */
 }
 
-/* Petit triangle */
-.notes-ic-btn .tooltip::after{
-  content:"";
-  position:absolute;
-  left:12px;
-  top:100%;
-  width:8px; height:8px;
-  transform:rotate(45deg);
-  background:rgba(0,0,0,.88);
-  border-right:1px solid rgba(255,255,255,.14);
-  border-bottom:1px solid rgba(255,255,255,.14);
+/* Ouverture : hover (PC), focus, et tap (data-open) */
+.notes-btn:hover .notes-pop,
+.notes-btn:focus .notes-pop,
+.notes-btn[data-open="1"] .notes-pop{
+  display: block;
 }
 
+/* Petit triangle (optionnel) */
+.notes-pop::after{
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 100%;
+  width: 8px; height: 8px;
+  transform: rotate(45deg);
+  background: rgba(0,0,0,.88);
+  border-right: 1px solid rgba(255,255,255,.16);
+  border-bottom: 1px solid rgba(255,255,255,.16);
+}
 
-
+/* Mobile : un poil plus petit */
+@media (max-width: 480px){
+  .notes-icon{ width: 24px; height: 24px; }
+  .notes-pop{ min-width: 200px; }
+}
 
 
 
