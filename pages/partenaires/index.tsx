@@ -494,41 +494,6 @@ export default function PartenairesIndexPage() {
                 </div>
               )}
 
-              {/* --------- Message libre (notes) : sticky + tooltip fiable --------- */}
-              {(() => {
-                const notes = toStr((ad as any).notes);
-                const hasNotes = !!notes;
-                const notesHtml = notes.replace(/\n/g, "<br />");
-
-                return (
-                  <div className="partners-card__notes">
-                    <button
-                      type="button"
-                      className={`notes-ic-btn ${hasNotes ? "" : "is-empty"}`}
-                      aria-label={hasNotes ? "Lire le message de l’annonce" : "Aucun message saisi"}
-                      title={hasNotes ? "Message" : "Aucun message"}
-                      onClick={(e) => {
-                        // Toggle pour mobile : un second tap referme la bulle
-                        const el = e.currentTarget;
-                        el.getAttribute("data-open") ? el.removeAttribute("data-open") : el.setAttribute("data-open", "1");
-                      }}
-                    >
-                      <img src="/Message.svg" alt="" width={36} height={36} className="notes-ic" />
-
-                      {hasNotes ? (
-                        <span
-                          className="tooltip tooltip--text tooltip--notes"
-                          dangerouslySetInnerHTML={{ __html: notesHtml }}
-                        />
-                      ) : (
-                        <span className="tooltip tooltip--notes">Aucun message</span>
-                      )}
-                    </button>
-                  </div>
-                );
-              })()}
-
-
               {/* Actions */}
               <footer className="partners-card__foot">
                 <em className="partners-card__created">
