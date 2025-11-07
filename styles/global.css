@@ -1416,17 +1416,17 @@ input[type="range"]{ width:100%; }
   display: block;
 }
 
+/* Tooltip : réglages simples */
+.notes-pop{
+  /* ajuste l’opacité ici : 0.65 à 0.95 selon rendu souhaité */
+  background: rgba(0, 0, 0, 0.88);
+  /* si besoin de forcer la police */
+  font-family: var(--font-outfit, "Outfit", system-ui, sans-serif);
+}
+
 /* Petit triangle (optionnel) */
 .notes-pop::after{
-  content: "";
-  position: absolute;
-  left: 12px;
-  top: 100%;
-  width: 8px; height: 8px;
-  transform: rotate(45deg);
-  background: rgba(0,0,0,.88);
-  border-right: 1px solid rgba(255,255,255,.16);
-  border-bottom: 1px solid rgba(255,255,255,.16);
+  display: none;
 }
 
 /* Mobile : un poil plus petit */
