@@ -1419,7 +1419,7 @@ input[type="range"]{ width:100%; }
 /* Tooltip : réglages simples */
 .notes-pop{
   /* ajuste l’opacité ici : 0.65 à 0.95 selon rendu souhaité */
-  background: rgba(0, 0, 0, 0.88);
+  background: rgba(0, 0, 0, 0.95);
   /* si besoin de forcer la police */
   font-family: var(--font-outfit, "Outfit", system-ui, sans-serif);
 }
