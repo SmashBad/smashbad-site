@@ -1088,22 +1088,53 @@ input[type="range"]{ width:100%; }
 }
 .partners-pill__caret{ margin-left: 8px; opacity: .7; }
 
-/* Menu déroulant */
+/* Menu déroulant — défaut (desktop) : centré sous la pilule */
 .partners-pill__menu{
   position: absolute;
   top: calc(100% + 8px);
   left: 50%;
-  transform: translateX(-75%);
+  transform: translateX(-50%);   /* ⬅️ vrai centrage (plus de -75%) */
   background: rgba(6,10,20,.96);
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 12px;
   padding: 8px;
   box-shadow: 0 14px 30px rgba(0,0,0,.36);
-  z-index: 50;
-  display:flex;
+  z-index: 900;
+  display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  width: max-content;
+  max-width: min(420px, 90vw);
+  box-sizing: border-box;
 }
+
+/* Mobile: centre dans l’écran et empêche tout débordement */
+@media (max-width: 640px){
+  /* Le menu doit s’ancrer au conteneur, pas à la pilule */
+  .partners-filterbar{ position: relative; width: 100%; }
+  .partners-pill{ position: static; } /* ⬅️ important : enlève l’ancrage local */
+
+  .partners-pill__menu{
+    /* s’ancre au conteneur .partners-filterbar */
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+
+    /* apparaît sous l’ensemble de la barre de filtres */
+    top: calc(100% + 10px);
+
+    /* largeur responsive centrée */
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    box-sizing: border-box;
+  }
+
+  /* champs internes à 100% pour éviter les débords */
+  .partners-pill__search{ width: 100%; min-width: 0; }
+  .partners-pill__options{ max-height: 320px; }
+}
+
+
 .partners-pill__list{
   display: grid; grid-template-columns: 1fr;
   max-height: 260px; overflow: auto; scrollbar-width: thin;
