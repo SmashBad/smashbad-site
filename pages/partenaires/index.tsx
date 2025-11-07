@@ -122,8 +122,9 @@ type MultiFilterPillProps = {
   width?: number;
   placeholder?: string;
   normalize?: (s: string) => string | null; // pour valider saisie libre
+  withSearch?: boolean;
 };
-function MultiFilterPill({ label, selected, onChange, options, width = 220, placeholder = "Rechercher…", normalize }: MultiFilterPillProps) {
+function MultiFilterPill({ label, selected, onChange, options, width = 220, placeholder = "Rechercher…", normalize, withSearch = true, }: MultiFilterPillProps) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const ref = useOutsideClose<HTMLDivElement>(open, () => setOpen(false));
@@ -147,16 +148,18 @@ function MultiFilterPill({ label, selected, onChange, options, width = 220, plac
       </button>
       {open && (
         <div className="partners-pill__menu" style={{ width }}>
-          <div className="partners-pill__search">
-            <input
-              placeholder={placeholder}
-              value={q}
-              onChange={e => setQ(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === "Enter" || e.key === "Escape") setOpen(false);
-              }}
-            />
-          </div>
+          {withSearch && (
+            <div className="partners-pill__search">
+              <input
+                placeholder={placeholder}
+                value={q}
+                onChange={e => setQ(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "Enter" || e.key === "Escape") setOpen(false);
+                }}
+              />
+            </div>
+          )}
 
           <div className="partners-pill__options">
             {filtered.map(opt => (
@@ -308,12 +311,12 @@ export default function PartenairesIndexPage() {
                 selected={depts} onChange={setDepts}
                 options={DEPTS} width={300}
                 placeholder="Département (ex: 92, 2A, 971)"
-                normalize={normDept}
               />
               <MultiFilterPill
                 label="Tableau"
                 selected={tableaux} onChange={setTableaux}
                 options={TABLEAUX} width={260}
+                withSearch={false}
               />
               <MultiFilterPill
                 label="Classement"

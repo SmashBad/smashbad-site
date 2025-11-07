@@ -1066,8 +1066,20 @@ input[type="range"]{ width:100%; }
 .partners-pill__search{
   min-width: 120px;
   border-radius: 10px; border: 1px solid rgba(255,255,255,.2);
-  padding: 8px 10px; background: rgba(255,255,255,.06); color: #fff;
+  padding: 8px 10px; background: rgba(255,255,255,.06); color: #fff;  margin-bottom: 6px;
 }
+/* input interne : plein large, police héritée (Outfit) */
+.partners-pill__search input{
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+}
+
+
 .partners-pill__footer{
   display: flex; justify-content: space-between; gap: 8px; margin-top: 8px;
 }
@@ -1106,6 +1118,26 @@ input[type="range"]{ width:100%; }
   width: max-content;
   max-width: min(420px, 90vw);
   box-sizing: border-box;
+  font-family: var(--font-outfit, "Outfit", system-ui, sans-serif);
+}
+
+.partners-pill__menu > .partners-pill__opt{
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+/* états hover / selected harmonisés avec les filtres */
+.partners-pill__menu > .partners-pill__opt:hover{
+  background: rgba(255,255,255,.08);
+}
+.partners-pill__menu > .partners-pill__opt.is-selected{
+  background: rgba(18,216,223,.18);
+  box-shadow: 0 0 0 1px rgba(18,216,223,.25) inset;
 }
 
 /* ===================== PARTENAIRES — MOBILE ONLY ===================== */
