@@ -1108,31 +1108,45 @@ input[type="range"]{ width:100%; }
   box-sizing: border-box;
 }
 
-/* Mobile: centre dans l’écran et empêche tout débordement */
-@media (max-width: 640px){
-  /* Le menu doit s’ancrer au conteneur, pas à la pilule */
-  .partners-filterbar{ position: relative; width: 100%; }
-  .partners-pill{ position: static; } /* ⬅️ important : enlève l’ancrage local */
+/* ===================== PARTENAIRES — MOBILE ONLY ===================== */
+/* Toute la logique mobile est scoppée par la classe "is-mobile" posée sur <body> */
 
-  .partners-pill__menu{
-    /* s’ancre au conteneur .partners-filterbar */
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%) !important;
-
-    /* apparaît sous l’ensemble de la barre de filtres */
-    top: calc(100% + 10px);
-
-    /* largeur responsive centrée */
-    width: calc(100vw - 24px);
-    max-width: calc(100vw - 24px);
-    box-sizing: border-box;
-  }
-
-  /* champs internes à 100% pour éviter les débords */
-  .partners-pill__search{ width: 100%; min-width: 0; }
-  .partners-pill__options{ max-height: 320px; }
+body.is-mobile .partners-filterbar{
+  position: relative;      /* conteneur d’ancrage pour le menu */
+  width: 100%;
+  /* Hauteur de la ligne "Tri" (pour superposer le menu au-dessus de Tri) */
+  --tri-h: 44px;           /* ajuste à 40–48 si besoin selon ton rendu */
 }
+
+/* Chaque pilule redevient "statique" pour que le menu s’ancre au conteneur */
+body.is-mobile .partners-pill{ position: static; }
+
+/* Le menu se centre dans l’écran et sort juste SOUS la rangée de filtres (au-dessus de Tri) */
+body.is-mobile .partners-pill__menu{
+  position: absolute;
+  z-index: 950;                    /* devant le bouton Tri et le reste */
+  top: calc(100% - var(--tri-h));  /* <-- clé : remonte d’une hauteur "Tri" */
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: calc(100vw - 24px);       /* largeur responsive centrée */
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
+
+  background: rgba(6,10,20,.96);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.36);
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* Champs internes : plein pot pour ne jamais déborder */
+body.is-mobile .partners-pill__search{ width: 100%; min-width: 0; }
+body.is-mobile .partners-pill__options{ max-height: 320px; }
+
 
 
 .partners-pill__list{
