@@ -1128,7 +1128,7 @@ input[type="range"]{ width:100%; }
   border: 0;
   border-radius: 8px;
   padding: 10px 12px;
-  font-weight: 600;
+  font-family: 'Outfit';
   cursor: pointer;
 }
 /* états hover / selected harmonisés avec les filtres */
@@ -1136,8 +1136,8 @@ input[type="range"]{ width:100%; }
   background: rgba(255,255,255,.08);
 }
 .partners-pill__menu > .partners-pill__opt.is-selected{
-  background: rgba(18,216,223,.18);
-  box-shadow: 0 0 0 1px rgba(18,216,223,.25) inset;
+  background: rgba(255,255,255,.08);
+  /*box-shadow: 0 0 0 1px rgba(18,216,223,.25) inset;*/
 }
 
 /* ===================== PARTENAIRES — MOBILE ONLY ===================== */
